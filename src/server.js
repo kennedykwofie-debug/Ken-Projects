@@ -1,0 +1,25 @@
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const path = require('path');
+const logger = require('./utils/logger');
+const apiRoutes = require('./routes/api');
+const fs = require('fs');
+if (!fs.existsSync('logs')) fs.mkdirSync('logs');
+const app = express();
+const PORT = process.env.PORT || 3001;
+app.use(helmet());
+app.use(cors({ origin: '*', methods: ['GET', 'POST'] }));
+app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
+app.use(express.json());
+app.use('/api/v1', apiRoutes);
+const publicDir = path.join(__dirname, '..', 'public');
+app.use(express.static(publicDir));
+app.get('*', (req, res) => {
+  const i = path.join(publicDir, 'index.html');
+  fs.existsSync(i) ? res.sendFile(i) : res.json({ message: 'DARKWATCH API' });
+});
+app.listen(PORT, () => logger.info(`DARKWATCH started on http://localhost:${PORT}`));
+module.exports = app;
