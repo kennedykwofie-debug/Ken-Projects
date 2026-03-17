@@ -105,7 +105,7 @@ if(monList){
   if(monCount)monCount.textContent=ems.length+(ems.length===1?" email":" emails");
 }
 var emH="";
-var exposed=res.filter(function(em3){return em3.breachCount>0;});
+var exposed=res.filter(function(em3){return em3.breachCount>0&&ems.indexOf(em3.email)>-1;});
 var badge=document.getElementById("exposed-badge");
 if(badge){badge.textContent=exposed.length+" EXPOSED";badge.style.display=exposed.length?"inline":"none";}
 exposed.forEach(function(em3){
