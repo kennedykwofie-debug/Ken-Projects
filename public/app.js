@@ -88,9 +88,7 @@ g('scan-btn').addEventListener('click',function(){var sb=g('scan-btn');sb.textCo
         .then(function(d) {
           btn1.textContent = 'Get DNS Verification Token'; btn1.disabled = false;
           if (!d.success) {
-            alert('Could not get token. Make sure you first add your domain at haveibeenpwned.com/DomainSearch, then try again.
-
-Details: ' + (d.error || 'Unknown error'));
+            alert('Could not get token. Make sure you first add your domain at haveibeenpwned.com/DomainSearch, then try again.  Details: ' + (d.error || 'Unknown error'));
             return;
           }
           dvToken = d.token;
