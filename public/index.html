@@ -150,6 +150,54 @@
     </div>
 
     <!-- Domain Verification Wizard -->
+    
+    <!-- Bulk Import Panel -->
+    <div id="bulk-panel" style="background:#0d1117;border:1px solid #2a3440;border-radius:6px;margin-bottom:12px;overflow:hidden">
+      <div id="bulk-header" style="padding:10px 14px;background:#161b22;display:flex;justify-content:space-between;align-items:center;cursor:pointer">
+        <div style="font-size:11px;font-weight:700;color:#a78bfa;text-transform:uppercase;letter-spacing:1px">+ Bulk Email Import</div>
+        <div id="bulk-toggle" style="font-size:10px;color:#64748b">Click to expand</div>
+      </div>
+      <div id="bulk-body" style="display:none;padding:14px">
+        <!-- Tab switcher -->
+        <div style="display:flex;gap:4px;margin-bottom:12px">
+          <button id="bulk-tab-pattern" class="btn btn-primary" style="font-size:11px">Auto-Generate Patterns</button>
+          <button id="bulk-tab-csv" class="btn" style="font-size:11px;background:#1e2630;border:1px solid #2a3440">CSV / Paste List</button>
+        </div>
+
+        <!-- Pattern generator -->
+        <div id="bulk-pane-pattern">
+          <div style="font-size:12px;color:#e2e8f0;margin-bottom:8px">Enter a domain to generate common corporate email addresses:</div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
+            <input id="bulk-domain" class="inp" placeholder="example.com" style="width:180px">
+            <button id="bulk-preview-btn" class="btn" style="font-size:11px;background:#1e2630;border:1px solid #a78bfa;color:#a78bfa">Preview</button>
+          </div>
+          <div id="bulk-preview-area" style="display:none;margin-bottom:10px">
+            <div style="font-size:10px;color:#64748b;margin-bottom:6px">Select which to add <span id="bulk-sel-count" style="color:#a78bfa"></span>:</div>
+            <div style="display:flex;gap:6px;margin-bottom:8px">
+              <button id="bulk-select-all" class="btn" style="font-size:10px;padding:2px 8px;background:#1e2630;border:1px solid #2a3440">Select All</button>
+              <button id="bulk-deselect-all" class="btn" style="font-size:10px;padding:2px 8px;background:#1e2630;border:1px solid #2a3440">Deselect All</button>
+            </div>
+            <div id="bulk-email-list" style="display:flex;flex-wrap:wrap;gap:6px;max-height:200px;overflow-y:auto;padding:8px;background:#161b22;border-radius:4px;border:1px solid #2a3440;margin-bottom:10px"></div>
+            <button id="bulk-add-selected" class="btn btn-primary" style="font-size:11px">Add Selected to Monitor</button>
+            <div id="bulk-add-status" style="font-size:11px;margin-top:6px;color:#64748b"></div>
+          </div>
+        </div>
+
+        <!-- CSV / Paste pane -->
+        <div id="bulk-pane-csv" style="display:none">
+          <div style="font-size:12px;color:#e2e8f0;margin-bottom:8px">Paste email addresses (one per line, or comma-separated) or drop a CSV file:</div>
+          <textarea id="bulk-paste" style="width:100%;height:120px;background:#161b22;border:1px solid #2a3440;border-radius:4px;padding:8px;color:#e2e8f0;font-family:monospace;font-size:11px;resize:vertical;outline:none" placeholder="user1@example.com&#10;user2@example.com&#10;user3@example.com"></textarea>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap">
+            <button id="bulk-csv-add" class="btn btn-primary" style="font-size:11px">Add All Emails</button>
+            <label style="font-size:11px;color:#64748b;cursor:pointer;display:flex;align-items:center;gap:4px">
+              <input id="bulk-file-input" type="file" accept=".csv,.txt" style="display:none">
+              <span style="border:1px solid #2a3440;background:#1e2630;padding:3px 8px;border-radius:4px;color:#e2e8f0">Upload .csv / .txt</span>
+            </label>
+          </div>
+          <div id="bulk-csv-status" style="font-size:11px;margin-top:6px;color:#64748b"></div>
+        </div>
+      </div>
+    </div>
     <div id="dv-wizard" style="background:#0d1117;border:1px solid #2a3440;border-radius:6px;margin-bottom:12px;overflow:hidden">
       <div id="dv-header" style="padding:10px 14px;background:#161b22;display:flex;justify-content:space-between;align-items:center;cursor:pointer">
         <div style="font-size:11px;font-weight:700;color:#4d9eff;text-transform:uppercase;letter-spacing:1px">* Domain Verification -- Bulk Email Scanning</div>
