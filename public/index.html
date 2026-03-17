@@ -127,7 +127,6 @@
     <div style="display:flex;gap:8px;margin-left:auto;align-items:center">
       <input id="add-cred-email" class="inp" placeholder="individual@email.com" style="width:260px">
       <button id="add-cred-btn" class="btn btn-primary">+ Monitor Email</button>
-        <button id="verify-domain-btn" class="btn" style="background:#1e2630;border:1px solid #4d9eff;color:#4d9eff;margin-left:6px">&#10003; Verify Domain</button>
       <button id="check-btn" class="btn">&#9654; Check All Now</button>
     </div>
   </div>
@@ -171,39 +170,7 @@
   </div>
 </div>
 <div class="ph" style="margin-top:8px"><div class="pt">Email Breach Summary</div></div>
-        <div id="domain-verify-panel" style="display:none;background:#0d1117;border:1px solid #4d9eff;border-radius:6px;padding:16px;margin-bottom:12px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-size:11px;font-weight:700;color:#4d9eff;text-transform:uppercase;letter-spacing:1px">Domain Verification Wizard</div><button id="close-verify-btn" style="background:none;border:none;color:#64748b;cursor:pointer;font-size:16px">&times;</button></div><div id="verify-step-1"><div style="font-size:12px;color:#e2e8f0;margin-bottom:8px">Enter your organisation domain to enable bulk email scanning:</div><div style="display:flex;gap:8px;align-items:center"><input id="verify-domain-input" class="inp" placeholder="yourcompany.com" style="width:220px"><button id="verify-step1-btn" class="btn btn-primary" style="font-size:11px">Get Verification Token</button></div></div><div id="verify-step-2" style="display:none"><div style="font-size:12px;color:#e2e8f0;margin-bottom:10px">Add this DNS TXT record to <span id="verify-domain-name" style="color:#f5c518"></span>:</div><div style="background:#161b22;border:1px solid #2a3440;border-radius:4px;padding:10px;margin-bottom:10px"><div style="font-size:10px;color:#64748b;margin-bottom:4px">Record Type: TXT &nbsp;|&nbsp; Name/Host: @ (root)</div><div style="font-size:10px;color:#64748b;margin-bottom:6px">Value:</div><div id="verify-txt-value" style="font-family:monospace;font-size:12px;color:#00d4aa;word-break:break-all;user-select:all;padding:6px;background:#0d1117;border-radius:3px"></div></div><div style="font-size:11px;color:#64748b;margin-bottom:10px">DNS changes can take up to 24h. Click Check Status after adding the record.</div><div style="display:flex;gap:8px"><button id="verify-step2-btn" class="btn btn-primary" style="font-size:11px">Check Verification Status</button><button id="verify-copy-btn" class="btn" style="font-size:11px;background:#1e2630;border:1px solid #2a3440">Copy TXT Value</button></div><div id="verify-status-msg" style="margin-top:8px;font-size:11px"></div></div><div id="verify-step-3" style="display:none"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="color:#00d4aa;font-size:18px">&#10003;</span><span style="font-size:12px;color:#00d4aa;font-weight:700"><span id="verified-domain-name"></span> is verified!</span></div><div style="font-size:11px;color:#64748b;margin-bottom:10px">Bulk scanning enabled. DARKWATCH will check ALL emails on your domain against every known breach.</div><button id="verify-scan-btn" class="btn btn-primary" style="font-size:11px">Scan All Emails on Domain Now</button></div></div>
-<div style="padding:11px 13px" id="cred-summary"><div class="lt">Add a domain to monitor</div></div>
-      </div>
-      <div class="pn">
-        <div class="ph"><div class="pt">Recent Global Breaches</div></div>
-        <div class="scroll" style="max-height:260px;padding:0 13px" id="global-breaches"><div class="lt">Loading...</div></div>
-      </div>
-    </div>
-    <div class="pn">
-      <div class="ph"><div class="pt">Exposed Email Accounts</div></div>
-      <div class="scroll" style="max-height:300px;padding:0 13px">
-        <table>
-          <thead><tr><th>EMAIL</th><th>BREACH COUNT</th><th>BREACHES FOUND IN</th><th>RISK</th></tr></thead>
-          <tbody id="exposed-emails"><tr><td colspan="4" class="lt">Add emails to monitor</td></tr></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ALERTS PAGE -->
-<div id="page-alerts" class="page">
-  <div class="fil">
-    <span style="font-size:12px;color:#64748b">Real-time alerts from continuous monitoring</span>
-    <button id="clear-alerts-btn" class="btn" style="margin-left:auto">Clear All</button>
-  </div>
-  <div style="padding:16px">
-    <div class="pn">
-      <div class="ph"><div class="pt">Monitoring Alerts</div><span id="alerts-badge" class="badge">0</span></div>
-      <div style="padding:11px 13px" id="alerts-list"><div class="lt">No alerts yet - monitoring will generate alerts when threats are detected</div></div>
-    </div>
-  </div>
-</div>
+        
 
 <script src="/app.js" defer></script>
 </body>
