@@ -56,7 +56,7 @@ g('scan-btn').addEventListener('click',function(){var sb=g('scan-btn');sb.textCo
 });
 
 
-// ── Domain Verification Wizard (dv- prefix) ──────────────────────────────────
+// \u2500\u2500 Domain Verification Wizard (dv- prefix) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 (function() {
   var dvDomain = '', dvToken = '';
   var header = document.getElementById('dv-header');
@@ -121,7 +121,7 @@ Details: ' + (d.error || 'Unknown error'));
             statusEl.textContent = '';
           } else {
             var reason = (d.data && d.data.reason) || 'TXT record not yet detected.';
-            statusEl.textContent = reason + ' DNS propagation can take up to 24h — try again later.';
+            statusEl.textContent = reason + ' DNS propagation can take up to 24h -- try again later.';
             statusEl.style.color = '#f5c518';
           }
         })
