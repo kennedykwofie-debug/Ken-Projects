@@ -241,4 +241,24 @@ router.get('/credentials/breaches', async function(req, res) {
   } catch (err) { res.status(500).json({ success: false, error: err.message }); }
 });
 
+
+// DNS resolution endpoint - resolves domain to IPs using Google DoH
+router.get('/monitor/dns/:domain', async function(req, res) {
+  try {
+    var domain = req.params.domain;
+    var axios = require('axios');
+    var result = await axios.get('https://dns.google/resolve', {
+      params: { name: domain, type: 'A' },
+      timeout: 8000
+    });
+    var answers = (result.data.Answer || []).filter(function(r) { return r.type === 1; });
+    var ips = answers.map(function(r) { return r.data; });
+    // Also get CNAMEs
+    var cnames = (result.data.Answer || []).filter(function(r) { return r.type === 5; }).map(function(r) { return r.data.replace(/\.$/, ''); });
+    res.json({ success: true, domain: domain, ips: ips, cnames: cnames, status: result.data.Status });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 module.exports = router;
