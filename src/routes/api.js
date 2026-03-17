@@ -261,4 +261,40 @@ router.get('/monitor/dns/:domain', async function(req, res) {
   }
 });
 
+
+// ── Domain Verification & Bulk Domain Breach Scanning ────────────────────────
+
+// GET /api/v1/credentials/verify/:domain - get verification token + check DNS
+router.get('/credentials/verify/:domain', async function(req, res) {
+  try {
+    var domain = req.params.domain;
+    var result = await creds.checkDomainVerification(domain);
+    res.json({ success: true, data: result });
+  } catch(err) { res.status(500).json({ success: false, error: err.message }); }
+});
+
+// GET /api/v1/credentials/token/:domain - just get the token (no DNS check)
+router.get('/credentials/token/:domain', function(req, res) {
+  try {
+    var domain = req.params.domain;
+    var token = creds.getVerificationToken(domain);
+    res.json({ success: true, domain: domain, token: token, txtRecord: token, instruction: 'Add a DNS TXT record to ' + domain + ' with value: ' + token });
+  } catch(err) { res.status(500).json({ success: false, error: err.message }); }
+});
+
+// GET /api/v1/credentials/domain/:domain - bulk breach scan for verified domain
+router.get('/credentials/domain/:domain', async function(req, res) {
+  try {
+    var result = await creds.checkDomainBreaches(req.params.domain);
+    res.json({ success: true, data: result });
+  } catch(err) { res.status(500).json({ success: false, error: err.message }); }
+});
+
+// GET /api/v1/credentials/verified - list all verified domains
+router.get('/credentials/verified', function(req, res) {
+  try {
+    res.json({ success: true, data: creds.getVerifiedDomains() });
+  } catch(err) { res.status(500).json({ success: false, error: err.message }); }
+});
+
 module.exports = router;
