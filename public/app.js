@@ -147,6 +147,30 @@ g("cr-accounts").textContent=(summ.exposedEmails||0).toLocaleString();
 g("cr-breaches").textContent=(summ.uniqueBreaches||[]).length||0;
 g("cr-critical").textContent=summ.criticalEmails||0;
 if(emailResults.length&&emailResults[0].lastChecked)g("cr-last").textContent=rel(emailResults[0].lastChecked);
+  // Update monitored emails panel
+  var monList = document.getElementById('monitored-email-list');
+  var monCount = document.getElementById('mon-email-count');
+  if(monList){
+    if(!monitoredEmails.length){
+      monList.innerHTML='<div class="lt" style="padding:0">No emails monitored yet &mdash; add one above</div>';
+    } else {
+      var monH='';
+      monitoredEmails.forEach(function(em4){
+        var res4 = emailResults.filter(function(r3){return r3.email===em4;})[0];
+        var rc4 = res4 ? (res4.riskLevel==='clean'?'low':res4.riskLevel||'low') : 'pending';
+        var col4 = rc4==='critical'?'#ff3b5c':rc4==='high'?'#ff8c42':rc4==='medium'?'#f5c518':rc4==='low'?'#00d4aa':'#64748b';
+        monH += '<span class="watched-chip">';
+        monH += '<span style="font-family:monospace;font-size:11px;color:'+col4+'">'+esc(em4)+'</span>';
+        if(res4&&res4.breachCount>0) monH += '<span style="font-size:10px;color:'+col4+';margin-left:4px">'+res4.breachCount+' breach'+(res4.breachCount!==1?'es':'')+'</span>';
+        else if(res4&&res4.breachCount===0) monH += '<span style="font-size:10px;color:#00d4aa;margin-left:4px">clean</span>';
+        else monH += '<span style="font-size:10px;color:#64748b;margin-left:4px">checking...</span>';
+        monH += '<button class="rm-btn" data-type="email" data-val="'+esc(em4)+'" title="Remove">x</button>';
+        monH += '</span>';
+      });
+      monList.innerHTML = monH;
+    }
+    if(monCount) monCount.textContent = monitoredEmails.length + (monitoredEmails.length===1?' email':' emails');
+  }
 var sumH="";
 if(!emailResults.length){sumH="<div style=\"padding:20px;color:#64748b;font-size:12px;line-height:1.6\">Enter any email above to check against 700+ known breaches in real-time.<br><span style=\"color:#4d9eff\">Powered by HaveIBeenPwned</span> &bull; Results cached 12h</div>";}
 else{emailResults.forEach(function(em){var erc=em.riskLevel==="clean"?"low":em.riskLevel||"low";var ecol=erc==="critical"?"#ff3b5c":erc==="high"?"#ff8c42":erc==="medium"?"#f5c518":"#00d4aa";sumH+="<div style=\"padding:12px 0;border-bottom:1px solid #1e2630;display:flex;justify-content:space-between;align-items:flex-start\"><div style=\"flex:1;min-width:0\"><div style=\"font-family:monospace;font-size:12px;font-weight:700;color:"+ecol+";margin-bottom:5px\">"+esc(em.email)+"</div>";if(em.breachCount>0){sumH+="<div style=\"font-size:11px;color:#64748b;margin-bottom:4px\">Found in: ";(em.breachNames||[]).slice(0,6).forEach(function(bn){sumH+="<span class=\"tag\">"+esc(bn)+"</span>";});if((em.breachNames||[]).length>6)sumH+="<span class=\"tag\">+"+(em.breachNames.length-6)+" more</span>";sumH+="</div>";}else{sumH+="<div style=\"font-size:11px;color:#00d4aa\">No breaches - clean!</div>";}sumH+="</div><div style=\"text-align:right;flex-shrink:0;margin-left:16px\"><span class=\"risk-badge "+erc+"\">"+(em.breachCount||0)+" breach"+(em.breachCount!==1?"es":"")+"</span><br><button onclick=\"window._rmW('email','"+esc(em.email)+"');\" style=\"background:none;border:none;color:#64748b;cursor:pointer;font-size:10px;margin-top:6px\">Remove</button></div></div>";});}
