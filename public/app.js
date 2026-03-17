@@ -62,23 +62,45 @@ if(res.length&&res[0].lastChecked)g("cr-last").textContent=rel(res[0].lastChecke
 var monList=document.getElementById("monitored-email-list");
 var monCount=document.getElementById("mon-email-count");
 if(monList){
+  monList.innerHTML="";
   if(!ems.length){
-    monList.innerHTML="<div style=\"color:#64748b;font-size:12px\">No emails monitored yet -- add one above</div>";
+    var noEm=document.createElement("div");
+    noEm.style.cssText="color:#64748b;font-size:12px";
+    noEm.textContent="No emails monitored yet -- add one above";
+    monList.appendChild(noEm);
   }else{
-    var mh="";
     ems.forEach(function(em){
       var r4=res.filter(function(x){return x.email===em;})[0];
       var rl=r4?(r4.riskLevel==="clean"?"low":r4.riskLevel||"low"):"pending";
       var co=rl==="critical"?"#ff3b5c":rl==="high"?"#ff8c42":rl==="medium"?"#f5c518":rl==="low"?"#00d4aa":"#64748b";
-      mh+="<span class=\"watched-chip\">";
-      mh+="<span style=\"font-family:monospace;font-size:11px;color:"+co+"\">"+esc(em)+"</span>";
-      if(r4&&r4.breachCount>0) mh+=" <span style=\"font-size:10px;color:"+co+"\">"+r4.breachCount+" breach"+(r4.breachCount!==1?"es":"")+"</span>";
-      else if(r4&&r4.breachCount===0) mh+=" <span style=\"font-size:10px;color:#00d4aa\">clean</span>";
-      else mh+=" <span style=\"font-size:10px;color:#64748b\">checking...</span>";
-      mh+=" <button class=\"rm-btn\" data-type=\"email\" data-val=\""+esc(em)+"\">x</button>";
-      mh+="</span>";
+      var chip=document.createElement("span");
+      chip.className="watched-chip";
+      var lbl=document.createElement("span");
+      lbl.style.cssText="font-family:monospace;font-size:11px;color:"+co;
+      lbl.textContent=em;
+      chip.appendChild(lbl);
+      var st=document.createElement("span");
+      st.style.cssText="font-size:10px;margin-left:4px";
+      if(r4&&r4.breachCount>0){st.style.color=co;st.textContent=r4.breachCount+" breach"+(r4.breachCount!==1?"es":"");}
+      else if(r4&&r4.breachCount===0){st.style.color="#00d4aa";st.textContent="clean";}
+      else{st.style.color="#64748b";st.textContent="checking...";}
+      chip.appendChild(st);
+      var xbtn=document.createElement("button");
+      xbtn.className="rm-btn";
+      xbtn.textContent="x";
+      xbtn.style.marginLeft="6px";
+      (function(email){
+        xbtn.addEventListener("click",function(e){
+          e.stopPropagation();
+          xbtn.disabled=true;xbtn.textContent="...";
+          fetch(API+"/monitor/watchlist",{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({type:"email",value:email})})
+          .then(function(){loadCreds();})
+          .catch(function(){xbtn.disabled=false;xbtn.textContent="x";});
+        });
+      })(em);
+      chip.appendChild(xbtn);
+      monList.appendChild(chip);
     });
-    monList.innerHTML=mh;
   }
   if(monCount)monCount.textContent=ems.length+(ems.length===1?" email":" emails");
 }
