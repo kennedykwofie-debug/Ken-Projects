@@ -48,6 +48,163 @@ fetch(API+"/monitor/assets").then(function(r){return r.json();}).then(function(d
 window._rmW=function(wtype,wval){fetch(API+"/monitor/watchlist",{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({type:wtype,value:wval})}).then(function(){if(wtype==="email"){if(typeof loadCreds==="function")loadCreds();}else{if(typeof loadAssets==="function")loadAssets();}}).catch(function(){});};
 g("add-asset-btn").addEventListener("click",function(){var addIpVal=g("add-ip").value.trim(),addDmVal=g("add-domain").value.trim();if(!addIpVal&&!addDmVal){alert("Enter an IP or domain");return;}var abody={};if(addIpVal)abody.ip=addIpVal;if(addDmVal){abody.domain=addDmVal;abody.credDomain=addDmVal;}fetch(API+"/monitor/watchlist",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(abody)}).then(function(){g("add-ip").value="";g("add-domain").value="";loadAssets();}).catch(function(){});});
 g("scan-btn").addEventListener("click",function(){var scanBtn=g("scan-btn");scanBtn.textContent="Scanning...";g("asset-badge").textContent="SCANNING";fetch(API+"/monitor/scan",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"}).then(function(){setTimeout(function(){scanBtn.textContent="Run Scan Now";loadAssets();loadAlerts();},15000);}).catch(function(){scanBtn.textContent="Run Scan Now";});});
+
+// ── Bulk Import Panel ────────────────────────────────────────────────────────
+(function(){
+var PREFIXES=[
+"admin","administrator","webmaster","hostmaster","postmaster","abuse","noc","security",
+"info","contact","hello","support","help","helpdesk","servicedesk","it","itsupport",
+"hr","humanresources","recruitment","careers","jobs","payroll","training",
+"ceo","cfo","cto","coo","ciso","president","director","manager","vp",
+"finance","accounting","billing","accounts","treasury","audit",
+"legal","compliance","privacy","dpo","risk","governance",
+"sales","marketing","press","media","communications","pr","partnerships",
+"procurement","purchasing","supply","vendors","facilities",
+"operations","ops","devops","dev","engineering","tech","infrastructure",
+"data","analytics","research","innovation",
+"customerservice","customers","clients","feedback","complaints"
+];
+var bHdr=document.getElementById("bulk-header");
+if(!bHdr)return;
+bHdr.addEventListener("click",function(){
+  var bd=document.getElementById("bulk-body");
+  var bt=document.getElementById("bulk-toggle");
+  if(!bd)return;
+  var open=bd.style.display!=="none";
+  bd.style.display=open?"none":"block";
+  if(bt)bt.textContent=open?"Click to expand":"Click to collapse";
+});
+var tabPattern=document.getElementById("bulk-tab-pattern");
+var tabCsv=document.getElementById("bulk-tab-csv");
+var panePattern=document.getElementById("bulk-pane-pattern");
+var paneCsv=document.getElementById("bulk-pane-csv");
+function switchBulkTab(t){
+  var isP=t==="pattern";
+  if(tabPattern)tabPattern.className=isP?"btn btn-primary":"btn";tabPattern.style.cssText=isP?"font-size:11px":"font-size:11px;background:#1e2630;border:1px solid #2a3440";
+  if(tabCsv)tabCsv.style.cssText=isP?"font-size:11px;background:#1e2630;border:1px solid #2a3440":"font-size:11px";tabCsv.className=isP?"btn":"btn btn-primary";
+  if(panePattern)panePattern.style.display=isP?"block":"none";
+  if(paneCsv)paneCsv.style.display=isP?"none":"block";
+}
+if(tabPattern)tabPattern.addEventListener("click",function(){switchBulkTab("pattern");});
+if(tabCsv)tabCsv.addEventListener("click",function(){switchBulkTab("csv");});
+var selectedEmails={};
+function updateSelCount(){
+  var n=Object.keys(selectedEmails).filter(function(k){return selectedEmails[k];}).length;
+  var el=document.getElementById("bulk-sel-count");
+  if(el)el.textContent="("+n+" selected)";
+}
+var previewBtn=document.getElementById("bulk-preview-btn");
+if(previewBtn){previewBtn.addEventListener("click",function(){
+  var dom=document.getElementById("bulk-domain");
+  if(!dom)return;
+  var domain=dom.value.trim().toLowerCase().replace(/^@/,"");
+  if(!domain||domain.indexOf(".")<0){dom.style.borderColor="#ff3b5c";return;}
+  dom.style.borderColor="";
+  selectedEmails={};
+  var listEl=document.getElementById("bulk-email-list");
+  var previewArea=document.getElementById("bulk-preview-area");
+  if(!listEl||!previewArea)return;
+  listEl.innerHTML="";
+  PREFIXES.forEach(function(p){
+    var em=p+"@"+domain;
+    selectedEmails[em]=true;
+    var chip=document.createElement("label");
+    chip.style.cssText="display:inline-flex;align-items:center;gap:4px;background:#0d1117;border:1px solid #2a3440;border-radius:4px;padding:3px 7px;cursor:pointer;font-size:11px;font-family:monospace;color:#e2e8f0;user-select:none";
+    var cb=document.createElement("input");
+    cb.type="checkbox";cb.checked=true;cb.style.accentColor="#a78bfa";
+    (function(email,lbl,checkbox){
+      checkbox.addEventListener("change",function(){
+        selectedEmails[email]=checkbox.checked;
+        lbl.style.borderColor=checkbox.checked?"#2a3440":"#1e2630";
+        lbl.style.opacity=checkbox.checked?"1":"0.4";
+        updateSelCount();
+      });
+    })(em,chip,cb);
+    chip.appendChild(cb);
+    chip.appendChild(document.createTextNode(em));
+    listEl.appendChild(chip);
+  });
+  previewArea.style.display="block";
+  updateSelCount();
+});}
+var selAll=document.getElementById("bulk-select-all");
+var deselAll=document.getElementById("bulk-deselect-all");
+if(selAll){selAll.addEventListener("click",function(){
+  document.querySelectorAll("#bulk-email-list input[type=checkbox]").forEach(function(cb){cb.checked=true;var em=cb.parentElement.textContent.trim();selectedEmails[em]=true;cb.parentElement.style.opacity="1";cb.parentElement.style.borderColor="#2a3440";});
+  updateSelCount();
+});}
+if(deselAll){deselAll.addEventListener("click",function(){
+  document.querySelectorAll("#bulk-email-list input[type=checkbox]").forEach(function(cb){cb.checked=false;var em=cb.parentElement.textContent.trim();selectedEmails[em]=false;cb.parentElement.style.opacity="0.4";cb.parentElement.style.borderColor="#1e2630";});
+  updateSelCount();
+});}
+var addSelBtn=document.getElementById("bulk-add-selected");
+if(addSelBtn){addSelBtn.addEventListener("click",function(){
+  var toAdd=Object.keys(selectedEmails).filter(function(k){return selectedEmails[k];});
+  if(!toAdd.length){return;}
+  var statusEl=document.getElementById("bulk-add-status");
+  addSelBtn.disabled=true;addSelBtn.textContent="Adding "+toAdd.length+" emails...";
+  var added=0,errors=0;
+  function addNext(i){
+    if(i>=toAdd.length){
+      addSelBtn.disabled=false;addSelBtn.textContent="Add Selected to Monitor";
+      if(statusEl)statusEl.textContent="Done: "+added+" added, "+errors+" errors.";
+      setTimeout(function(){if(typeof loadCreds==="function")loadCreds();},500);
+      return;
+    }
+    fetch(API+"/monitor/watchlist",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:toAdd[i]})})
+    .then(function(){added++;if(statusEl)statusEl.textContent="Adding... "+added+"/"+toAdd.length;addNext(i+1);})
+    .catch(function(){errors++;addNext(i+1);});
+  }
+  addNext(0);
+});}
+function parseEmails(raw){
+  var lines=raw.replace(/,/g,"\n").split("\n");
+  var emails=[];
+  lines.forEach(function(l){
+    var e=l.trim().toLowerCase();
+    if(e&&e.indexOf("@")>0&&e.indexOf(".")>0)emails.push(e);
+  });
+  return emails;
+}
+var csvAddBtn=document.getElementById("bulk-csv-add");
+if(csvAddBtn){csvAddBtn.addEventListener("click",function(){
+  var ta=document.getElementById("bulk-paste");
+  if(!ta)return;
+  var emails=parseEmails(ta.value);
+  var statusEl=document.getElementById("bulk-csv-status");
+  if(!emails.length){if(statusEl)statusEl.textContent="No valid email addresses found.";return;}
+  csvAddBtn.disabled=true;csvAddBtn.textContent="Adding "+emails.length+" emails...";
+  var added=0,errors=0;
+  function addNext(i){
+    if(i>=emails.length){
+      csvAddBtn.disabled=false;csvAddBtn.textContent="Add All Emails";
+      if(statusEl)statusEl.textContent="Done: "+added+" added, "+errors+" skipped/errors.";
+      ta.value="";
+      setTimeout(function(){if(typeof loadCreds==="function")loadCreds();},500);
+      return;
+    }
+    fetch(API+"/monitor/watchlist",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:emails[i]})})
+    .then(function(){added++;if(statusEl)statusEl.textContent="Adding... "+added+"/"+emails.length;addNext(i+1);})
+    .catch(function(){errors++;addNext(i+1);});
+  }
+  addNext(0);
+});}
+var fileInput=document.getElementById("bulk-file-input");
+if(fileInput){fileInput.addEventListener("change",function(e){
+  var file=e.target.files[0];
+  if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    var ta=document.getElementById("bulk-paste");
+    if(ta)ta.value=ev.target.result;
+    var statusEl=document.getElementById("bulk-csv-status");
+    var count=parseEmails(ev.target.result).length;
+    if(statusEl)statusEl.textContent="Loaded "+file.name+" -- "+count+" valid emails found. Click Add All Emails to import.";
+  };
+  reader.readAsText(file);
+  fileInput.value="";
+});}
+})();
 function loadCreds(){
 fetch(API+"/credentials/status").then(function(r){return r.json();}).then(function(d){
 if(!d.success)return;
