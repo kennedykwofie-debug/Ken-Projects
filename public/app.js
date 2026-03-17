@@ -48,7 +48,55 @@ fetch(API+"/monitor/assets").then(function(r){return r.json();}).then(function(d
 
 document.addEventListener("click",function(ev){var btn=ev.target.closest(".rm-btn");if(btn){var wt=btn.getAttribute("data-type");var wv=btn.getAttribute("data-val");if(wt&&wv)window._rmW(wt,wv);return;}var credBtn=ev.target.closest("#cred-summary button");if(credBtn&&credBtn.onclick){credBtn.onclick();}});
 window._rmW=function(wtype,wval){fetch(API+"/monitor/watchlist",{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({type:wtype,value:wval})}).then(function(){loadAssets();}).catch(function(){});};
-g("add-asset-btn").addEventListener("click",function(){var addIpVal=g("add-ip").value.trim(),addDmVal=g("add-domain").value.trim();if(!addIpVal&&!addDmVal){alert("Enter an IP or domain");return;}var abody={};if(addIpVal)abody.ip=addIpVal;if(addDmVal){abody.domain=addDmVal;abody.credDomain=addDmVal;}fetch(API+"/monitor/watchlist",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(abody)}).then(function(){g("add-ip").value="";g("add-domain").value="";loadAssets();}).catch(function(){});});
+g("add-asset-btn").addEventListener("click",function(){
+  var addIpVal=g("add-ip").value.trim(), addDmVal=g("add-domain").value.trim();
+  if(!addIpVal&&!addDmVal){alert("Enter an IP address or domain name");return;}
+  var addBtn=g("add-asset-btn"); addBtn.textContent="Adding...";
+
+  if(addIpVal) {
+    // Direct IP — add straight to watchlist
+    fetch(API+"/monitor/watchlist",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({ip:addIpVal})})
+      .then(function(){g("add-ip").value="";addBtn.textContent="+ Add to Watchlist";loadAssets();})
+      .catch(function(){addBtn.textContent="+ Add to Watchlist";});
+    return;
+  }
+
+  // Domain — resolve to IPs first via Google DNS, then add each IP
+  fetch(API+"/monitor/resolve?domain="+encodeURIComponent(addDmVal))
+    .then(function(r){return r.json();})
+    .then(function(dns){
+      if(!dns.success||!dns.ips||dns.ips.length===0){
+        // No IPs found — just store the domain name for display
+        return fetch(API+"/monitor/watchlist",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({domain:addDmVal})});
+      }
+      // Show resolved IPs in status
+      var ipadd = dns.ips.join(", ");
+      var isBehindCDN = dns.ips.some(function(ip){
+        return ip.startsWith("104.18.")||ip.startsWith("104.16.")||ip.startsWith("172.67.")||
+               ip.startsWith("162.159.")||ip.startsWith("1.1.1.")||ip.startsWith("8.8.");
+      });
+      var note = isBehindCDN ? " (Cloudflare CDN - shared IPs)" : "";
+      g("add-domain").placeholder = "Resolved: "+ipadd+note;
+
+      // Add domain for display tracking
+      var promises = [fetch(API+"/monitor/watchlist",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({domain:addDmVal})})];
+      // Add each resolved IP for Shodan scanning
+      dns.ips.forEach(function(ip){
+        promises.push(fetch(API+"/monitor/watchlist",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({ip:ip})}));
+      });
+      // Show DNS result in UI
+      var cdnWarn = isBehindCDN ? '<div style="font-size:10px;color:#f5c518;margin-top:4px">&#9888; Behind Cloudflare CDN - these are shared IPs</div>' : '';
+      g("watched-ips").innerHTML += '<div style="font-size:11px;color:#64748b;padding:4px 0">Resolved '+esc(addDmVal)+' &#8594; '+esc(ipadd)+cdnWarn+'</div>';
+      return Promise.all(promises);
+    })
+    .then(function(){
+      g("add-domain").value="";
+      g("add-domain").placeholder="Domain (e.g. example.com)";
+      addBtn.textContent="+ Add to Watchlist";
+      loadAssets();
+    })
+    .catch(function(){addBtn.textContent="+ Add to Watchlist";});
+});
 g("scan-btn").addEventListener("click",function(){var scanBtn=g("scan-btn");scanBtn.textContent="Scanning...";g("asset-badge").textContent="SCANNING";fetch(API+"/monitor/scan",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"}).then(function(){setTimeout(function(){scanBtn.textContent="Run Scan Now";loadAssets();loadAlerts();},15000);}).catch(function(){scanBtn.textContent="Run Scan Now";});});
 function loadCreds(){
 fetch(API+"/credentials/status").then(function(r){return r.json();}).then(function(d){
