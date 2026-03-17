@@ -137,6 +137,16 @@
       <div class="stat-card blue2"><div class="sl">Critical Leaks</div><div class="sv" id="cr-critical">0</div></div>
       <div class="stat-card green"><div class="sl">Last Check</div><div class="sv" id="cr-last" style="font-size:12px">Never</div></div>
     </div>
+    
+    <div id="monitored-emails-panel" style="background:#0f1318;border:1px solid #1e2630;border-radius:6px;margin-bottom:12px;overflow:hidden">
+      <div style="padding:9px 13px;background:#161b22;border-bottom:1px solid #1e2630;display:flex;align-items:center;gap:8px">
+        <div class="pt">Monitored Emails</div>
+        <span id="mon-email-count" style="font-family:monospace;font-size:10px;color:#64748b;margin-left:auto">0 emails</span>
+      </div>
+      <div id="monitored-email-list" style="padding:10px 13px;min-height:38px">
+        <div class="lt" style="padding:0">No emails monitored yet — add one above</div>
+      </div>
+    </div>
     <div id="dv-wizard" style="background:#0d1117;border:1px solid #2a3440;border-radius:6px;margin-bottom:12px;overflow:hidden">
       <div id="dv-header" style="padding:10px 14px;background:#161b22;display:flex;justify-content:space-between;align-items:center;cursor:pointer">
         <div style="font-size:11px;font-weight:700;color:#4d9eff;text-transform:uppercase;letter-spacing:1px">&#9670; Domain Verification &#8212; Bulk Email Scanning</div>
