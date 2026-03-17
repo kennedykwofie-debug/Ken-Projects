@@ -76,7 +76,10 @@ function addCredDomain(domain) { addWatchedDomain(domain); }
 function removeWatched(type, value) {
   if (type === 'ip') state.watchedIPs = state.watchedIPs.filter(function(x) { return x !== value; });
   if (type === 'domain') state.watchedDomains = state.watchedDomains.filter(function(x) { return x !== value; });
-  if (type === 'email') state.watchedEmails = state.watchedEmails.filter(function(x) { return x !== value; });
+  if (type === 'email') {
+    state.watchedEmails = state.watchedEmails.filter(function(x) { return x !== value; });
+    state.emailResults = state.emailResults.filter(function(x) { return x.email !== value; });
+  }
   saveToDisk(state);
 }
 
