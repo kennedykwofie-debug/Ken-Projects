@@ -2,99 +2,32 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>DARKWATCH — Threat Intelligence Platform</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:#0a0d12;color:#e2e8f0;font-family:Segoe UI,sans-serif}
-.top{background:#0f1318;border-bottom:1px solid #1e2630;padding:0 20px;height:48px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
-.logo{color:#ff3b5c;font-weight:700;font-size:15px}
-.live{background:#3d0f18;border:1px solid #ff3b5c;color:#ff3b5c;padding:2px 8px;border-radius:3px;font-size:10px}
-.clk{margin-left:auto;color:#00d4aa;font-family:monospace;font-size:12px}
-.fil{background:#0f1318;border-bottom:1px solid #1e2630;padding:8px 20px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.fil select{background:#161b22;border:1px solid #2a3440;color:#e2e8f0;padding:4px 10px;border-radius:4px;font-size:12px}
-.fil label{font-size:11px;color:#64748b}
-.gr{display:grid;grid-template-columns:200px 1fr;min-height:calc(100vh - 96px)}
-.sb{background:#0f1318;border-right:1px solid #1e2630;padding:12px;position:sticky;top:48px;height:calc(100vh - 48px);overflow-y:auto}
-.sb h3{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
-.si{padding:5px 8px;border-radius:4px;font-size:12px;display:flex;justify-content:space-between;border-left:2px solid transparent}
-.si:hover{background:#161b22}
-.dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:6px}
-.co{padding:16px}
-.st{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px}
-.sc{background:#0f1318;border:1px solid #1e2630;border-radius:6px;padding:11px 13px;position:relative;overflow:hidden}
-.sc::before{content:"";position:absolute;top:0;left:0;right:0;height:2px}
-.r::before{background:#ff3b5c}.o::before{background:#ff8c42}.a::before{background:#f5c518}.b::before{background:#4d9eff}.g::before{background:#00d4aa}
-.sl{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
-.sv{font-size:22px;font-weight:700;font-family:monospace}
-.pn{background:#0f1318;border:1px solid #1e2630;border-radius:6px;margin-bottom:12px;overflow:hidden}
-.ph{background:#161b22;padding:9px 13px;border-bottom:1px solid #1e2630;display:flex;align-items:center;gap:8px}
-.pt{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-family:monospace}
-.pb{padding:11px 13px}
-.tabs{display:flex;gap:4px}
-.tab{font-size:10px;padding:3px 9px;border-radius:4px;cursor:pointer;color:#64748b;border:1px solid transparent;font-family:monospace}
-.tab.on{background:#0d2040;color:#4d9eff;border-color:#4d9eff}
-.tc{display:none}.tc.on{display:block}
-.fl{max-height:380px;overflow-y:auto;padding:0 13px}
-.fi{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid #1e2630}
-.fi:hover{background:#161b22;margin:0 -13px;padding:8px 13px}
-.svb{width:3px;border-radius:2px;min-height:36px;flex-shrink:0}
-.critical{background:#ff3b5c}.high{background:#ff8c42}.medium{background:#f5c518}.low{background:#00d4aa}
-.fm{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:2px;font-size:10px;font-family:monospace}
-.bx{padding:1px 5px;border-radius:3px;font-size:9px}
-.bx.critical{background:#3d0f18;color:#ff3b5c;border:1px solid #ff3b5c}
-.bx.high{background:#3d1f0a;color:#ff8c42;border:1px solid #ff8c42}
-.bx.medium{background:#2e2300;color:#f5c518;border:1px solid #f5c518}
-.bx.low{background:#002e26;color:#00d4aa;border:1px solid #00d4aa}
-.ft{font-size:12px;font-weight:500;margin-bottom:2px}
-.fd{font-size:11px;color:#64748b}
-table{width:100%;border-collapse:collapse;font-size:11px;font-family:monospace}
-th{text-align:left;font-size:10px;color:#64748b;padding:4px 6px;border-bottom:1px solid #1e2630}
-td{padding:6px;border-bottom:1px solid #1e2630;vertical-align:top}tr:hover td{background:#161b22}
-.ag{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:11px 13px;max-height:380px;overflow-y:auto}
-.ac{background:#161b22;border:1px solid #1e2630;border-radius:5px;padding:9px 11px}
-.ac:hover{border-color:#2a3440}
-.an{font-family:monospace;font-size:12px;font-weight:700;margin-bottom:3px}
-.as_{font-size:11px;color:#64748b;margin-bottom:5px}
-.ci{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid #1e2630}
-.cv{font-family:monospace;font-size:11px;font-weight:700;padding:2px 6px;border-radius:4px;min-width:32px;text-align:center;flex-shrink:0}
-.cv.critical{background:#2d0810;color:#ff3b5c;border:1px solid #ff3b5c}
-.cv.high{background:#2d1408;color:#ff8c42;border:1px solid #ff8c42}
-.cv.medium{background:#2e2300;color:#f5c518;border:1px solid #f5c518}
-.pi{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid #1e2630}
-.pi:hover{background:#161b22;margin:0 -13px;padding:8px 13px}
-.bars{display:flex;flex-direction:column;gap:8px}
-.br{display:flex;align-items:center;gap:8px}
-.bl{font-size:11px;width:70px;flex-shrink:0;color:#64748b;font-family:monospace}
-.bt{flex:1;background:#161b22;border-radius:2px;height:6px;overflow:hidden}
-.bf{height:100%;border-radius:2px;transition:width .5s}
-.bc{font-size:10px;color:#64748b;min-width:24px;text-align:right;font-family:monospace}
-.lt{padding:20px;text-align:center;color:#64748b;font-family:monospace;font-size:12px}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:#0f1318}::-webkit-scrollbar-thumb{background:#2a3440;border-radius:2px}
-</style>
+<title>DARKWATCH - Threat Intelligence Platform</title>
+<link rel="stylesheet" href="/app.css">
 </head>
 <body>
 <div class="top">
   <div class="logo">&#9888; DARKWATCH</div>
   <span class="live">&#9679; LIVE</span>
-  <span style="font-size:11px;color:#64748b">Threat Intelligence Platform</span>
+  <span class="subt">Threat Intelligence Platform</span>
   <span class="clk" id="ck">00:00:00 UTC</span>
 </div>
 <div class="fil">
   <label>INDUSTRY</label>
-  <select id="fi" onchange="go()"><option value="all">All Industries</option><option value="finance">Finance</option><option value="healthcare">Healthcare</option><option value="energy">Energy</option><option value="government">Government</option><option value="technology">Technology</option></select>
+  <select id="fi"><option value="all">All Industries</option><option value="finance">Finance</option><option value="healthcare">Healthcare</option><option value="energy">Energy</option><option value="government">Government</option><option value="technology">Technology</option></select>
   <label>REGION</label>
-  <select id="fr" onchange="go()"><option value="all">All Regions</option><option value="na">North America</option><option value="eu">Europe</option><option value="apac">Asia Pacific</option><option value="latam">Latin America</option><option value="mena">Middle East &amp; Africa</option></select>
+  <select id="fr"><option value="all">All Regions</option><option value="na">North America</option><option value="eu">Europe</option><option value="apac">Asia Pacific</option><option value="latam">Latin America</option><option value="mena">Middle East</option></select>
   <label>SEVERITY</label>
-  <select id="fs" onchange="go()"><option value="all">All Severities</option><option value="critical">Critical</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select>
-  <button onclick="rf()" style="margin-left:auto;background:#161b22;border:1px solid #2a3440;color:#e2e8f0;padding:4px 14px;border-radius:4px;cursor:pointer;font-size:11px">&#8635; Refresh</button>
+  <select id="fs"><option value="all">All Severities</option><option value="critical">Critical</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select>
+  <button id="rfbtn">&#8635; Refresh</button>
 </div>
 <div class="gr">
   <div class="sb">
     <h3>Sources</h3>
     <div class="si"><span><span class="dot" style="background:#00d4aa"></span>All</span><span id="c0">-</span></div>
-    <div class="si"><span><span class="dot" style="background:#ff8c42"></span>AlienVault OTX</span><span id="c1">-</span></div>
+    <div class="si"><span><span class="dot" style="background:#ff8c42"></span>OTX</span><span id="c1">-</span></div>
     <div class="si"><span><span class="dot" style="background:#ff3b5c"></span>URLhaus</span><span id="c2">-</span></div>
-    <div class="si"><span><span class="dot" style="background:#ff3b5c"></span>MalwareBazaar</span><span id="c3">-</span></div>
+    <div class="si"><span><span class="dot" style="background:#ff3b5c"></span>Bazaar</span><span id="c3">-</span></div>
     <div class="si"><span><span class="dot" style="background:#4d9eff"></span>ThreatFox</span><span id="c4">-</span></div>
     <div class="si"><span><span class="dot" style="background:#a78bfa"></span>Feodo</span><span id="c5">-</span></div>
     <div class="si"><span><span class="dot" style="background:#64748b"></span>Phishing</span><span id="c6">-</span></div>
@@ -114,131 +47,27 @@ td{padding:6px;border-bottom:1px solid #1e2630;vertical-align:top}tr:hover td{ba
     <div class="pn">
       <div class="ph">
         <div class="pt">Intelligence Feed</div>
-        <div class="tabs" style="margin-left:8px">
-          <div class="tab on" onclick="sw('ta',this)">All</div>
-          <div class="tab" onclick="sw('ti',this)">IoCs</div>
-          <div class="tab" onclick="sw('tac',this)">Actors</div>
-          <div class="tab" onclick="sw('tc',this)">CVEs</div>
-          <div class="tab" onclick="sw('tp',this)">Phishing</div>
+        <div class="tabs">
+          <button class="tab on" data-tab="ta">All</button>
+          <button class="tab" data-tab="ti">IoCs</button>
+          <button class="tab" data-tab="tac">Actors</button>
+          <button class="tab" data-tab="tc">CVEs</button>
+          <button class="tab" data-tab="tp">Phishing</button>
         </div>
-        <span id="fb" style="margin-left:auto;background:#3d0f18;color:#ff3b5c;border:1px solid #ff3b5c;padding:1px 6px;border-radius:3px;font-size:10px;font-family:monospace">LOADING</span>
+        <span id="fb" class="badge">LOADING</span>
       </div>
       <div class="tc on" id="ta"><div class="fl" id="fa"><div class="lt">Loading...</div></div></div>
-      <div class="tc" id="ti"><div style="max-height:380px;overflow-y:auto;padding:0 13px"><table><thead><tr><th>TYPE</th><th>VALUE</th><th>CONF</th><th>FIRST</th><th>SRC</th></tr></thead><tbody id="ib"></tbody></table></div></div>
+      <div class="tc" id="ti"><div class="scroll"><table><thead><tr><th>TYPE</th><th>VALUE</th><th>CONF</th><th>FIRST</th><th>SRC</th></tr></thead><tbody id="ib"></tbody></table></div></div>
       <div class="tc" id="tac"><div class="ag" id="ag"></div></div>
-      <div class="tc" id="tc"><div style="max-height:380px;overflow-y:auto;padding:0 13px" id="cl"></div></div>
-      <div class="tc" id="tp"><div style="max-height:380px;overflow-y:auto;padding:0 13px" id="pl"></div></div>
+      <div class="tc" id="tc"><div class="scroll" id="cl"></div></div>
+      <div class="tc" id="tp"><div class="scroll" id="pl"></div></div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div class="two">
       <div class="pn"><div class="ph"><div class="pt">By Region</div></div><div class="pb"><div class="bars" id="rb"></div></div></div>
       <div class="pn"><div class="ph"><div class="pt">By Industry</div></div><div class="pb"><div class="bars" id="ib2"></div></div></div>
     </div>
   </div>
 </div>
-<script>
-var A="/api/v1";
-var RC={na:"#4d9eff",eu:"#a78bfa",apac:"#00d4aa",mena:"#f5c518",latam:"#ff8c42"};
-var RN={na:"N.Am",eu:"Europe",apac:"Asia",mena:"MENA",latam:"LatAm"};
-function x(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
-function cv(s){return !s?"medium":s>=9?"critical":s>=7?"high":"medium";}
-function go(){
-  var fi=document.getElementById("fi").value;
-  var fr=document.getElementById("fr").value;
-  var fs=document.getElementById("fs").value;
-  var qs="?industry="+fi+"&region="+fr+"&severity="+fs+"&limit=50";
-  fetch(A+"/threats"+qs).then(function(r){return r.json();}).then(function(d){
-    if(!d.success)return;
-    var ev=d.data.events||[];
-    document.getElementById("fb").textContent=ev.filter(function(t){return t.severity==="critical";}).length+" CRITICAL";
-    var html="";
-    for(var i=0;i<ev.length;i++){
-      var t=ev[i];
-      html+='<div class="fi"><div class="svb '+x(t.severity)+'"></div><div style="flex:1;min-width:0"><div class="fm"><span class="bx '+x(t.severity)+'">'+x(t.severity).toUpperCase()+'</span><span style="background:#161b22;padding:1px 5px;border-radius:3px">'+x(t.source)+'</span></div><div class="ft">'+x(t.title)+'</div><div class="fd">'+x((t.description||"").substring(0,100))+'</div></div></div>';
-    }
-    document.getElementById("fa").innerHTML=html||'<div class="lt">No threats</div>';
-    document.getElementById("c0").textContent=ev.length;
-    var cnt={};
-    for(var i=0;i<ev.length;i++){var rg=ev[i].region||[];for(var j=0;j<rg.length;j++){cnt[rg[j]]=(cnt[rg[j]]||0)+1;}}
-    var sr=Object.entries(cnt).sort(function(a,b){return b[1]-a[1];}).slice(0,5);
-    var mx=sr.length?sr[0][1]:1;
-    var rbh="";
-    for(var i=0;i<sr.length;i++){var k=sr[i][0],v=sr[i][1];rbh+='<div class="br"><span class="bl">'+x(RN[k]||k)+'</span><div class="bt"><div class="bf" style="width:'+Math.round(v/mx*100)+'%;background:'+(RC[k]||"#4d9eff")+'"></div></div><span class="bc">'+v+'</span></div>';}
-    document.getElementById("rb").innerHTML=rbh||'<div class="lt">No data</div>';
-    var ind={};
-    for(var i=0;i<ev.length;i++){var ig=ev[i].industry||[];for(var j=0;j<ig.length;j++){ind[ig[j]]=(ind[ig[j]]||0)+1;}}
-    var si=Object.entries(ind).sort(function(a,b){return b[1]-a[1];}).slice(0,7);
-    var mi=si.length?si[0][1]:1;
-    var ibh="";
-    for(var i=0;i<si.length;i++){var k=si[i][0],v=si[i][1];ibh+='<div class="br"><span class="bl" style="text-transform:capitalize">'+x(k)+'</span><div class="bt"><div class="bf" style="width:'+Math.round(v/mi*100)+'%;background:linear-gradient(90deg,#4d9eff,#a78bfa)"></div></div><span class="bc">'+Math.round(v/(ev.length||1)*100)+'%</span></div>';}
-    document.getElementById("ib2").innerHTML=ibh||'<div class="lt">No data</div>';
-  }).catch(function(){});
-  fetch(A+"/stats").then(function(r){return r.json();}).then(function(d){
-    if(!d.success)return;var s=d.data;
-    document.getElementById("s0").textContent=s.criticalThreats||"-";
-    document.getElementById("s1").textContent=(s.activeIoCs||0).toLocaleString();
-    document.getElementById("s2").textContent=s.threatActors||"-";
-    document.getElementById("s3").textContent=s.zeroDayCVEs||"-";
-    document.getElementById("s4").textContent=s.phishingKits||"-";
-  }).catch(function(){});
-  fetch(A+"/health").then(function(r){return r.json();}).then(function(d){
-    if(!d.feeds)return;
-    var fc={configured:"#00d4aa",active:"#00d4aa",public:"#4d9eff","no-key":"#f5c518"};
-    var fl={configured:"key",active:"active",public:"public","no-key":"no key"};
-    var h="<h3 style='font-size:10px;color:#64748b;text-transform:uppercase;margin-bottom:8px'>Health</h3>";
-    Object.entries(d.feeds).forEach(function(e){h+='<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:11px"><span style="color:#e2e8f0">'+e[0]+'</span><span style="color:'+(fc[e[1]]||"#64748b")+'">'+( fl[e[1]]||e[1])+'</span></div>';});
-    document.getElementById("fh").innerHTML=h;
-  }).catch(function(){});
-  fetch(A+"/iocs?limit=100").then(function(r){return r.json();}).then(function(d){
-    if(!d.success)return;var ic=d.data||[];
-    document.getElementById("c1").textContent=ic.filter(function(i){return i.source==="OTX";}).length;
-    document.getElementById("c2").textContent=ic.filter(function(i){return i.source==="URLhaus";}).length;
-    document.getElementById("c3").textContent=ic.filter(function(i){return i.source==="MalwareBazaar";}).length;
-    document.getElementById("c4").textContent=ic.filter(function(i){return i.source==="ThreatFox";}).length;
-    document.getElementById("c5").textContent=ic.filter(function(i){return i.source==="Feodo Tracker";}).length;
-    var kc=function(c){return c>=90?"#00d4aa":c>=75?"#f5c518":"#ff3b5c";};
-    var h="";
-    for(var i=0;i<ic.length;i++){var v=ic[i];h+='<tr><td><span style="background:#2e2300;color:#f5c518;border:1px solid #f5c518;padding:1px 4px;border-radius:3px;font-size:9px">'+x(v.type||"-")+'</span></td><td style="color:#f5c518;word-break:break-all">'+x((v.value||"").substring(0,48))+'</td><td style="color:'+(kc(v.confidence||0))+"">"+(v.confidence||"?")+'%</td><td style="color:#64748b">'+x(v.first||"-")+'</td><td style="color:#64748b">'+x(v.source||"-")+'</td></tr>';}
-    document.getElementById("ib").innerHTML=h||'<tr><td colspan="5" class="lt">No IoCs</td></tr>';
-  }).catch(function(){});
-  fetch(A+"/actors?limit=40").then(function(r){return r.json();}).then(function(d){
-    if(!d.success)return;var ac=d.data||[];
-    document.getElementById("c7").textContent=ac.length;
-    var h="";
-    for(var i=0;i<ac.length;i++){var a=ac[i];h+='<div class="ac"><div class="an">'+x(a.name||"?")+'</div><div class="as_">'+x(a.nation||"?")+' · '+x(a.type||"APT")+'</div></div>';}
-    document.getElementById("ag").innerHTML=h||'<div class="lt">No actors</div>';
-  }).catch(function(){});
-  fetch(A+"/cves?limit=20").then(function(r){return r.json();}).then(function(d){
-    if(!d.success)return;var cv_=d.data||[];
-    document.getElementById("c8").textContent=cv_.length;
-    var h="";
-    for(var i=0;i<cv_.length;i++){var c=cv_[i];h+='<div class="ci"><div class="cv '+cv(c.cvss)+"">"+(c.cvss||"N/A")+'</div><div><div style="font-family:monospace;font-size:11px"><a href="'+(c.url||"#")+'" target="_blank" rel="noopener" style="color:#4d9eff;text-decoration:none">'+x(c.id)+'</a>'+( c.exploited?"<span style='color:#ff3b5c;font-size:10px;margin-left:6px'>● EXPLOITED</span>":"")+'</div><div class="ft">'+x((c.title||"").substring(0,90))+'</div></div></div>';}
-    document.getElementById("cl").innerHTML=h||'<div class="lt">No CVEs</div>';
-  }).catch(function(){});
-  fetch(A+"/phishing?limit=20").then(function(r){return r.json();}).then(function(d){
-    if(!d.success)return;var ph=d.data||[];
-    document.getElementById("c6").textContent=ph.length;
-    document.getElementById("s4").textContent=ph.length;
-    var h="";
-    for(var i=0;i<ph.length;i++){var p=ph[i];h+='<div class="pi"><div style="margin-top:2px;font-size:14px">⚠</div><div><div class="ft">'+x(p.subject||("Campaign: "+p.target))+'</div><div style="font-size:10px;color:#ff3b5c;font-family:monospace">'+x(p.target||"-")+'</div><div style="font-size:11px;color:#64748b">'+( p.domains||1)+' domain(s)</div></div></div>';}
-    document.getElementById("pl").innerHTML=h||'<div class="lt">No phishing</div>';
-  }).catch(function(){});
-  clearTimeout(window._rt);
-  window._rt=setTimeout(function(){fetch(A+"/cache/flush",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"}).catch(function(){}).then(go);},300000);
-}
-function rf(){fetch(A+"/cache/flush",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"}).catch(function(){}).then(go);}
-function sw(id,el){
-  document.querySelectorAll(".tc").forEach(function(t){t.classList.remove("on");});
-  document.querySelectorAll(".tab").forEach(function(t){t.classList.remove("on");});
-  document.getElementById(id).classList.add("on");
-  el.classList.add("on");
-}
-function uc(){
-  var n=new Date();
-  var p=function(x){return String(x).padStart(2,"0");};
-  document.getElementById("ck").textContent=p(n.getUTCHours())+":"+p(n.getUTCMinutes())+":"+p(n.getUTCSeconds())+" UTC";
-}
-setInterval(uc,1000);uc();
-go();
-</script>
+<script src="/app.js"></script>
 </body>
 </html>
