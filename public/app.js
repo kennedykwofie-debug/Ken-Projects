@@ -63,7 +63,7 @@ var monList=document.getElementById("monitored-email-list");
 var monCount=document.getElementById("mon-email-count");
 if(monList){
   if(!ems.length){
-    monList.innerHTML="<div style=\"padding:10px 13px;color:#64748b;font-size:12px\">No emails monitored yet -- add one above</div>";
+    monList.innerHTML="<div style=\"color:#64748b;font-size:12px\">No emails monitored yet -- add one above</div>";
   }else{
     var mh="";
     ems.forEach(function(em){
@@ -82,63 +82,76 @@ if(monList){
   }
   if(monCount)monCount.textContent=ems.length+(ems.length===1?" email":" emails");
 }
+var emH="";
+var exposed=res.filter(function(em3){return em3.breachCount>0;});
+var badge=document.getElementById("exposed-badge");
+if(badge){badge.textContent=exposed.length+" EXPOSED";badge.style.display=exposed.length?"inline":"none";}
+exposed.forEach(function(em3){
+  (em3.breaches||[]).forEach(function(br){
+    var erc2=em3.riskLevel==="clean"?"low":em3.riskLevel||"low";
+    var ec2=erc2==="critical"?"#ff3b5c":erc2==="high"?"#ff8c42":erc2==="medium"?"#f5c518":"#00d4aa";
+    emH+="<tr>";
+    emH+="<td style=\"font-family:monospace;color:"+ec2+";font-size:11px\">"+esc(em3.email)+"</td>";
+    emH+="<td style=\"text-align:center\">"+em3.breachCount+"</td>";
+    emH+="<td><div style=\"font-weight:700;color:#e2e8f0\">"+esc(br.name||"-")+"</div>";
+    emH+="<div style=\"font-size:10px;color:#64748b;margin-top:2px\">"+esc(br.domain||"-")+" | "+esc(br.breachDate||"-")+"</div>";
+    emH+="<div style=\"font-size:10px;color:#ff8c42;margin-top:1px\">"+(br.pwnCount||0).toLocaleString()+" accounts exposed</div></td>";
+    emH+="<td>";
+    (br.dataClasses||[]).forEach(function(dc){
+      var dcC=dc.toLowerCase().indexOf("password")>-1||dc.toLowerCase().indexOf("ssn")>-1||dc.toLowerCase().indexOf("financial")>-1?"#ff3b5c":dc.toLowerCase().indexOf("phone")>-1||dc.toLowerCase().indexOf("address")>-1?"#f5c518":"#64748b";
+      emH+="<span style=\"display:inline-block;margin:1px 2px;padding:1px 5px;border-radius:3px;font-size:10px;border:1px solid "+dcC+";color:"+dcC+"\">"+esc(dc)+"</span>";
+    });
+    if(br.isSensitive)emH+="<br><span style=\"font-size:10px;color:#ff3b5c\">SENSITIVE</span>";
+    emH+="</td>";
+    emH+="<td><span class=\"risk-badge "+erc2+"\">"+erc2.toUpperCase()+"</span></td>";
+    emH+="</tr>";
+  });
+});
+g("exposed-emails").innerHTML=emH||"<tr><td colspan=\"5\" class=\"lt\">No breaches found for monitored emails</td></tr>";
 var sumH="";
 if(!res.length){
-  sumH="<div style=\"padding:16px;color:#64748b;font-size:12px;line-height:1.6\">Add any email above to check it against 700+ known data breaches in real-time.<br><span style=\"color:#4d9eff\">Powered by HaveIBeenPwned</span></div>";
+  sumH="<div style=\"padding:16px;color:#64748b;font-size:12px\">Add any email above to check against 700+ known breaches.<br><span style=\"color:#4d9eff\">Powered by HaveIBeenPwned</span></div>";
 }else{
   res.forEach(function(em2){
     var erc=em2.riskLevel==="clean"?"low":em2.riskLevel||"low";
     var ecol=erc==="critical"?"#ff3b5c":erc==="high"?"#ff8c42":erc==="medium"?"#f5c518":"#00d4aa";
-    sumH+="<div style=\"padding:10px 0;border-bottom:1px solid #1e2630;display:flex;justify-content:space-between;align-items:flex-start\">";
+    sumH+="<div style=\"padding:10px 13px;border-bottom:1px solid #1e2630;display:flex;justify-content:space-between;align-items:flex-start\">";
     sumH+="<div><div style=\"font-family:monospace;font-size:12px;font-weight:700;color:"+ecol+";margin-bottom:4px\">"+esc(em2.email)+"</div>";
-    if(em2.breachCount>0){
-      sumH+="<div style=\"font-size:11px;color:#64748b\">Found in: ";
-      (em2.breachNames||[]).slice(0,6).forEach(function(bn){sumH+="<span class=\"tag\">"+esc(bn)+"</span>";});
-      if((em2.breachNames||[]).length>6)sumH+="<span class=\"tag\">+"+(em2.breachNames.length-6)+" more</span>";
-      sumH+="</div>";
-    }else{sumH+="<div style=\"font-size:11px;color:#00d4aa\">No breaches found -- clean!</div>";}
-    sumH+="</div><div style=\"text-align:right;flex-shrink:0;margin-left:16px\">";
-    sumH+="<span class=\"risk-badge "+erc+"\">"+(em2.breachCount||0)+" breach"+(em2.breachCount!==1?"es":"")+"</span>";
-    sumH+="</div></div>";
+    if(em2.breachCount>0){sumH+="<div style=\"font-size:11px;color:#64748b\">Found in: ";(em2.breachNames||[]).slice(0,6).forEach(function(bn){sumH+="<span class=\"tag\">"+esc(bn)+"</span>";});if((em2.breachNames||[]).length>6)sumH+="<span class=\"tag\">+"+(em2.breachNames.length-6)+" more</span>";sumH+="</div>";}
+    else{sumH+="<div style=\"font-size:11px;color:#00d4aa\">No breaches found</div>";}
+    sumH+="</div><span class=\"risk-badge "+erc+"\">"+(em2.breachCount||0)+" breach"+(em2.breachCount!==1?"es":"")+"</span></div>";
   });
 }
-g("cred-summary").innerHTML=sumH;
-var emH="";
-res.filter(function(em3){return em3.breachCount>0;}).forEach(function(em3){
-  (em3.breaches||[]).forEach(function(br){
-    var erc2=em3.riskLevel==="clean"?"low":em3.riskLevel||"low";
-    var ec2=erc2==="critical"?"#ff3b5c":erc2==="high"?"#ff8c42":"#f5c518";
-    emH+="<tr>";
-emH+="<td style=\"font-family:monospace;color:"+ec2+";font-size:11px\">"+esc(em3.email)+"</td>";
-emH+="<td style=\"text-align:center\">"+em3.breachCount+"</td>";
-emH+="<td><div style=\"font-weight:700;color:#e2e8f0\">"+esc(br.name||"-")+"</div>";
-emH+="<div style=\"font-size:10px;color:#64748b;margin-top:2px\">"+esc(br.domain||"-")+" | "+esc(br.breachDate||"-")+"</div>";
-emH+="<div style=\"font-size:10px;color:#ff8c42;margin-top:1px\">"+(br.pwnCount||0).toLocaleString()+" accounts exposed</div></td>";
-emH+="<td>";
-(br.dataClasses||[]).forEach(function(dc){
-  var dcCol=dc.toLowerCase().indexOf("password")>-1?"#ff3b5c":dc.toLowerCase().indexOf("financial")>-1||dc.toLowerCase().indexOf("bank")>-1?"#ff3b5c":dc.toLowerCase().indexOf("ssn")>-1||dc.toLowerCase().indexOf("passport")>-1?"#ff3b5c":"#64748b";
-  emH+="<span style=\"display:inline-block;margin:1px 2px;padding:1px 5px;border-radius:3px;font-size:10px;border:1px solid "+dcCol+";color:"+dcCol+"\">"+esc(dc)+"</span>";
-});
-if(br.isSensitive) emH+="<br><span style=\"font-size:10px;color:#ff3b5c;margin-top:3px;display:inline-block\">SENSITIVE BREACH</span>";
-emH+="</td>";
-emH+="<td><span class=\"risk-badge "+erc2+"\">"+erc2.toUpperCase()+"</span></td>";
-emH+="</tr>";
-  });
-});
-g("exposed-emails").innerHTML=emH||"<tr><td colspan=\"4\" class=\"lt\">No breaches found for monitored emails</td></tr>";
+var cs=document.getElementById("cred-summary");if(cs)cs.innerHTML=sumH;
 }).catch(function(){});
 fetch(API+"/credentials/breaches").then(function(r){return r.json();}).then(function(d){
 if(!d.success)return;var brs=d.data||[],gbh="";
-for(var gbi=0;gbi<brs.length;gbi++){
-  var gbr=brs[gbi];
-  gbh+="<div class=\"breach-item\">";
-  gbh+="<div class=\"breach-name\">"+esc(gbr.name)+"</div>";
+brs.forEach(function(gbr){
+  gbh+="<div class=\"breach-item\"><div class=\"breach-name\">"+esc(gbr.name)+"</div>";
   gbh+="<div class=\"breach-meta\">"+esc(gbr.domain||"-")+" - "+esc(gbr.breachDate||"-")+" - <span style=\"color:#ff8c42\">"+(gbr.pwnCount||0).toLocaleString()+" accounts</span></div>";
   gbh+="<div style=\"margin-top:4px\">"+(gbr.dataClasses||[]).map(function(dc){return "<span class=\"tag\">"+esc(dc)+"</span>";}).join("")+"</div></div>";
-}
-g("global-breaches").innerHTML=gbh||"<div class=\"lt\">No breach data</div>";
+});
+var gb=document.getElementById("global-breaches");if(gb)gb.innerHTML=gbh||"<div class=\"lt\">No data</div>";
 }).catch(function(){});
 }
+
+// Collapsible sections on creds page
+(function(){
+  function makeToggle(headerId,bodyId,toggleId){
+    var h=document.getElementById(headerId);
+    if(!h)return;
+    h.addEventListener("click",function(){
+      var b=document.getElementById(bodyId);
+      var t=document.getElementById(toggleId);
+      if(!b)return;
+      var open=b.style.display!=="none";
+      b.style.display=open?"none":"block";
+      if(t)t.textContent=open?"Click to expand":"Click to collapse";
+    });
+  }
+  makeToggle("summary-header","summary-body","summary-toggle");
+  makeToggle("breaches-header","breaches-body","breaches-toggle");
+})();
 
 g("add-cred-btn").addEventListener("click",function(){var credEmailVal=g("add-cred-email").value.trim();if(!credEmailVal||credEmailVal.indexOf("@")<0){alert("Enter a valid email");return;}var credBtn=g("add-cred-btn");credBtn.textContent="Checking...";fetch(API+"/monitor/watchlist",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:credEmailVal})}).then(function(){return fetch(API+"/credentials/email/"+encodeURIComponent(credEmailVal));}).then(function(r){return r.json();}).then(function(){g("add-cred-email").value="";credBtn.textContent="+ Monitor Email";loadCreds();}).catch(function(){credBtn.textContent="+ Monitor Email";});});
 g("check-btn").addEventListener("click",function(){var checkBtn=g("check-btn");checkBtn.textContent="Checking...";fetch(API+"/monitor/scan",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"}).then(function(){setTimeout(function(){checkBtn.textContent="Check All Now";loadCreds();},8000);}).catch(function(){checkBtn.textContent="Check All Now";});});
