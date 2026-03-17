@@ -297,4 +297,39 @@ router.get('/credentials/verified', function(req, res) {
   } catch(err) { res.status(500).json({ success: false, error: err.message }); }
 });
 
+
+// ── Domain Verification Routes ────────────────────────────────────────────────
+
+// GET /api/v1/credentials/domain/verify/request/:domain - get HIBP TXT token
+router.get('/credentials/domain/verify/request/:domain', async function(req, res) {
+  try {
+    var result = await creds.requestDomainVerification(req.params.domain);
+    res.json(result);
+  } catch(err) { res.status(500).json({ success: false, error: err.message }); }
+});
+
+// GET /api/v1/credentials/domain/verify/check/:domain - check if DNS TXT record detected
+router.get('/credentials/domain/verify/check/:domain', async function(req, res) {
+  try {
+    var result = await creds.checkDomainVerified(req.params.domain);
+    res.json({ success: true, data: result });
+  } catch(err) { res.status(500).json({ success: false, error: err.message }); }
+});
+
+// GET /api/v1/credentials/domain/scan/:domain - full bulk scan of verified domain
+router.get('/credentials/domain/scan/:domain', async function(req, res) {
+  try {
+    var result = await creds.scanVerifiedDomain(req.params.domain);
+    res.json({ success: true, data: result });
+  } catch(err) { res.status(500).json({ success: false, error: err.message }); }
+});
+
+// GET /api/v1/credentials/domain/breaches/:domain - alias for scan
+router.get('/credentials/domain/breaches/:domain', async function(req, res) {
+  try {
+    var result = await creds.scanVerifiedDomain(req.params.domain);
+    res.json({ success: true, data: result });
+  } catch(err) { res.status(500).json({ success: false, error: err.message }); }
+});
+
 module.exports = router;
