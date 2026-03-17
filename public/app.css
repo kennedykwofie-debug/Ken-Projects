@@ -98,3 +98,9 @@ td{padding:6px;border-bottom:1px solid #1e2630;vertical-align:top}tr:hover td{ba
 .rm-btn:hover{background:#cc2040}
 .watched-chip button{background:none;border:none;color:#ff3b5c;cursor:pointer;font-size:12px;padding:0;line-height:1}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:#0f1318}::-webkit-scrollbar-thumb{background:#2a3440;border-radius:2px}
+/* Region bar colour fix - overrides broken inline style */
+#rb .br:nth-child(1) .bf{background-color:#4d9eff!important}
+#rb .br:nth-child(2) .bf{background-color:#a78bfa!important}
+#rb .br:nth-child(3) .bf{background-color:#00d4aa!important}
+#rb .br:nth-child(4) .bf{background-color:#f5c518!important}
+#rb .br:nth-child(5) .bf{background-color:#ff8c42!important}
