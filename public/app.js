@@ -48,138 +48,87 @@ fetch(API+"/monitor/assets").then(function(r){return r.json();}).then(function(d
 window._rmW=function(wtype,wval){fetch(API+"/monitor/watchlist",{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({type:wtype,value:wval})}).then(function(){loadAssets();}).catch(function(){});};
 g("add-asset-btn").addEventListener("click",function(){var addIpVal=g("add-ip").value.trim(),addDmVal=g("add-domain").value.trim();if(!addIpVal&&!addDmVal){alert("Enter an IP or domain");return;}var abody={};if(addIpVal)abody.ip=addIpVal;if(addDmVal){abody.domain=addDmVal;abody.credDomain=addDmVal;}fetch(API+"/monitor/watchlist",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(abody)}).then(function(){g("add-ip").value="";g("add-domain").value="";loadAssets();}).catch(function(){});});
 g("scan-btn").addEventListener("click",function(){var scanBtn=g("scan-btn");scanBtn.textContent="Scanning...";g("asset-badge").textContent="SCANNING";fetch(API+"/monitor/scan",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"}).then(function(){setTimeout(function(){scanBtn.textContent="Run Scan Now";loadAssets();loadAlerts();},15000);}).catch(function(){scanBtn.textContent="Run Scan Now";});});
-
-(function(){
-var dvDomain="",dvToken="";
-var dvHdr=document.getElementById("dv-header");
-if(!dvHdr)return;
-dvHdr.addEventListener("click",function(){
-  var body=document.getElementById("dv-body");
-  if(!body)return;
-  var open=body.style.display!=="none";
-  body.style.display=open?"none":"block";
-  var lbl=document.getElementById("dv-toggle-label");
-  if(lbl)lbl.textContent=open?"Click to expand":"Click to collapse";
-});
-function dvShow(s){
-  ["dv-s1","dv-s2","dv-s3"].forEach(function(id){
-    var el=document.getElementById(id);
-    if(el)el.style.display=id===s?"block":"none";
-  });
-}
-var dvBtn1=document.getElementById("dv-btn1");
-if(dvBtn1){dvBtn1.addEventListener("click",function(){
-  var inp=document.getElementById("dv-input");
-  if(!inp)return;
-  dvDomain=inp.value.trim();
-  if(!dvDomain||dvDomain.indexOf(".")<0){alert("Enter a valid domain");return;}
-  dvBtn1.textContent="Requesting...";dvBtn1.disabled=true;
-  fetch("/api/v1/credentials/domain/verify/request/"+encodeURIComponent(dvDomain))
-    .then(function(r){return r.json();})
-    .then(function(d){
-      dvBtn1.textContent="Get DNS Verification Token";dvBtn1.disabled=false;
-      if(!d.success){alert("Error: "+(d.error||"Add domain at haveibeenpwned.com/DomainSearch first"));return;}
-      dvToken=d.token;
-      var dn=document.getElementById("dv-domname");
-      var tk=document.getElementById("dv-token");
-      if(dn)dn.textContent=dvDomain;
-      if(tk)tk.textContent="have-i-been-pwned-verification="+dvToken;
-      document.getElementById("dv-body").style.display="block";
-      dvShow("dv-s2");
-    })
-    .catch(function(e){dvBtn1.textContent="Get DNS Verification Token";dvBtn1.disabled=false;alert("Failed: "+e.message);});
-});}
-var dvTk=document.getElementById("dv-token");
-if(dvTk){dvTk.addEventListener("click",function(){
-  navigator.clipboard&&navigator.clipboard.writeText(dvTk.textContent).then(function(){
-    var cm=document.getElementById("dv-copymsg");
-    if(cm){cm.style.display="inline";setTimeout(function(){cm.style.display="none";},2000);}
-  });
-});}
-var dvBack=document.getElementById("dv-back");
-if(dvBack){dvBack.addEventListener("click",function(){dvShow("dv-s1");});}
-var dvBtn2=document.getElementById("dv-btn2");
-if(dvBtn2){dvBtn2.addEventListener("click",function(){
-  var st=document.getElementById("dv-status");
-  dvBtn2.textContent="Checking...";dvBtn2.disabled=true;
-  if(st)st.textContent="Checking HIBP for DNS TXT record...";
-  fetch("/api/v1/credentials/domain/verify/check/"+encodeURIComponent(dvDomain))
-    .then(function(r){return r.json();})
-    .then(function(d){
-      dvBtn2.textContent="Check Verification Status";dvBtn2.disabled=false;
-      if(d.success&&d.data&&d.data.verified){
-        var vn=document.getElementById("dv-verified-name");
-        if(vn)vn.textContent=dvDomain;
-        dvShow("dv-s3");
-        if(st)st.textContent="";
-      }else{
-        var reason=(d.data&&d.data.reason)||"TXT record not detected yet";
-        if(st){st.textContent=reason+" (DNS can take up to 24h)";st.style.color="#f5c518";}
-      }
-    })
-    .catch(function(e){dvBtn2.textContent="Check Verification Status";dvBtn2.disabled=false;if(st){st.textContent="Failed: "+e.message;st.style.color="#ff3b5c";}});
-});}
-var dvBtn3=document.getElementById("dv-btn3");
-if(dvBtn3){dvBtn3.addEventListener("click",function(){
-  var res=document.getElementById("dv-scan-result");
-  dvBtn3.textContent="Scanning...";dvBtn3.disabled=true;
-  if(res)res.textContent="Querying HIBP for all breached accounts on "+dvDomain+"...";
-  fetch("/api/v1/credentials/domain/scan/"+encodeURIComponent(dvDomain))
-    .then(function(r){return r.json();})
-    .then(function(d){
-      dvBtn3.textContent="Scan All Emails on Domain Now";dvBtn3.disabled=false;
-      if(d.success&&d.data&&d.data.verified){
-        var cnt=d.data.totalBreached||0;
-        if(res){res.textContent="Found "+cnt+" breached account(s). Refreshing...";res.style.color="#00d4aa";}
-        setTimeout(function(){loadCreds();},1500);
-      }else{
-        if(res){res.textContent="Domain not verified yet. Add the DNS TXT record first.";res.style.color="#f5c518";}
-      }
-    })
-    .catch(function(e){dvBtn3.textContent="Scan All Emails on Domain Now";dvBtn3.disabled=false;if(res){res.textContent="Scan failed: "+e.message;res.style.color="#ff3b5c";}});
-});}
-})();
 function loadCreds(){
 fetch(API+"/credentials/status").then(function(r){return r.json();}).then(function(d){
-if(!d.success)return;var emailResults=d.data||[],monEmails=d.emails||[],summ=d.summary||{};
-g("cr-domains").textContent=monEmails.length||"-";
+if(!d.success)return;
+var ems=d.emails||[];
+var res=d.data||[];
+var summ=d.summary||{};
+g("cr-domains").textContent=ems.length||"-";
 g("cr-accounts").textContent=(summ.exposedEmails||0).toLocaleString();
 g("cr-breaches").textContent=(summ.uniqueBreaches||[]).length||0;
 g("cr-critical").textContent=summ.criticalEmails||0;
-if(emailResults.length&&emailResults[0].lastChecked)g("cr-last").textContent=rel(emailResults[0].lastChecked);
-  // Update monitored emails panel - always show from watchlist, results optional
-  var monList = document.getElementById('monitored-email-list');
-  var monCount = document.getElementById('mon-email-count');
-  if(monList){
-    if(!monitoredEmails.length){
-      monList.innerHTML='<div class="lt" style="padding:0">No emails monitored yet &mdash; add one above</div>';
-    }else{
-      var monH='';
-      monitoredEmails.forEach(function(em4){
-        var res4=(emailResults||[]).filter(function(r3){return r3.email===em4;})[0];
-        var rc4=res4?(res4.riskLevel==='clean'?'low':res4.riskLevel||'low'):'pending';
-        var col4=rc4==='critical'?'#ff3b5c':rc4==='high'?'#ff8c42':rc4==='medium'?'#f5c518':rc4==='low'?'#00d4aa':'#64748b';
-        monH+='<span class="watched-chip" style="margin:3px;max-width:100%;flex-wrap:wrap">';
-        monH+='<span style="font-family:monospace;font-size:11px;color:'+col4+'">'+esc(em4)+'</span>';
-        if(res4&&res4.breachCount>0) monH+=' <span style="font-size:10px;color:'+col4+'">'+res4.breachCount+' breach'+(res4.breachCount!==1?'es':'')+'</span>';
-        else if(res4&&res4.breachCount===0) monH+=' <span style="font-size:10px;color:#00d4aa">clean</span>';
-        else monH+=' <span style="font-size:10px;color:#64748b">not checked yet</span>';
-        monH+=' <button class="rm-btn" data-type="email" data-val="'+esc(em4)+'" title="Remove">x</button>';
-        monH+='</span>';
-      });
-      monList.innerHTML=monH;
-    }
-    if(monCount) monCount.textContent=monitoredEmails.length+(monitoredEmails.length===1?' email':' emails');
+if(res.length&&res[0].lastChecked)g("cr-last").textContent=rel(res[0].lastChecked);
+var monList=document.getElementById("monitored-email-list");
+var monCount=document.getElementById("mon-email-count");
+if(monList){
+  if(!ems.length){
+    monList.innerHTML="<div style=\"padding:10px 13px;color:#64748b;font-size:12px\">No emails monitored yet -- add one above</div>";
+  }else{
+    var mh="";
+    ems.forEach(function(em){
+      var r4=res.filter(function(x){return x.email===em;})[0];
+      var rl=r4?(r4.riskLevel==="clean"?"low":r4.riskLevel||"low"):"pending";
+      var co=rl==="critical"?"#ff3b5c":rl==="high"?"#ff8c42":rl==="medium"?"#f5c518":rl==="low"?"#00d4aa":"#64748b";
+      mh+="<span class=\"watched-chip\">";
+      mh+="<span style=\"font-family:monospace;font-size:11px;color:"+co+"\">"+esc(em)+"</span>";
+      if(r4&&r4.breachCount>0) mh+=" <span style=\"font-size:10px;color:"+co+"\">"+r4.breachCount+" breach"+(r4.breachCount!==1?"es":"")+"</span>";
+      else if(r4&&r4.breachCount===0) mh+=" <span style=\"font-size:10px;color:#00d4aa\">clean</span>";
+      else mh+=" <span style=\"font-size:10px;color:#64748b\">checking...</span>";
+      mh+=" <button class=\"rm-btn\" data-type=\"email\" data-val=\""+esc(em)+"\">x</button>";
+      mh+="</span>";
+    });
+    monList.innerHTML=mh;
   }
-var sumH="";
-if(!emailResults.length){sumH="<div style=\"padding:20px;color:#64748b;font-size:12px;line-height:1.6\">Enter any email above to check against 700+ known breaches in real-time.<br><span style=\"color:#4d9eff\">Powered by HaveIBeenPwned</span> &bull; Results cached 12h</div>";}
-else{emailResults.forEach(function(em){var erc=em.riskLevel==="clean"?"low":em.riskLevel||"low";var ecol=erc==="critical"?"#ff3b5c":erc==="high"?"#ff8c42":erc==="medium"?"#f5c518":"#00d4aa";sumH+="<div style=\"padding:12px 0;border-bottom:1px solid #1e2630;display:flex;justify-content:space-between;align-items:flex-start\"><div style=\"flex:1;min-width:0\"><div style=\"font-family:monospace;font-size:12px;font-weight:700;color:"+ecol+";margin-bottom:5px\">"+esc(em.email)+"</div>";if(em.breachCount>0){sumH+="<div style=\"font-size:11px;color:#64748b;margin-bottom:4px\">Found in: ";(em.breachNames||[]).slice(0,6).forEach(function(bn){sumH+="<span class=\"tag\">"+esc(bn)+"</span>";});if((em.breachNames||[]).length>6)sumH+="<span class=\"tag\">+"+(em.breachNames.length-6)+" more</span>";sumH+="</div>";}else{sumH+="<div style=\"font-size:11px;color:#00d4aa\">No breaches - clean!</div>";}sumH+="</div><div style=\"text-align:right;flex-shrink:0;margin-left:16px\"><span class=\"risk-badge "+erc+"\">"+(em.breachCount||0)+" breach"+(em.breachCount!==1?"es":"")+"</span><br><button onclick=\"window._rmW('email','"+esc(em.email)+"');\" style=\"background:none;border:none;color:#64748b;cursor:pointer;font-size:10px;margin-top:6px\">Remove</button></div></div>";});}
-g("cred-summary").innerHTML=sumH;
-var emH="";emailResults.filter(function(em2){return em2.breachCount>0;}).forEach(function(em3){(em3.breaches||[]).forEach(function(br){var erc2=em3.riskLevel==="clean"?"low":em3.riskLevel||"low";var ecol2=erc2==="critical"?"#ff3b5c":erc2==="high"?"#ff8c42":"#f5c518";emH+="<tr><td style=\"font-family:monospace;color:"+ecol2+"\">"+esc(em3.email)+"</td><td style=\"text-align:center;font-family:monospace;color:#64748b\">"+em3.breachCount+"</td><td><span style=\"font-weight:700;color:#e2e8f0\">"+esc(br.name||"-")+"</span> <span style=\"color:#64748b;font-size:10px\">"+esc(br.breachDate||"-")+"</span><br><span style=\"font-size:10px;color:#64748b\">"+(br.dataClasses||[]).slice(0,3).join(", ")+"</span></td><td><span class=\"risk-badge "+erc2+"\">"+erc2.toUpperCase()+"</span></td></tr>";});});
-g("exposed-emails").innerHTML=emH||"<tr><td colspan=\"4\" class=\"lt\">No breaches found</td></tr>";
-}).catch(function(){});
-fetch(API+"/credentials/breaches").then(function(r){return r.json();}).then(function(d){if(!d.success)return;var brs=d.data||[],gbh="";for(var gbi=0;gbi<brs.length;gbi++){var gbr=brs[gbi];gbh+="<div class=\"breach-item\"><div class=\"breach-name\">"+esc(gbr.name)+"</div><div class=\"breach-meta\">"+esc(gbr.domain||"-")+" &bull; "+esc(gbr.breachDate||"-")+" &bull; <span style=\"color:#ff8c42\">"+(gbr.pwnCount||0).toLocaleString()+" accounts</span></div><div style=\"margin-top:4px\">"+(gbr.dataClasses||[]).map(function(dc){return "<span class=\"tag\">"+esc(dc)+"</span>";}).join("")+"</div></div>";}g("global-breaches").innerHTML=gbh||"<div class=\"lt\">No breach data</div>";}).catch(function(){});
+  if(monCount)monCount.textContent=ems.length+(ems.length===1?" email":" emails");
 }
+var sumH="";
+if(!res.length){
+  sumH="<div style=\"padding:16px;color:#64748b;font-size:12px;line-height:1.6\">Add any email above to check it against 700+ known data breaches in real-time.<br><span style=\"color:#4d9eff\">Powered by HaveIBeenPwned</span></div>";
+}else{
+  res.forEach(function(em2){
+    var erc=em2.riskLevel==="clean"?"low":em2.riskLevel||"low";
+    var ecol=erc==="critical"?"#ff3b5c":erc==="high"?"#ff8c42":erc==="medium"?"#f5c518":"#00d4aa";
+    sumH+="<div style=\"padding:10px 0;border-bottom:1px solid #1e2630;display:flex;justify-content:space-between;align-items:flex-start\">";
+    sumH+="<div><div style=\"font-family:monospace;font-size:12px;font-weight:700;color:"+ecol+";margin-bottom:4px\">"+esc(em2.email)+"</div>";
+    if(em2.breachCount>0){
+      sumH+="<div style=\"font-size:11px;color:#64748b\">Found in: ";
+      (em2.breachNames||[]).slice(0,6).forEach(function(bn){sumH+="<span class=\"tag\">"+esc(bn)+"</span>";});
+      if((em2.breachNames||[]).length>6)sumH+="<span class=\"tag\">+"+(em2.breachNames.length-6)+" more</span>";
+      sumH+="</div>";
+    }else{sumH+="<div style=\"font-size:11px;color:#00d4aa\">No breaches found -- clean!</div>";}
+    sumH+="</div><div style=\"text-align:right;flex-shrink:0;margin-left:16px\">";
+    sumH+="<span class=\"risk-badge "+erc+"\">"+(em2.breachCount||0)+" breach"+(em2.breachCount!==1?"es":"")+"</span>";
+    sumH+="</div></div>";
+  });
+}
+g("cred-summary").innerHTML=sumH;
+var emH="";
+res.filter(function(em3){return em3.breachCount>0;}).forEach(function(em3){
+  (em3.breaches||[]).forEach(function(br){
+    var erc2=em3.riskLevel==="clean"?"low":em3.riskLevel||"low";
+    var ec2=erc2==="critical"?"#ff3b5c":erc2==="high"?"#ff8c42":"#f5c518";
+    emH+="<tr><td style=\"font-family:monospace;color:"+ec2+"\">"+esc(em3.email)+"</td>";
+    emH+="<td style=\"text-align:center\">"+em3.breachCount+"</td>";
+    emH+="<td><b>"+esc(br.name||"-")+"</b> <span style=\"color:#64748b;font-size:10px\">"+esc(br.breachDate||"-")+"</span><br><span style=\"color:#64748b;font-size:10px\">"+(br.dataClasses||[]).slice(0,3).join(", ")+"</span></td>";
+    emH+="<td><span class=\"risk-badge "+erc2+"\">"+erc2.toUpperCase()+"</span></td></tr>";
+  });
+});
+g("exposed-emails").innerHTML=emH||"<tr><td colspan=\"4\" class=\"lt\">No breaches found for monitored emails</td></tr>";
+}).catch(function(){});
+fetch(API+"/credentials/breaches").then(function(r){return r.json();}).then(function(d){
+if(!d.success)return;var brs=d.data||[],gbh="";
+for(var gbi=0;gbi<brs.length;gbi++){
+  var gbr=brs[gbi];
+  gbh+="<div class=\"breach-item\">";
+  gbh+="<div class=\"breach-name\">"+esc(gbr.name)+"</div>";
+  gbh+="<div class=\"breach-meta\">"+esc(gbr.domain||"-")+" - "+esc(gbr.breachDate||"-")+" - <span style=\"color:#ff8c42\">"+(gbr.pwnCount||0).toLocaleString()+" accounts</span></div>";
+  gbh+="<div style=\"margin-top:4px\">"+(gbr.dataClasses||[]).map(function(dc){return "<span class=\"tag\">"+esc(dc)+"</span>";}).join("")+"</div></div>";
+}
+g("global-breaches").innerHTML=gbh||"<div class=\"lt\">No breach data</div>";
+}).catch(function(){});
+}
+
 g("add-cred-btn").addEventListener("click",function(){var credEmailVal=g("add-cred-email").value.trim();if(!credEmailVal||credEmailVal.indexOf("@")<0){alert("Enter a valid email");return;}var credBtn=g("add-cred-btn");credBtn.textContent="Checking...";fetch(API+"/monitor/watchlist",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:credEmailVal})}).then(function(){return fetch(API+"/credentials/email/"+encodeURIComponent(credEmailVal));}).then(function(r){return r.json();}).then(function(){g("add-cred-email").value="";credBtn.textContent="+ Monitor Email";loadCreds();}).catch(function(){credBtn.textContent="+ Monitor Email";});});
 g("check-btn").addEventListener("click",function(){var checkBtn=g("check-btn");checkBtn.textContent="Checking...";fetch(API+"/monitor/scan",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"}).then(function(){setTimeout(function(){checkBtn.textContent="Check All Now";loadCreds();},8000);}).catch(function(){checkBtn.textContent="Check All Now";});});
 function loadAlerts(){fetch(API+"/monitor/alerts").then(function(r){return r.json();}).then(function(d){if(!d.success)return;var alts=d.data||[];var acnt=alts.length,adot=g("alert-count");if(acnt>0){adot.textContent=acnt;adot.style.display="inline-block";}else{adot.style.display="none";}g("alerts-badge").textContent=acnt+" ALERTS";if(!alts.length){g("alerts-list").innerHTML="<div class=\"lt\">No alerts yet.</div>";return;}var aicons={new_port:"[PORT]",new_vuln:"[CVE]",credential_leak:"[CRED]",critical_asset:"[ASSET]"};var asevC={critical:"#ff3b5c",high:"#ff8c42",medium:"#f5c518",low:"#00d4aa"};var alh="";for(var ali=0;ali<alts.length;ali++){var alt=alts[ali],asc=asevC[alt.severity]||"#64748b";alh+="<div class=\"alert-item\"><div style=\"font-family:monospace;font-size:11px;color:"+asc+";flex-shrink:0;padding-top:2px\">"+(aicons[alt.type]||"[!]")+"</div><div style=\"flex:1\"><div class=\"alert-msg\">"+esc(alt.message)+"</div><div class=\"alert-time\"><span style=\"color:"+asc+"\">"+esc((alt.severity||"").toUpperCase())+"</span> &bull; "+esc(rel(alt.timestamp))+"</div></div></div>";}g("alerts-list").innerHTML=alh;}).catch(function(){});}
