@@ -62,4 +62,64 @@ g('clear-alerts-btn').addEventListener('click',loadAlerts);
 g('fi').addEventListener('change',go);g('fr').addEventListener('change',go);g('fs').addEventListener('change',go);g('rfbtn').addEventListener('click',rf);
 setInterval(function(){var ap=document.querySelector('.page.active');if(!ap)return;if(ap.id==='page-assets')loadAssets();if(ap.id==='page-creds')loadCreds();if(ap.id==='page-alerts')loadAlerts();},30000);
 go();
+
+// Domain Verification
+var _vd="";
+if(g("get-token-btn")){
+g("get-token-btn").addEventListener("click",function(){
+var dom=g("verify-domain-input").value.trim();
+if(!dom||dom.indexOf(".")<0){alert("Enter a valid domain e.g. doh.gov.ph");return;}
+_vd=dom;var vb=g("get-token-btn");vb.textContent="Fetching...";
+fetch(API+"/credentials/token/"+encodeURIComponent(dom)).then(function(r){return r.json();}).then(function(d){
+vb.textContent="Get Verification Token";
+if(!d.success)return;
+g("token-display").textContent=d.token;
+g("verify-panel").style.display="block";
+g("verified-success").style.display="none";
+g("verify-status").textContent="";
+}).catch(function(){vb.textContent="Get Verification Token";});
+});
+g("copy-token-btn").addEventListener("click",function(){
+var tok=g("token-display").textContent;if(!tok)return;
+var cb=g("copy-token-btn");
+navigator.clipboard.writeText(tok).then(function(){cb.textContent="Copied!";setTimeout(function(){cb.textContent="Copy";},2000);}).catch(function(){var ta=document.createElement("textarea");ta.value=tok;document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);cb.textContent="Copied!";setTimeout(function(){cb.textContent="Copy";},2000);});
+});
+g("check-verify-btn").addEventListener("click",function(){
+var d2=_vd||g("verify-domain-input").value.trim();
+if(!d2){alert("Enter your domain first");return;}
+var cvb=g("check-verify-btn"),vs=g("verify-status");
+cvb.textContent="Checking DNS...";vs.textContent="Querying...";vs.style.color="#64748b";
+fetch(API+"/credentials/verify/"+encodeURIComponent(d2)).then(function(r){return r.json();}).then(function(d){
+cvb.textContent="Check Verification Status";
+if(!d.success){vs.textContent="Error: "+(d.error||"?");vs.style.color="#ff3b5c";return;}
+var vr=d.data;
+if(vr.verified){
+vs.textContent="Verified!";vs.style.color="#00d4aa";
+g("verified-success").style.display="block";
+fetch(API+"/monitor/watchlist",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({domain:d2})}).catch(function(){});
+}else{
+vs.style.color="#ff8c42";
+vs.textContent="Not verified yet. Found TXT: "+(vr.answers&&vr.answers.length?vr.answers.join(" | ").substring(0,80):"none")+". DNS can take up to 48h.";
+}
+}).catch(function(){cvb.textContent="Check Verification Status";vs.textContent="Check failed";vs.style.color="#ff3b5c";});
+});
+g("bulk-scan-btn").addEventListener("click",function(){
+var bd=_vd||g("verify-domain-input").value.trim();if(!bd)return;
+var bb=g("bulk-scan-btn");bb.textContent="Scanning all emails...";
+fetch(API+"/credentials/domain/"+encodeURIComponent(bd)).then(function(r){return r.json();}).then(function(d){
+bb.textContent="Scan All Breached Emails Now";
+if(!d.success){alert("Scan failed: "+(d.error||"?"));return;}
+var br=d.data;
+if(br.needsVerification){alert("HIBP rejected - verify DNS first.");return;}
+var be=br.emails||[];
+var bh="<div style=\"padding:10px 0;border-bottom:1px solid #2a3440;margin-bottom:8px\"><div style=\"color:#00d4aa;font-weight:700\">"+be.length+" exposed accounts found on "+esc(bd)+"</div><div style=\"color:#64748b;font-size:11px\">Source: HaveIBeenPwned bulk domain scan</div></div>";
+be.forEach(function(em){var erc=em.riskLevel==="clean"?"low":em.riskLevel||"low";var ec=erc==="critical"?"#ff3b5c":erc==="high"?"#ff8c42":"#f5c518";bh+="<div style=\"padding:8px 0;border-bottom:1px solid #1e2630;display:flex;justify-content:space-between;align-items:center\"><div><div style=\"font-family:monospace;font-size:12px;color:"+ec+"\">"+esc(em.email)+"</div><div style=\"font-size:11px;color:#64748b;margin-top:3px\">";(em.breachNames||[]).slice(0,5).forEach(function(bn){bh+="<span class=\"tag\">"+esc(bn)+"</span>";});bh+="</div></div><span class=\"risk-badge "+erc+"\">"+em.breachCount+" breach"+(em.breachCount!==1?"es":"")+"</span></div>";});
+if(!be.length)bh+="<div style=\"color:#00d4aa;padding:12px\">No breached accounts found.</div>";
+g("cred-summary").innerHTML=bh;
+g("cr-accounts").textContent=be.length;
+g("cr-domains").textContent="1 verified domain";
+g("cr-critical").textContent=be.filter(function(e){return e.riskLevel==="critical";}).length;
+}).catch(function(){bb.textContent="Scan All Breached Emails Now";});
+});
+}
 })();
