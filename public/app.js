@@ -45,7 +45,7 @@ function loadAssets(){
 fetch(API+"/monitor/status").then(function(r){return r.json();}).then(function(d){if(!d.success)return;var st=d.data;var ipH="";(st.watchedIPs||[]).forEach(function(wip){ipH+="<span class=\"watched-chip\">"+esc(wip)+"<button onclick=\"window._rmW('ip','"+esc(wip)+"')\">x</button></span>";});g("watched-ips").innerHTML=ipH||"<div class=\"lt\">No IPs watched</div>";var dmH="";(st.watchedDomains||[]).forEach(function(wdm){dmH+="<span class=\"watched-chip\">"+esc(wdm)+"<button onclick=\"window._rmW('domain','"+esc(wdm)+"')\">x</button></span>";});g("watched-domains").innerHTML=dmH||"<div class=\"lt\">No domains watched</div>";if(st.lastScan)g("as-scan").textContent=rel(st.lastScan);}).catch(function(){});
 fetch(API+"/monitor/assets").then(function(r){return r.json();}).then(function(d){if(!d.success)return;var assets=d.data||[];var acrit=assets.filter(function(a){return a.riskLevel==="critical";}).length;var ahigh=assets.filter(function(a){return a.riskLevel==="high";}).length;g("as-crit").textContent=acrit;g("as-high").textContent=ahigh;g("as-total").textContent=assets.length;g("as-ports").textContent=assets.length;g("asset-badge").textContent=acrit+" CRITICAL";var at="";for(var asi=0;asi<assets.length;asi++){var aa2=assets[asi];var vs=Object.keys(aa2.vulns||{}).length?"<span style=\"color:#ff3b5c\">"+Object.keys(aa2.vulns).length+" CVE(s)</span>":"<span style=\"color:#00d4aa\">Clean</span>";at+="<tr><td style=\"font-family:monospace;color:#4d9eff\">"+esc(aa2.ip)+"</td><td style=\"color:#64748b\">"+esc((aa2.hostnames||[])[0]||aa2.org||"-")+"</td><td style=\"font-family:monospace\">"+esc(String(aa2.port||"-"))+"</td><td>"+esc(aa2.product||"Unknown")+(aa2.version?" <span style=\"color:#64748b\">"+esc(aa2.version)+"</span>":"")+"</td><td style=\"color:#64748b\">"+esc(aa2.country||"-")+"</td><td>"+vs+"</td><td><span class=\"risk-badge "+esc(aa2.riskLevel||"low")+"\">"+esc((aa2.riskLevel||"low").toUpperCase())+"</span></td></tr>";}g("asset-tbody").innerHTML=at||"<tr><td colspan=\"7\" class=\"lt\">No assets</td></tr>";}).catch(function(){});
 }
-window._rmW=function(wtype,wval){fetch(API+"/monitor/watchlist",{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({type:wtype,value:wval})}).then(function(){loadAssets();}).catch(function(){});};
+window._rmW=function(wtype,wval){fetch(API+"/monitor/watchlist",{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({type:wtype,value:wval})}).then(function(){if(wtype==="email"){if(typeof loadCreds==="function")loadCreds();}else{if(typeof loadAssets==="function")loadAssets();}}).catch(function(){});};
 g("add-asset-btn").addEventListener("click",function(){var addIpVal=g("add-ip").value.trim(),addDmVal=g("add-domain").value.trim();if(!addIpVal&&!addDmVal){alert("Enter an IP or domain");return;}var abody={};if(addIpVal)abody.ip=addIpVal;if(addDmVal){abody.domain=addDmVal;abody.credDomain=addDmVal;}fetch(API+"/monitor/watchlist",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(abody)}).then(function(){g("add-ip").value="";g("add-domain").value="";loadAssets();}).catch(function(){});});
 g("scan-btn").addEventListener("click",function(){var scanBtn=g("scan-btn");scanBtn.textContent="Scanning...";g("asset-badge").textContent="SCANNING";fetch(API+"/monitor/scan",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"}).then(function(){setTimeout(function(){scanBtn.textContent="Run Scan Now";loadAssets();loadAlerts();},15000);}).catch(function(){scanBtn.textContent="Run Scan Now";});});
 function loadCreds(){
@@ -108,10 +108,21 @@ res.filter(function(em3){return em3.breachCount>0;}).forEach(function(em3){
   (em3.breaches||[]).forEach(function(br){
     var erc2=em3.riskLevel==="clean"?"low":em3.riskLevel||"low";
     var ec2=erc2==="critical"?"#ff3b5c":erc2==="high"?"#ff8c42":"#f5c518";
-    emH+="<tr><td style=\"font-family:monospace;color:"+ec2+"\">"+esc(em3.email)+"</td>";
-    emH+="<td style=\"text-align:center\">"+em3.breachCount+"</td>";
-    emH+="<td><b>"+esc(br.name||"-")+"</b> <span style=\"color:#64748b;font-size:10px\">"+esc(br.breachDate||"-")+"</span><br><span style=\"color:#64748b;font-size:10px\">"+(br.dataClasses||[]).slice(0,3).join(", ")+"</span></td>";
-    emH+="<td><span class=\"risk-badge "+erc2+"\">"+erc2.toUpperCase()+"</span></td></tr>";
+    emH+="<tr>";
+emH+="<td style=\"font-family:monospace;color:"+ec2+";font-size:11px\">"+esc(em3.email)+"</td>";
+emH+="<td style=\"text-align:center\">"+em3.breachCount+"</td>";
+emH+="<td><div style=\"font-weight:700;color:#e2e8f0\">"+esc(br.name||"-")+"</div>";
+emH+="<div style=\"font-size:10px;color:#64748b;margin-top:2px\">"+esc(br.domain||"-")+" | "+esc(br.breachDate||"-")+"</div>";
+emH+="<div style=\"font-size:10px;color:#ff8c42;margin-top:1px\">"+(br.pwnCount||0).toLocaleString()+" accounts exposed</div></td>";
+emH+="<td>";
+(br.dataClasses||[]).forEach(function(dc){
+  var dcCol=dc.toLowerCase().indexOf("password")>-1?"#ff3b5c":dc.toLowerCase().indexOf("financial")>-1||dc.toLowerCase().indexOf("bank")>-1?"#ff3b5c":dc.toLowerCase().indexOf("ssn")>-1||dc.toLowerCase().indexOf("passport")>-1?"#ff3b5c":"#64748b";
+  emH+="<span style=\"display:inline-block;margin:1px 2px;padding:1px 5px;border-radius:3px;font-size:10px;border:1px solid "+dcCol+";color:"+dcCol+"\">"+esc(dc)+"</span>";
+});
+if(br.isSensitive) emH+="<br><span style=\"font-size:10px;color:#ff3b5c;margin-top:3px;display:inline-block\">SENSITIVE BREACH</span>";
+emH+="</td>";
+emH+="<td><span class=\"risk-badge "+erc2+"\">"+erc2.toUpperCase()+"</span></td>";
+emH+="</tr>";
   });
 });
 g("exposed-emails").innerHTML=emH||"<tr><td colspan=\"4\" class=\"lt\">No breaches found for monitored emails</td></tr>";
