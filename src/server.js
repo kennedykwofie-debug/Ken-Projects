@@ -15,7 +15,22 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 const SCAN_INTERVAL_MS = parseInt(process.env.SCAN_INTERVAL_HOURS || '6') * 60 * 60 * 1000;
 
-app.use(helmet());
+// Helmet with relaxed CSP for our dashboard
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", "data:"],
+      connectSrc: ["'self'"],
+      fontSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      frameSrc: ["'none'"]
+    }
+  }
+}));
+
 app.use(cors({ origin: '*', methods: ['GET', 'POST', 'DELETE'] }));
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 500 }));
 app.use(express.json());
@@ -31,7 +46,7 @@ app.get('*', function(req, res) {
 app.listen(PORT, function() {
   logger.info('DARKWATCH started on http://localhost:' + PORT);
 
-  // Pre-warm caches after 2 seconds
+  // Pre-warm caches
   setTimeout(function() {
     logger.info('Pre-warming caches...');
     require('./feeds/actors').fetchThreatActors({ limit: 50 })
@@ -45,23 +60,23 @@ app.listen(PORT, function() {
       .catch(function() {});
   }, 2000);
 
-  // Initial monitoring scan after 10 seconds
+  // Initial monitoring scan
   setTimeout(function() {
     logger.info('Running initial monitoring scan...');
     monitor.runScanCycle()
-      .then(function(r) { logger.info('Initial scan done: ' + r.assetsScanned + ' assets, ' + r.alerts.length + ' alerts'); })
+      .then(function(r) { logger.info('Initial scan: ' + r.assetsScanned + ' assets, ' + r.alerts.length + ' alerts'); })
       .catch(function(e) { logger.error('Initial scan error: ' + e.message); });
-  }, 10000);
+  }, 15000);
 
-  // Schedule continuous monitoring every N hours
+  // Continuous monitoring every N hours
   setInterval(function() {
-    logger.info('Scheduled monitoring scan starting...');
+    logger.info('Scheduled monitoring scan...');
     monitor.runScanCycle()
-      .then(function(r) { logger.info('Scheduled scan done: ' + r.assetsScanned + ' assets'); })
+      .then(function(r) { logger.info('Scan done: ' + r.assetsScanned + ' assets'); })
       .catch(function(e) { logger.error('Scheduled scan error: ' + e.message); });
   }, SCAN_INTERVAL_MS);
 
-  logger.info('Continuous monitoring: every ' + (SCAN_INTERVAL_MS / 3600000) + ' hours');
+  logger.info('Monitoring: every ' + (SCAN_INTERVAL_MS / 3600000) + 'h');
 });
 
 module.exports = app;
