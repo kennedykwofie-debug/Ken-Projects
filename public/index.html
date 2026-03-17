@@ -10,64 +10,170 @@
   <div class="logo">&#9888; DARKWATCH</div>
   <span class="live">&#9679; LIVE</span>
   <span class="subt">Threat Intelligence Platform</span>
+  <nav class="nav">
+    <button class="nvb active" data-page="intel">Intel Feed</button>
+    <button class="nvb" data-page="assets">Asset Monitor</button>
+    <button class="nvb" data-page="creds">Credential Leaks</button>
+    <button class="nvb" data-page="alerts">Alerts <span id="alert-count" class="alert-dot" style="display:none">0</span></button>
+  </nav>
   <span class="clk" id="ck">00:00:00 UTC</span>
 </div>
-<div class="fil">
-  <label>INDUSTRY</label>
-  <select id="fi"><option value="all">All Industries</option><option value="finance">Finance</option><option value="healthcare">Healthcare</option><option value="energy">Energy</option><option value="government">Government</option><option value="technology">Technology</option></select>
-  <label>REGION</label>
-  <select id="fr"><option value="all">All Regions</option><option value="na">North America</option><option value="eu">Europe</option><option value="apac">Asia Pacific</option><option value="latam">Latin America</option><option value="mena">Middle East</option></select>
-  <label>SEVERITY</label>
-  <select id="fs"><option value="all">All Severities</option><option value="critical">Critical</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select>
-  <button id="rfbtn">&#8635; Refresh</button>
-</div>
-<div class="gr">
-  <div class="sb">
-    <h3>Sources</h3>
-    <div class="si"><span><span class="dot" style="background:#00d4aa"></span>All</span><span id="c0">-</span></div>
-    <div class="si"><span><span class="dot" style="background:#ff8c42"></span>OTX</span><span id="c1">-</span></div>
-    <div class="si"><span><span class="dot" style="background:#ff3b5c"></span>URLhaus</span><span id="c2">-</span></div>
-    <div class="si"><span><span class="dot" style="background:#ff3b5c"></span>Bazaar</span><span id="c3">-</span></div>
-    <div class="si"><span><span class="dot" style="background:#4d9eff"></span>ThreatFox</span><span id="c4">-</span></div>
-    <div class="si"><span><span class="dot" style="background:#a78bfa"></span>Feodo</span><span id="c5">-</span></div>
-    <div class="si"><span><span class="dot" style="background:#64748b"></span>Phishing</span><span id="c6">-</span></div>
-    <div style="margin-top:12px"><h3>Intel</h3></div>
-    <div class="si"><span><span class="dot" style="background:#00d4aa"></span>MITRE ATT&amp;CK</span><span id="c7">-</span></div>
-    <div class="si"><span><span class="dot" style="background:#00d4aa"></span>NVD/CISA</span><span id="c8">-</span></div>
-    <div style="margin-top:12px" id="fh"></div>
+
+<!-- INTEL FEED PAGE -->
+<div id="page-intel" class="page active">
+  <div class="fil">
+    <label>INDUSTRY</label>
+    <select id="fi"><option value="all">All Industries</option><option value="finance">Finance</option><option value="healthcare">Healthcare</option><option value="energy">Energy</option><option value="government">Government</option><option value="technology">Technology</option></select>
+    <label>REGION</label>
+    <select id="fr"><option value="all">All Regions</option><option value="na">North America</option><option value="eu">Europe</option><option value="apac">Asia Pacific</option><option value="latam">Latin America</option><option value="mena">Middle East</option></select>
+    <label>SEVERITY</label>
+    <select id="fs"><option value="all">All Severities</option><option value="critical">Critical</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select>
+    <button id="rfbtn" class="btn">&#8635; Refresh</button>
   </div>
-  <div class="co">
+  <div class="gr">
+    <div class="sb">
+      <h3>Sources</h3>
+      <div class="si"><span><span class="dot" style="background:#00d4aa"></span>All</span><span id="c0">-</span></div>
+      <div class="si"><span><span class="dot" style="background:#ff8c42"></span>OTX</span><span id="c1">-</span></div>
+      <div class="si"><span><span class="dot" style="background:#ff3b5c"></span>URLhaus</span><span id="c2">-</span></div>
+      <div class="si"><span><span class="dot" style="background:#ff3b5c"></span>Bazaar</span><span id="c3">-</span></div>
+      <div class="si"><span><span class="dot" style="background:#4d9eff"></span>ThreatFox</span><span id="c4">-</span></div>
+      <div class="si"><span><span class="dot" style="background:#a78bfa"></span>Feodo</span><span id="c5">-</span></div>
+      <div class="si"><span><span class="dot" style="background:#64748b"></span>Phishing</span><span id="c6">-</span></div>
+      <div style="margin-top:12px"><h3>Intel</h3></div>
+      <div class="si"><span><span class="dot" style="background:#00d4aa"></span>MITRE ATT&amp;CK</span><span id="c7">-</span></div>
+      <div class="si"><span><span class="dot" style="background:#00d4aa"></span>NVD/CISA</span><span id="c8">-</span></div>
+      <div style="margin-top:12px" id="fh"></div>
+    </div>
+    <div class="co">
+      <div class="st">
+        <div class="sc r"><div class="sl">Critical Threats</div><div class="sv" style="color:#ff3b5c" id="s0">-</div></div>
+        <div class="sc o"><div class="sl">Active IoCs</div><div class="sv" style="color:#ff8c42" id="s1">-</div></div>
+        <div class="sc a"><div class="sl">Threat Actors</div><div class="sv" style="color:#f5c518" id="s2">-</div></div>
+        <div class="sc b"><div class="sl">CVEs Exploited</div><div class="sv" style="color:#4d9eff" id="s3">-</div></div>
+        <div class="sc g"><div class="sl">Phishing</div><div class="sv" style="color:#00d4aa" id="s4">-</div></div>
+      </div>
+      <div class="pn">
+        <div class="ph">
+          <div class="pt">Intelligence Feed</div>
+          <div class="tabs">
+            <button class="tab on" data-tab="ta">All</button>
+            <button class="tab" data-tab="ti">IoCs</button>
+            <button class="tab" data-tab="tac">Actors</button>
+            <button class="tab" data-tab="tc">CVEs</button>
+            <button class="tab" data-tab="tp">Phishing</button>
+          </div>
+          <span id="fb" class="badge">LOADING</span>
+        </div>
+        <div class="tc on" id="ta"><div class="fl" id="fa"><div class="lt">Loading...</div></div></div>
+        <div class="tc" id="ti"><div class="scroll"><table><thead><tr><th>TYPE</th><th>VALUE</th><th>CONF</th><th>FIRST</th><th>SRC</th></tr></thead><tbody id="ib"></tbody></table></div></div>
+        <div class="tc" id="tac"><div class="ag" id="ag"></div></div>
+        <div class="tc" id="tc"><div class="scroll" id="cl"></div></div>
+        <div class="tc" id="tp"><div class="scroll" id="pl"></div></div>
+      </div>
+      <div class="two">
+        <div class="pn"><div class="ph"><div class="pt">By Region</div></div><div class="pb"><div class="bars" id="rb"></div></div></div>
+        <div class="pn"><div class="ph"><div class="pt">By Industry</div></div><div class="pb"><div class="bars" id="ib2"></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ASSET MONITOR PAGE -->
+<div id="page-assets" class="page">
+  <div class="fil">
+    <span style="font-size:12px;color:#64748b">Monitor internet-facing assets and open ports for your organisation</span>
+    <div style="display:flex;gap:8px;margin-left:auto;align-items:center">
+      <input id="add-ip" class="inp" placeholder="IP address (e.g. 1.2.3.4)" style="width:180px">
+      <input id="add-domain" class="inp" placeholder="Domain (e.g. example.com)" style="width:180px">
+      <button id="add-asset-btn" class="btn btn-primary">+ Add to Watchlist</button>
+      <button id="scan-btn" class="btn">&#9654; Run Scan Now</button>
+    </div>
+  </div>
+  <div style="padding:16px">
     <div class="st">
-      <div class="sc r"><div class="sl">Critical Threats</div><div class="sv" style="color:#ff3b5c" id="s0">-</div></div>
-      <div class="sc o"><div class="sl">Active IoCs</div><div class="sv" style="color:#ff8c42" id="s1">-</div></div>
-      <div class="sc a"><div class="sl">Threat Actors</div><div class="sv" style="color:#f5c518" id="s2">-</div></div>
-      <div class="sc b"><div class="sl">CVEs Exploited</div><div class="sv" style="color:#4d9eff" id="s3">-</div></div>
-      <div class="sc g"><div class="sl">Phishing</div><div class="sv" style="color:#00d4aa" id="s4">-</div></div>
+      <div class="sc r"><div class="sl">Critical Assets</div><div class="sv" style="color:#ff3b5c" id="as-crit">-</div></div>
+      <div class="sc o"><div class="sl">High Risk</div><div class="sv" style="color:#ff8c42" id="as-high">-</div></div>
+      <div class="sc b"><div class="sl">Total Assets</div><div class="sv" style="color:#4d9eff" id="as-total">-</div></div>
+      <div class="sc a"><div class="sl">Open Ports</div><div class="sv" style="color:#f5c518" id="as-ports">-</div></div>
+      <div class="sc g"><div class="sl">Last Scan</div><div class="sv" style="color:#00d4aa;font-size:12px" id="as-scan">Never</div></div>
+    </div>
+    <div class="two" style="margin-bottom:12px">
+      <div class="pn">
+        <div class="ph"><div class="pt">Watched IPs</div></div>
+        <div style="padding:11px 13px" id="watched-ips"><div class="lt">No IPs watched yet</div></div>
+      </div>
+      <div class="pn">
+        <div class="ph"><div class="pt">Watched Domains</div></div>
+        <div style="padding:11px 13px" id="watched-domains"><div class="lt">No domains watched yet</div></div>
+      </div>
     </div>
     <div class="pn">
-      <div class="ph">
-        <div class="pt">Intelligence Feed</div>
-        <div class="tabs">
-          <button class="tab on" data-tab="ta">All</button>
-          <button class="tab" data-tab="ti">IoCs</button>
-          <button class="tab" data-tab="tac">Actors</button>
-          <button class="tab" data-tab="tc">CVEs</button>
-          <button class="tab" data-tab="tp">Phishing</button>
-        </div>
-        <span id="fb" class="badge">LOADING</span>
+      <div class="ph"><div class="pt">Internet-Facing Assets</div><span id="asset-badge" class="badge">LOADING</span></div>
+      <div class="scroll" style="max-height:420px;padding:0 13px">
+        <table id="asset-table">
+          <thead><tr><th>IP</th><th>HOSTNAME</th><th>PORT</th><th>SERVICE</th><th>COUNTRY</th><th>VULNS</th><th>RISK</th></tr></thead>
+          <tbody id="asset-tbody"><tr><td colspan="7" class="lt">Run a scan to discover assets</td></tr></tbody>
+        </table>
       </div>
-      <div class="tc on" id="ta"><div class="fl" id="fa"><div class="lt">Loading...</div></div></div>
-      <div class="tc" id="ti"><div class="scroll"><table><thead><tr><th>TYPE</th><th>VALUE</th><th>CONF</th><th>FIRST</th><th>SRC</th></tr></thead><tbody id="ib"></tbody></table></div></div>
-      <div class="tc" id="tac"><div class="ag" id="ag"></div></div>
-      <div class="tc" id="tc"><div class="scroll" id="cl"></div></div>
-      <div class="tc" id="tp"><div class="scroll" id="pl"></div></div>
-    </div>
-    <div class="two">
-      <div class="pn"><div class="ph"><div class="pt">By Region</div></div><div class="pb"><div class="bars" id="rb"></div></div></div>
-      <div class="pn"><div class="ph"><div class="pt">By Industry</div></div><div class="pb"><div class="bars" id="ib2"></div></div></div>
     </div>
   </div>
 </div>
+
+<!-- CREDENTIAL LEAKS PAGE -->
+<div id="page-creds" class="page">
+  <div class="fil">
+    <span style="font-size:12px;color:#64748b">Monitor credential leaks and data breaches for your organisation</span>
+    <div style="display:flex;gap:8px;margin-left:auto;align-items:center">
+      <input id="add-cred-domain" class="inp" placeholder="Organisation domain (e.g. company.com)" style="width:220px">
+      <button id="add-cred-btn" class="btn btn-primary">+ Monitor Domain</button>
+      <button id="check-btn" class="btn">&#9654; Check Now</button>
+    </div>
+  </div>
+  <div style="padding:16px">
+    <div class="st">
+      <div class="sc r"><div class="sl">Exposed Accounts</div><div class="sv" style="color:#ff3b5c" id="cr-accounts">-</div></div>
+      <div class="sc o"><div class="sl">Active Breaches</div><div class="sv" style="color:#ff8c42" id="cr-breaches">-</div></div>
+      <div class="sc a"><div class="sl">Monitored Domains</div><div class="sv" style="color:#f5c518" id="cr-domains">-</div></div>
+      <div class="sc b"><div class="sl">Critical Leaks</div><div class="sv" style="color:#4d9eff" id="cr-critical">-</div></div>
+      <div class="sc g"><div class="sl">Last Check</div><div class="sv" style="color:#00d4aa;font-size:12px" id="cr-last">Never</div></div>
+    </div>
+    <div class="two" style="margin-bottom:12px">
+      <div class="pn">
+        <div class="ph"><div class="pt">Domain Breach Summary</div></div>
+        <div style="padding:11px 13px" id="cred-summary"><div class="lt">Add a domain to monitor</div></div>
+      </div>
+      <div class="pn">
+        <div class="ph"><div class="pt">Recent Global Breaches</div></div>
+        <div class="scroll" style="max-height:260px;padding:0 13px" id="global-breaches"><div class="lt">Loading...</div></div>
+      </div>
+    </div>
+    <div class="pn">
+      <div class="ph"><div class="pt">Exposed Email Accounts</div></div>
+      <div class="scroll" style="max-height:300px;padding:0 13px">
+        <table>
+          <thead><tr><th>EMAIL</th><th>BREACHES</th><th>DOMAIN</th></tr></thead>
+          <tbody id="exposed-emails"><tr><td colspan="3" class="lt">No data</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ALERTS PAGE -->
+<div id="page-alerts" class="page">
+  <div class="fil">
+    <span style="font-size:12px;color:#64748b">Real-time alerts from continuous monitoring</span>
+    <button id="clear-alerts-btn" class="btn" style="margin-left:auto">Clear All</button>
+  </div>
+  <div style="padding:16px">
+    <div class="pn">
+      <div class="ph"><div class="pt">Monitoring Alerts</div><span id="alerts-badge" class="badge">0</span></div>
+      <div style="padding:11px 13px" id="alerts-list"><div class="lt">No alerts yet - monitoring will generate alerts when threats are detected</div></div>
+    </div>
+  </div>
+</div>
+
 <script src="/app.js"></script>
 </body>
 </html>
