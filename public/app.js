@@ -143,82 +143,123 @@ g("scan-btn").addEventListener("click",function(){
 });
 
 // Credential Leaks
-function loadCreds(){
-  fetch(API+"/credentials/status").then(function(r){return r.json();}).then(function(d){
-    if(!d.success)return; var cres=d.data||[],doms=d.domains||[];
-    g("cr-domains").textContent=doms.length||"-";
-    var totAcc=0,bSet=new Set(),crit2=0;
-    cres.forEach(function(cr){totAcc+=(cr.totalExposedAccounts||0);(cr.breaches||[]).forEach(function(b){bSet.add(b);});if((cr.totalExposedAccounts||0)>100)crit2++;});
-    g("cr-accounts").textContent=totAcc.toLocaleString(); g("cr-breaches").textContent=bSet.size; g("cr-critical").textContent=crit2;
-    if(cres.length&&cres[0].lastChecked)g("cr-last").textContent=rel(cres[0].lastChecked);
-    var sumH="";
-    if(!cres.length){sumH="<div class=\"lt\">Add a domain to monitor for credential leaks</div>";}
-    else{cres.forEach(function(cr2){var csev=cr2.totalExposedAccounts>100?"critical":cr2.totalExposedAccounts>10?"high":"medium";
-      sumH+="<div style=\"padding:10px 0;border-bottom:1px solid #1e2630\"><div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:6px\"><span style=\"font-family:monospace;font-size:13px;font-weight:700\">"+esc(cr2.domain)+"</span><span class=\"risk-badge "+csev+"\">"+cr2.totalExposedAccounts+" EXPOSED</span></div><div style=\"font-size:11px;color:#64748b;margin-bottom:5px\">Breaches: ";
-      (cr2.breaches||[]).forEach(function(b2){sumH+="<span class=\"tag\">"+esc(b2)+"</span>";});
-      sumH+="</div></div>";});}
-    g("cred-summary").innerHTML=sumH;
-    var emH="";
-    cres.forEach(function(cr3){(cr3.exposedEmails||[]).forEach(function(em){
-      emH+="<tr><td style=\"font-family:monospace;color:#f5c518\">"+esc(em.email||"-")+"</td><td>"+(em.breaches||[]).map(function(b3){return "<span class=\"tag\">"+esc(b3)+"</span>";}).join("")+"</td><td style=\"color:#64748b\">"+esc(cr3.domain||"-")+"</td></tr>";});});
-    g("exposed-emails").innerHTML=emH||"<tr><td colspan=\"3\" class=\"lt\">No exposed emails</td></tr>";
-  }).catch(function(){});
-  fetch(API+"/credentials/breaches").then(function(r){return r.json();}).then(function(d){
-    if(!d.success)return; var brs=d.data||[],bh="";
-    for(var bi=0;bi<brs.length;bi++){var br2=brs[bi];
-      bh+="<div class=\"breach-item\"><div class=\"breach-name\">"+esc(br2.name)+"</div>";
-      bh+="<div class=\"breach-meta\">"+esc(br2.domain||"-")+" &bull; "+esc(br2.breachDate||"-")+" &bull; <span style=\"color:#ff8c42\">"+(br2.pwnCount||0).toLocaleString()+" accounts</span></div>";
-      bh+="<div style=\"margin-top:4px\">"+(br2.dataClasses||[]).map(function(dc){return "<span class=\"tag\">"+esc(dc)+"</span>";}).join("")+"</div></div>";}
-    g("global-breaches").innerHTML=bh||"<div class=\"lt\">No breach data</div>";
-  }).catch(function(){});
+function loadCreds() {
+  fetch(API+'/credentials/status')
+    .then(function(r){return r.json();})
+    .then(function(d) {
+      if (!d.success) return;
+      var results=d.data||[], emails=d.emails||[], summary=d.summary||{};
+      g('cr-domains').textContent = emails.length||'-';
+      g('cr-accounts').textContent = (summary.exposedEmails||0).toLocaleString();
+      g('cr-breaches').textContent = (summary.uniqueBreaches||[]).length;
+      g('cr-critical').textContent = summary.criticalEmails||0;
+      if (results.length && results[0].lastChecked) g('cr-last').textContent = rel(results[0].lastChecked);
+      var sumH = '';
+      if (!results.length) {
+        sumH = '<div class="lt" style="text-align:left;padding:16px">Enter any work email above to check if it appears in known data breaches.<br><br><span style="color:#64748b">Uses your HaveIBeenPwned subscription to check against 700+ known breaches in real-time.</span></div>';
+      } else {
+        results.forEach(function(em) {
+          var rc=em.riskLevel, col=rc==='critical'?'#ff3b5c':rc==='high'?'#ff8c42':rc==='medium'?'#f5c518':'#00d4aa';
+          sumH += '<div style="padding:10px 0;border-bottom:1px solid #1e2630;display:flex;justify-content:space-between;align-items:flex-start">';
+          sumH += '<div><div style="font-family:monospace;font-size:12px;font-weight:700;color:'+col+';margin-bottom:4px">'+esc(em.email)+'</div>';
+          if (em.breachCount > 0) {
+            sumH += '<div style="font-size:11px;color:#64748b;margin-bottom:3px">Breached in: ';
+            (em.breachNames||[]).slice(0,5).forEach(function(b){sumH+='<span class="tag">'+esc(b)+'</span>';});
+            if((em.breachNames||[]).length>5) sumH+='<span class="tag">+'+(em.breachNames.length-5)+' more</span>';
+            sumH += '</div>';
+          } else { sumH += '<div style="font-size:11px;color:#00d4aa">No breaches found - clean!</div>'; }
+          sumH += '</div>';
+          sumH += '<div style="text-align:right;flex-shrink:0;margin-left:12px">';
+          sumH += '<span class="risk-badge '+(rc==='clean'?'low':rc||'low')+'">'+(em.breachCount||0)+' breach'+(em.breachCount!==1?'es':'')+'</span>';
+          sumH += '<div style="font-size:10px;color:#64748b;margin-top:3px">'+esc(rel(em.lastChecked))+'</div>';
+          sumH += '<button onclick="window._rmW('email',''+esc(em.email)+'')" style="background:none;border:none;color:#ff3b5c;cursor:pointer;font-size:10px;margin-top:2px">Remove</button>';
+          sumH += '</div></div>';
+        });
+      }
+      g('cred-summary').innerHTML = sumH;
+      var emH = '';
+      results.filter(function(r2){return r2.breachCount>0;}).forEach(function(em) {
+        (em.breaches||[]).forEach(function(b) {
+          var col=em.riskLevel==='critical'?'#ff3b5c':em.riskLevel==='high'?'#ff8c42':'#f5c518';
+          emH += '<tr>';
+          emH += '<td style="font-family:monospace;color:'+col+'">'+esc(em.email)+'</td>';
+          emH += '<td style="font-family:monospace;color:#64748b;text-align:center">'+em.breachCount+'</td>';
+          emH += '<td><span style="font-weight:700">'+esc(b.name||'-')+'</span> <span style="color:#64748b;font-size:10px">'+esc(b.breachDate||'-')+'</span> <span style="color:#64748b;font-size:10px">'+(b.dataClasses||[]).slice(0,2).join(', ')+'</span></td>';
+          emH += '<td><span class="risk-badge '+(em.riskLevel==='clean'?'low':em.riskLevel||'low')+'">'+esc((em.riskLevel||'low').toUpperCase())+'</span></td>';
+          emH += '</tr>';
+        });
+      });
+      g('exposed-emails').innerHTML = emH || '<tr><td colspan="4" class="lt">No breaches found for monitored emails</td></tr>';
+    }).catch(function(){});
+  fetch(API+'/credentials/breaches')
+    .then(function(r){return r.json();})
+    .then(function(d) {
+      if (!d.success) return;
+      var brs=d.data||[], bh='';
+      for (var bi=0;bi<brs.length;bi++) {
+        var br2=brs[bi];
+        bh += '<div class="breach-item"><div class="breach-name">'+esc(br2.name)+'</div>';
+        bh += '<div class="breach-meta">'+esc(br2.domain||'-')+' &bull; '+esc(br2.breachDate||'-')+' &bull; <span style="color:#ff8c42">'+(br2.pwnCount||0).toLocaleString()+' accounts</span></div>';
+        bh += '<div style="margin-top:4px">'+(br2.dataClasses||[]).map(function(dc){return '<span class="tag">'+esc(dc)+'</span>';}).join('')+'</div></div>';
+      }
+      g('global-breaches').innerHTML = bh || '<div class="lt">No breach data</div>';
+    }).catch(function(){});
 }
-g("add-cred-btn").addEventListener("click",function(){
-  var cdm=g("add-cred-domain").value.trim();
-  if(!cdm){alert("Enter a domain");return;}
-  fetch(API+"/monitor/watchlist",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({credDomain:cdm})})
-    .then(function(){g("add-cred-domain").value="";loadCreds();}).catch(function(){});
+
+g('add-cred-btn').addEventListener('click', function() {
+  var em2 = g('add-cred-email').value.trim();
+  if (!em2 || em2.indexOf('@') < 0) { alert('Enter a valid email address (e.g. you@company.com)'); return; }
+  var cbtn = g('add-cred-btn'); cbtn.textContent = 'Checking...';
+  fetch(API+'/monitor/watchlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em2})})
+    .then(function(){return fetch(API+'/credentials/email/'+encodeURIComponent(em2));})
+    .then(function(r){return r.json();})
+    .then(function(){
+      g('add-cred-email').value = '';
+      cbtn.textContent = '+ Monitor Email';
+      loadCreds();
+    }).catch(function(){cbtn.textContent='+ Monitor Email';});
 });
-g("check-btn").addEventListener("click",function(){
-  var cb=g("check-btn"); cb.textContent="Checking...";
-  fetch(API+"/monitor/scan",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"})
-    .then(function(){setTimeout(function(){cb.textContent="Check Now";loadCreds();},8000);})
-    .catch(function(){cb.textContent="Check Now";});
+
+g('check-btn').addEventListener('click', function() {
+  var cb2=g('check-btn'); cb2.textContent='Checking...';
+  fetch(API+'/monitor/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})
+    .then(function(){setTimeout(function(){cb2.textContent='Check All Now';loadCreds();},8000);})
+    .catch(function(){cb2.textContent='Check All Now';});
 });
 
 // Alerts
-function loadAlerts(){
-  fetch(API+"/monitor/alerts").then(function(r){return r.json();}).then(function(d){
-    if(!d.success)return; var alts=d.data||[];
-    var acnt=alts.length; var adot=g("alert-count");
-    if(acnt>0){adot.textContent=acnt;adot.style.display="inline-block";}else{adot.style.display="none";}
-    g("alerts-badge").textContent=acnt+" ALERTS";
-    if(!alts.length){g("alerts-list").innerHTML="<div class=\"lt\">No alerts yet. Monitoring runs every 6h. Use Asset Monitor to trigger a manual scan.</div>";return;}
-    var aicons={new_port:"[PORT]",new_vuln:"[CVE]",credential_leak:"[CRED]",critical_asset:"[ASSET]"};
-    var asevC={critical:"#ff3b5c",high:"#ff8c42",medium:"#f5c518",low:"#00d4aa"};
-    var alh=""; for(var ali=0;ali<alts.length;ali++){var alt=alts[ali];
-      var asc=asevC[alt.severity]||"#64748b";
-      alh+="<div class=\"alert-item\"><div style=\"font-family:monospace;font-size:11px;color:"+asc+";flex-shrink:0;padding-top:2px\">"+(aicons[alt.type]||"[!]")+"</div>";
-      alh+="<div style=\"flex:1\"><div class=\"alert-msg\">"+esc(alt.message)+"</div><div class=\"alert-time\"><span style=\"color:"+asc+"\">"+esc((alt.severity||"").toUpperCase())+"</span> &bull; "+esc(rel(alt.timestamp))+"</div></div></div>";}
-    g("alerts-list").innerHTML=alh;
+function loadAlerts() {
+  fetch(API+'/monitor/alerts').then(function(r){return r.json();}).then(function(d) {
+    if (!d.success) return; var alts=d.data||[];
+    var acnt=alts.length; var adot=g('alert-count');
+    if(acnt>0){adot.textContent=acnt;adot.style.display='inline-block';}else{adot.style.display='none';}
+    g('alerts-badge').textContent=acnt+' ALERTS';
+    if (!alts.length) { g('alerts-list').innerHTML='<div class="lt">No alerts yet. Monitoring runs every 6h. Use Asset Monitor to trigger a manual scan.</div>'; return; }
+    var aicons={new_port:'[PORT]',new_vuln:'[CVE]',credential_leak:'[CRED]',critical_asset:'[ASSET]'};
+    var asevC={critical:'#ff3b5c',high:'#ff8c42',medium:'#f5c518',low:'#00d4aa'};
+    var alh='';
+    for (var ali=0;ali<alts.length;ali++) {
+      var alt=alts[ali]; var asc=asevC[alt.severity]||'#64748b';
+      alh += '<div class="alert-item"><div style="font-family:monospace;font-size:11px;color:'+asc+';flex-shrink:0;padding-top:2px">'+(aicons[alt.type]||'[!]')+'</div>';
+      alh += '<div style="flex:1"><div class="alert-msg">'+esc(alt.message)+'</div><div class="alert-time"><span style="color:'+asc+'">'+esc((alt.severity||'').toUpperCase())+'</span> &bull; '+esc(rel(alt.timestamp))+'</div></div></div>';
+    }
+    g('alerts-list').innerHTML = alh;
   }).catch(function(){});
 }
-g("clear-alerts-btn").addEventListener("click",loadAlerts);
 
-// Wire up filters
-g("fi").addEventListener("change",go);
-g("fr").addEventListener("change",go);
-g("fs").addEventListener("change",go);
-g("rfbtn").addEventListener("click",rf);
+g('clear-alerts-btn').addEventListener('click', loadAlerts);
+g('fi').addEventListener('change',go);
+g('fr').addEventListener('change',go);
+g('fs').addEventListener('change',go);
+g('rfbtn').addEventListener('click',rf);
 
-// Auto-refresh monitoring pages every 30s
 setInterval(function(){
-  var ap=document.querySelector(".page.active"); if(!ap)return;
-  if(ap.id==="page-assets")loadAssets();
-  if(ap.id==="page-creds")loadCreds();
-  if(ap.id==="page-alerts")loadAlerts();
+  var ap=document.querySelector('.page.active'); if(!ap)return;
+  if(ap.id==='page-assets')loadAssets();
+  if(ap.id==='page-creds')loadCreds();
+  if(ap.id==='page-alerts')loadAlerts();
 },30000);
 
-// Boot
 go();
 
 })();
