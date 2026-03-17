@@ -147,29 +147,29 @@ g("cr-accounts").textContent=(summ.exposedEmails||0).toLocaleString();
 g("cr-breaches").textContent=(summ.uniqueBreaches||[]).length||0;
 g("cr-critical").textContent=summ.criticalEmails||0;
 if(emailResults.length&&emailResults[0].lastChecked)g("cr-last").textContent=rel(emailResults[0].lastChecked);
-  // Update monitored emails panel
+  // Update monitored emails panel - always show from watchlist, results optional
   var monList = document.getElementById('monitored-email-list');
   var monCount = document.getElementById('mon-email-count');
   if(monList){
     if(!monitoredEmails.length){
       monList.innerHTML='<div class="lt" style="padding:0">No emails monitored yet &mdash; add one above</div>';
-    } else {
+    }else{
       var monH='';
       monitoredEmails.forEach(function(em4){
-        var res4 = emailResults.filter(function(r3){return r3.email===em4;})[0];
-        var rc4 = res4 ? (res4.riskLevel==='clean'?'low':res4.riskLevel||'low') : 'pending';
-        var col4 = rc4==='critical'?'#ff3b5c':rc4==='high'?'#ff8c42':rc4==='medium'?'#f5c518':rc4==='low'?'#00d4aa':'#64748b';
-        monH += '<span class="watched-chip">';
-        monH += '<span style="font-family:monospace;font-size:11px;color:'+col4+'">'+esc(em4)+'</span>';
-        if(res4&&res4.breachCount>0) monH += '<span style="font-size:10px;color:'+col4+';margin-left:4px">'+res4.breachCount+' breach'+(res4.breachCount!==1?'es':'')+'</span>';
-        else if(res4&&res4.breachCount===0) monH += '<span style="font-size:10px;color:#00d4aa;margin-left:4px">clean</span>';
-        else monH += '<span style="font-size:10px;color:#64748b;margin-left:4px">checking...</span>';
-        monH += '<button class="rm-btn" data-type="email" data-val="'+esc(em4)+'" title="Remove">x</button>';
-        monH += '</span>';
+        var res4=(emailResults||[]).filter(function(r3){return r3.email===em4;})[0];
+        var rc4=res4?(res4.riskLevel==='clean'?'low':res4.riskLevel||'low'):'pending';
+        var col4=rc4==='critical'?'#ff3b5c':rc4==='high'?'#ff8c42':rc4==='medium'?'#f5c518':rc4==='low'?'#00d4aa':'#64748b';
+        monH+='<span class="watched-chip" style="margin:3px;max-width:100%;flex-wrap:wrap">';
+        monH+='<span style="font-family:monospace;font-size:11px;color:'+col4+'">'+esc(em4)+'</span>';
+        if(res4&&res4.breachCount>0) monH+=' <span style="font-size:10px;color:'+col4+'">'+res4.breachCount+' breach'+(res4.breachCount!==1?'es':'')+'</span>';
+        else if(res4&&res4.breachCount===0) monH+=' <span style="font-size:10px;color:#00d4aa">clean</span>';
+        else monH+=' <span style="font-size:10px;color:#64748b">not checked yet</span>';
+        monH+=' <button class="rm-btn" data-type="email" data-val="'+esc(em4)+'" title="Remove">x</button>';
+        monH+='</span>';
       });
-      monList.innerHTML = monH;
+      monList.innerHTML=monH;
     }
-    if(monCount) monCount.textContent = monitoredEmails.length + (monitoredEmails.length===1?' email':' emails');
+    if(monCount) monCount.textContent=monitoredEmails.length+(monitoredEmails.length===1?' email':' emails');
   }
 var sumH="";
 if(!emailResults.length){sumH="<div style=\"padding:20px;color:#64748b;font-size:12px;line-height:1.6\">Enter any email above to check against 700+ known breaches in real-time.<br><span style=\"color:#4d9eff\">Powered by HaveIBeenPwned</span> &bull; Results cached 12h</div>";}
