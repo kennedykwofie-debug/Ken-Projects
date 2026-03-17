@@ -51,6 +51,97 @@ loadAssets();
 }).catch(function(){abn.textContent='+ Add to Watchlist';});
 });
 g('scan-btn').addEventListener('click',function(){var sb=g('scan-btn');sb.textContent='Scanning...';g('asset-badge').textContent='SCANNING';fetch(API+'/monitor/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}).then(function(){setTimeout(function(){sb.textContent='Run Scan Now';loadAssets();loadAlerts();},15000);}).catch(function(){sb.textContent='Run Scan Now';});});
+
+// ── Domain Verification Wizard ────────────────────────────────────────────────
+var _verifyDomain = '';
+var _verifyToken = '';
+
+g('verify-domain-btn').addEventListener('click', function() {
+  var panel = g('domain-verify-panel');
+  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+});
+
+g('close-verify-btn').addEventListener('click', function() {
+  g('domain-verify-panel').style.display = 'none';
+});
+
+g('verify-step1-btn').addEventListener('click', function() {
+  var domain = g('verify-domain-input').value.trim();
+  if (!domain || domain.indexOf('.') < 0) { alert('Enter a valid domain (e.g. yourcompany.com)'); return; }
+  _verifyDomain = domain;
+  var btn = g('verify-step1-btn'); btn.textContent = 'Requesting...';
+  fetch(API + '/credentials/domain/verify/request/' + encodeURIComponent(domain))
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      btn.textContent = 'Get Verification Token';
+      if (!d.success) {
+        alert('Error: ' + (d.error || 'Could not get token. Make sure your domain is added at haveibeenpwned.com/DomainSearch first.'));
+        return;
+      }
+      _verifyToken = d.token;
+      g('verify-domain-name').textContent = domain;
+      g('verify-txt-value').textContent = 'have-i-been-pwned-verification=' + _verifyToken;
+      g('verify-step-1').style.display = 'none';
+      g('verify-step-2').style.display = 'block';
+    })
+    .catch(function(err) { btn.textContent = 'Get Verification Token'; alert('Request failed: ' + err.message); });
+});
+
+g('verify-copy-btn').addEventListener('click', function() {
+  var txt = g('verify-txt-value').textContent;
+  navigator.clipboard && navigator.clipboard.writeText(txt).then(function() {
+    g('verify-copy-btn').textContent = 'Copied!';
+    setTimeout(function() { g('verify-copy-btn').textContent = 'Copy TXT Value'; }, 2000);
+  });
+});
+
+g('verify-step2-btn').addEventListener('click', function() {
+  var btn = g('verify-step2-btn'); btn.textContent = 'Checking...';
+  var statusMsg = g('verify-status-msg');
+  statusMsg.textContent = 'Querying HIBP for domain verification status...';
+  statusMsg.style.color = '#64748b';
+  fetch(API + '/credentials/domain/verify/check/' + encodeURIComponent(_verifyDomain))
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      btn.textContent = 'Check Verification Status';
+      if (d.success && d.data && d.data.verified) {
+        // Verified!
+        g('verified-domain-name').textContent = _verifyDomain;
+        g('verify-step-2').style.display = 'none';
+        g('verify-step-3').style.display = 'block';
+        statusMsg.textContent = '';
+      } else {
+        var reason = d.data && d.data.reason || 'DNS TXT record not detected yet';
+        statusMsg.textContent = reason.indexOf('not yet') > -1 || reason.indexOf('not added') > -1
+          ? 'Not verified yet - DNS changes can take up to 24h. Try again later.'
+          : reason;
+        statusMsg.style.color = '#f5c518';
+      }
+    })
+    .catch(function(err) { btn.textContent = 'Check Verification Status'; statusMsg.textContent = 'Check failed: ' + err.message; statusMsg.style.color = '#ff3b5c'; });
+});
+
+g('verify-scan-btn').addEventListener('click', function() {
+  var btn = g('verify-scan-btn'); btn.textContent = 'Scanning all emails...';
+  fetch(API + '/credentials/domain/scan/' + encodeURIComponent(_verifyDomain))
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      btn.textContent = 'Scan All Emails on Domain Now';
+      if (d.success && d.data && d.data.verified) {
+        var count = d.data.totalBreached || 0;
+        btn.textContent = 'Done - ' + count + ' breached accounts found';
+        // Close wizard and refresh creds tab
+        setTimeout(function() {
+          g('domain-verify-panel').style.display = 'none';
+          loadCreds();
+        }, 1500);
+      } else {
+        btn.textContent = 'Domain not yet verified';
+      }
+    })
+    .catch(function(err) { btn.textContent = 'Scan failed - try again'; });
+});
+
 function loadCreds(){
 fetch(API+'/credentials/status').then(function(r){return r.json();}).then(function(d){if(!d.success)return;var er=d.data||[],me=d.emails||[],sm=d.summary||{};g('cr-domains').textContent=me.length||'-';g('cr-accounts').textContent=(sm.exposedEmails||0).toLocaleString();g('cr-breaches').textContent=(sm.uniqueBreaches||[]).length||0;g('cr-critical').textContent=sm.criticalEmails||0;if(er.length&&er[0].lastChecked)g('cr-last').textContent=rel(er[0].lastChecked);var sh='';if(!er.length){sh='<div style="padding:20px;color:#64748b;font-size:12px;line-height:1.6">Enter any email above to check against 700+ known breaches.<br><span style="color:#4d9eff">Powered by HaveIBeenPwned</span></div>';}else{er.forEach(function(em){var erc=em.riskLevel==='clean'?'low':em.riskLevel||'low';var ecol=erc==='critical'?'#ff3b5c':erc==='high'?'#ff8c42':erc==='medium'?'#f5c518':'#00d4aa';sh+='<div style="padding:12px 0;border-bottom:1px solid #1e2630;display:flex;justify-content:space-between;align-items:flex-start"><div style="flex:1;min-width:0"><div style="font-family:monospace;font-size:12px;font-weight:700;color:'+ecol+';margin-bottom:5px">'+esc(em.email)+'</div>';if(em.breachCount>0){sh+='<div style="font-size:11px;color:#64748b;margin-bottom:4px">Found in: ';(em.breachNames||[]).slice(0,6).forEach(function(bn){sh+='<span class="tag">'+esc(bn)+'</span>';});if((em.breachNames||[]).length>6)sh+='<span class="tag">+'+(em.breachNames.length-6)+' more</span>';sh+='</div>';}else{sh+='<div style="font-size:11px;color:#00d4aa">No breaches - clean!</div>';}sh+='</div><div style="text-align:right;flex-shrink:0;margin-left:16px"><span class="risk-badge '+erc+'">'+(em.breachCount||0)+' breach'+(em.breachCount!==1?'es':'')+'</span><br><button class="rm-btn" data-type="email" data-val="'+esc(em.email)+'" style="margin-top:6px;padding:2px 8px;font-size:10px">Remove</button></div></div>';});}g('cred-summary').innerHTML=sh;var emH='';er.filter(function(e2){return e2.breachCount>0;}).forEach(function(em3){(em3.breaches||[]).forEach(function(br){var erc2=em3.riskLevel==='clean'?'low':em3.riskLevel||'low';var ec2=erc2==='critical'?'#ff3b5c':erc2==='high'?'#ff8c42':'#f5c518';emH+='<tr><td style="font-family:monospace;color:'+ec2+'">'+esc(em3.email)+'</td><td style="text-align:center;font-family:monospace;color:#64748b">'+em3.breachCount+'</td><td><span style="font-weight:700;color:#e2e8f0">'+esc(br.name||'-')+'</span> <span style="color:#64748b;font-size:10px">'+esc(br.breachDate||'-')+'</span><br><span style="font-size:10px;color:#64748b">'+(br.dataClasses||[]).slice(0,3).join(', ')+'</span></td><td><span class="risk-badge '+erc2+'">'+erc2.toUpperCase()+'</span></td></tr>';});});g('exposed-emails').innerHTML=emH||'<tr><td colspan="4" class="lt">No breaches found</td></tr>';}).catch(function(){});
 fetch(API+'/credentials/breaches').then(function(r){return r.json();}).then(function(d){if(!d.success)return;var brs=d.data||[],gbh='';for(var gbi=0;gbi<brs.length;gbi++){var gbr=brs[gbi];gbh+='<div class="breach-item"><div class="breach-name">'+esc(gbr.name)+'</div><div class="breach-meta">'+esc(gbr.domain||'-')+' &bull; '+esc(gbr.breachDate||'-')+' &bull; <span style="color:#ff8c42">'+(gbr.pwnCount||0).toLocaleString()+' accounts</span></div><div style="margin-top:4px">'+(gbr.dataClasses||[]).map(function(dc){return'<span class="tag">'+esc(dc)+'</span>';}).join('')+'</div></div>';}g('global-breaches').innerHTML=gbh||'<div class="lt">No breach data</div>';}).catch(function(){});
