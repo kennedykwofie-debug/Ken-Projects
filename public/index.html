@@ -125,22 +125,22 @@
   <div class="fil">
     <span style="font-size:12px;color:#64748b">Monitor credential leaks and data breaches for your organisation</span>
     <div style="display:flex;gap:8px;margin-left:auto;align-items:center">
-      <input id="add-cred-domain" class="inp" placeholder="Organisation domain (e.g. company.com)" style="width:220px">
-      <button id="add-cred-btn" class="btn btn-primary">+ Monitor Domain</button>
-      <button id="check-btn" class="btn">&#9654; Check Now</button>
+      <input id="add-cred-email" class="inp" placeholder="Email to monitor (e.g. you@company.com)" style="width:260px">
+      <button id="add-cred-btn" class="btn btn-primary">+ Monitor Email</button>
+      <button id="check-btn" class="btn">&#9654; Check All Now</button>
     </div>
   </div>
   <div style="padding:16px">
     <div class="st">
       <div class="sc r"><div class="sl">Exposed Accounts</div><div class="sv" style="color:#ff3b5c" id="cr-accounts">-</div></div>
       <div class="sc o"><div class="sl">Active Breaches</div><div class="sv" style="color:#ff8c42" id="cr-breaches">-</div></div>
-      <div class="sc a"><div class="sl">Monitored Domains</div><div class="sv" style="color:#f5c518" id="cr-domains">-</div></div>
+      <div class="sc a"><div class="sl">Monitored Emails</div><div class="sv" style="color:#f5c518" id="cr-domains">-</div></div>
       <div class="sc b"><div class="sl">Critical Leaks</div><div class="sv" style="color:#4d9eff" id="cr-critical">-</div></div>
       <div class="sc g"><div class="sl">Last Check</div><div class="sv" style="color:#00d4aa;font-size:12px" id="cr-last">Never</div></div>
     </div>
     <div class="two" style="margin-bottom:12px">
       <div class="pn">
-        <div class="ph"><div class="pt">Domain Breach Summary</div></div>
+        <div class="ph"><div class="pt">Email Breach Summary</div></div>
         <div style="padding:11px 13px" id="cred-summary"><div class="lt">Add a domain to monitor</div></div>
       </div>
       <div class="pn">
@@ -152,8 +152,8 @@
       <div class="ph"><div class="pt">Exposed Email Accounts</div></div>
       <div class="scroll" style="max-height:300px;padding:0 13px">
         <table>
-          <thead><tr><th>EMAIL</th><th>BREACHES</th><th>DOMAIN</th></tr></thead>
-          <tbody id="exposed-emails"><tr><td colspan="3" class="lt">No data</td></tr></tbody>
+          <thead><tr><th>EMAIL</th><th>BREACH COUNT</th><th>BREACHES FOUND IN</th><th>RISK</th></tr></thead>
+          <tbody id="exposed-emails"><tr><td colspan="4" class="lt">Add emails to monitor</td></tr></tbody>
         </table>
       </div>
     </div>
