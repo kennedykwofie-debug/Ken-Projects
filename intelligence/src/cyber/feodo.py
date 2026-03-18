@@ -8,7 +8,7 @@ from src.shared.http import get
 
 logger = logging.getLogger(__name__)
 
-_URL = "https://feodotracker.abuse.ch/downloads/ipblocklist_aggressive.csv"
+_URL = "https://feodotracker.abuse.ch/downloads/ipblocklist.csv"
 
 _VALID_FAMILIES = {
     "Dridex", "Emotet", "QakBot", "TrickBot", "BazarLoader",
