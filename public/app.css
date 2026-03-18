@@ -367,3 +367,64 @@ td{padding:6px;border-bottom:1px solid #1e2630;vertical-align:top}tr:hover td{ba
 .pi-ai-text{font-size:12px;color:#94a3b8;line-height:1.7;white-space:pre-wrap}
 .pi-ai-recs-hdr{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin:12px 0 6px}
 .pi-ai-recs{margin:0;padding-left:18px;font-size:12px;color:#94a3b8;line-height:1.7}
+
+/* ===== CYBER THREAT CARDS ===== */
+.pi-cyber-body{padding:0}
+.ct-stats{display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid #1a2030;background:#080b12;padding:12px 20px;align-items:flex-start}
+.ct-stat{min-width:80px;margin-right:24px;margin-bottom:4px}
+.ct-stat-wide{flex:1;min-width:180px}
+.ct-stat-val{font-size:22px;font-weight:900;color:#e2e8f0;line-height:1}
+.ct-stat-lbl{font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-top:3px}
+.ct-crit{color:#ff3b5c!important}
+.ct-high{color:#ff8c42!important}
+.ct-families{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}
+.ct-fam-tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;background:#1a0808;border:1px solid #ff3b5c44;color:#ff8c42;font-weight:600}
+.ct-section-hdr{font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;padding:14px 20px 8px;border-bottom:1px solid #1a2030;display:flex;align-items:center;gap:8px;background:#07090f;position:sticky;top:0;z-index:2}
+.ct-count{background:#1e2630;color:#64748b;font-size:10px;padding:1px 8px;border-radius:10px;font-weight:400}
+
+/* C2 Server cards */
+.ct-c2-card{margin:8px 12px;background:#0a0f1a;border:1px solid #1e2d3d;border-radius:6px;overflow:hidden;transition:border-color .2s}
+.ct-c2-card:hover{border-color:#2a3f55}
+.ct-c2-top{display:flex;gap:0;padding:12px 14px}
+.ct-c2-left{flex:1;min-width:0}
+.ct-c2-right{min-width:180px;max-width:200px;text-align:right;padding-left:12px;border-left:1px solid #1a2030;margin-left:12px;display:flex;flex-direction:column;gap:4px;justify-content:center}
+.ct-sev-pill{display:inline-block;font-size:9px;font-weight:800;letter-spacing:1px;padding:2px 8px;border-radius:10px;border:1px solid;margin-bottom:6px;text-transform:uppercase}
+.ct-ip-row{display:flex;align-items:center;gap:6px;margin-bottom:5px;flex-wrap:wrap}
+.ct-ip{font-family:monospace;font-size:14px;font-weight:700;color:#e2e8f0;letter-spacing:.5px}
+.ct-port{font-family:monospace;font-size:13px;color:#64748b}
+.ct-copy{background:none;border:1px solid #2a3440;color:#64748b;padding:1px 6px;border-radius:3px;cursor:pointer;font-size:11px;line-height:1.4;transition:all .15s}
+.ct-copy:hover{border-color:#4d9eff;color:#4d9eff}
+.ct-fam-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.ct-fam-badge{font-size:12px;font-weight:700}
+.ct-fam-cat{font-size:10px;color:#64748b;background:#111820;border:1px solid #1e2630;padding:1px 7px;border-radius:10px}
+.ct-fam-desc{font-size:11px;color:#64748b;line-height:1.5;font-style:italic}
+.ct-geo{font-size:12px;color:#e2e8f0;font-weight:600}
+.ct-isp{font-size:11px;color:#94a3b8;margin-top:2px}
+.ct-asn{font-size:10px;color:#64748b;font-family:monospace}
+.ct-badges{display:flex;gap:4px;justify-content:flex-end;margin-top:4px;flex-wrap:wrap}
+.ct-badge{font-size:9px;font-weight:700;letter-spacing:.5px;padding:1px 6px;border-radius:3px;text-transform:uppercase}
+.ct-badge-warn{background:#3a1a0022;border:1px solid #ff8c4266;color:#ff8c42}
+.ct-badge-info{background:#0a1a3022;border:1px solid #4d9eff44;color:#4d9eff}
+.ct-meta-row{display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap;justify-content:flex-end}
+.ct-src-tag{font-size:9px;background:#111820;border:1px solid #1e2630;color:#64748b;padding:1px 6px;border-radius:3px;text-transform:uppercase;letter-spacing:.5px}
+.ct-last-seen{font-size:10px;color:#64748b}
+.ct-conf{font-size:9px;color:#00d4aa;background:#001a1022;border:1px solid #00d4aa33;padding:1px 6px;border-radius:3px;text-transform:uppercase}
+
+/* Malware URL rows */
+.ct-url-row{margin:6px 12px;background:#0a0f1a;border:1px solid #1e2d3d;border-radius:5px;padding:10px 12px;transition:border-color .2s}
+.ct-url-row:hover{border-color:#ff8c4244}
+.ct-url-top{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap}
+.ct-threat-type{font-size:9px;font-weight:800;letter-spacing:.5px;padding:2px 7px;border-radius:3px;background:#2a150022;border:1px solid #ff8c4244;color:#ff8c42;text-transform:uppercase;flex-shrink:0}
+.ct-domain{font-family:monospace;font-size:12px;color:#e2e8f0;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ct-url-full{font-family:monospace;font-size:10px;color:#64748b;word-break:break-all;margin-bottom:4px;line-height:1.4}
+.ct-tag-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px}
+.ct-tag{font-size:9px;padding:1px 6px;border-radius:8px;background:#161b22;border:1px solid #2a3440;color:#94a3b8}
+.ct-url-date{font-size:10px;color:#64748b}
+
+/* Pulse cards */
+.ct-pulse-card{margin:6px 12px;background:#0a0f1a;border:1px solid #1e2d3d;border-left:3px solid #a78bfa;border-radius:5px;padding:10px 12px;transition:border-color .2s}
+.ct-pulse-card:hover{border-color:#a78bfa}
+.ct-pulse-name{font-size:12px;color:#e2e8f0;font-weight:600;margin-bottom:5px;line-height:1.4}
+.ct-pulse-meta{display:flex;gap:10px;align-items:center}
+.ct-pulse-author{font-size:10px;color:#a78bfa}
+.ct-pulse-ioc{font-size:10px;color:#64748b;background:#111820;border:1px solid #1e2630;padding:1px 7px;border-radius:10px}
