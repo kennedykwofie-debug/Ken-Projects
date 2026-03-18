@@ -395,6 +395,22 @@ function _buildSVGMap(data){
           document.getElementById("pi-det-cls").onclick=function(){detail.style.display="none";};
         });
       d3.select(svg).append("path").datum(borders).attr("d",path).attr("fill","none").attr("stroke","#1e2d3d").attr("stroke-width","0.5");
+      // Pan + zoom
+      var mapG=d3.select(svg).insert("g","path").attr("class","map-g");
+      d3.select(svg).selectAll("path.country,path:not(.map-g)").each(function(){mapG.node().appendChild(this);});
+      var zoom=d3.zoom().scaleExtent([0.5,8]).on("zoom",function(event){
+        mapG.attr("transform",event.transform);
+      });
+      d3.select(svg).call(zoom);
+      // Reset zoom button hint
+      var resetHint=document.createElement("div");
+      resetHint.style.cssText="position:absolute;bottom:8px;right:8px;font-size:10px;color:#64748b;background:#0a0e14;border:1px solid #1e2630;padding:3px 8px;border-radius:3px;cursor:pointer;user-select:none";
+      resetHint.textContent="Scroll to zoom · Drag to pan · Dbl-click reset";
+      resetHint.title="Double-click to reset zoom";
+      resetHint.ondblclick=function(){d3.select(svg).transition().duration(500).call(zoom.transform,d3.zoomIdentity);};
+      container.appendChild(resetHint);
+      d3.select(svg).on("dblclick.zoom",function(){d3.select(svg).transition().duration(500).call(zoom.transform,d3.zoomIdentity);});
+
       data.filter(function(c){return c.level==="CRITICAL"||c.level==="HIGH";}).forEach(function(c){
         var info=_CN[c.country];if(!info)return;var xy=proj([info.lon,info.lat]);if(!xy)return;var col=_lc(c.level);
         d3.select(svg).append("circle").attr("cx",xy[0]).attr("cy",xy[1]).attr("r",c.level==="CRITICAL"?7:5).attr("fill",col).attr("opacity","0.9").attr("pointer-events","none");
@@ -448,7 +464,7 @@ function loadPro(){
   fetch(PROAPI+"/ai/status").then(function(r){return r.json();}).then(function(d){
     var as=g("pro-ai-status");if(as){as.textContent=d.available?"READY":"OFFLINE";as.style.color=d.available?"#00d4aa":"#ff3b5c";}
     var aib=g("pi-ai-badge");if(aib)aib.textContent=d.available?"READY":"OFF";
-    var ab=g("pro-ai-btn");if(ab){if(!d.available){ab.disabled=true;ab.style.opacity="0.4";var ar=g("pro-ai-result");if(ar)ar.innerHTML="<div class=\"pi-ai-note\">GROQ_KEY required.</div>";}else{ab.disabled=false;ab.style.opacity="1";ab.onclick=function(){var inp=g("pro-ai-input");if(!inp||!inp.value.trim())return;var ar2=g("pro-ai-result");if(ar2)ar2.innerHTML="<div class=\"pi-ai-thinking\">&#129504; Analysing...</div>";ab.disabled=true;fetch(PROAPI+"/ai/risk",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({scenario:inp.value.trim()})}).then(function(r2){return r2.json();}).then(function(res){ab.disabled=false;if(!ar2)return;var html="<div class=\"pi-ai-response\">"+(res.risk_level?"<div class=\"pi-ai-risk-level\" style=\"color:"+(res.risk_level==="HIGH"||res.risk_level==="CRITICAL"?"#ff3b5c":res.risk_level==="MEDIUM"?"#f5c518":"#00d4aa")+"\">Risk Level: "+_xe(res.risk_level)+"</div>":"")+(res.analysis||res.summary?"<div class=\"pi-ai-text\">"+_xe(res.analysis||res.summary)+"</div>":"");if(res.recommendations&&res.recommendations.length){html+="<div class=\"pi-ai-recs-hdr\">Recommendations</div><ul class=\"pi-ai-recs\">";res.recommendations.forEach(function(rec){html+="<li>"+_xe(rec)+"</li>";});html+="</ul>";}html+="</div>";ar2.innerHTML=html;}).catch(function(err){ab.disabled=false;if(ar2)ar2.innerHTML="<div class=\"pi-ai-note\">Error: "+_xe(err.message)+"</div>";});};}}
+    var ab=g("pro-ai-btn");if(ab){if(!d.available){ab.disabled=true;ab.style.opacity="0.4";var ar=g("pro-ai-result");if(ar)ar.innerHTML="<div class=\"pi-ai-note\">GROQ_KEY required.</div>";}else{ab.disabled=false;ab.style.opacity="1";ab.onclick=function(){var inp=g("pro-ai-input");if(!inp||!inp.value.trim())return;var ar2=g("pro-ai-result");if(ar2)ar2.innerHTML="<div class=\"pi-ai-thinking\">&#129504; Analysing...</div>";ab.disabled=true;fetch(PROAPI+"/ai/deduct",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query:inp.value.trim(),context:"DARKWATCH threat intelligence platform"})}).then(function(r2){return r2.json();}).then(function(res){ab.disabled=false;if(!ar2)return;var _rl=res.risk_level||res.risk||res.threat_level||"";var _mt=res.deduction||res.analysis||res.summary||res.result||res.content||"";if(!_mt&&typeof res==="object"){var _keys=["deduction","analysis","summary","result","content","text","response","assessment","findings"];for(var _ki=0;_ki<_keys.length;_ki++){if(res[_keys[_ki]]){_mt=res[_keys[_ki]];break;}}}if(!_mt)_mt=JSON.stringify(res,null,2);var html="<div class=\"pi-ai-response\">";if(_rl)html+="<div class=\"pi-ai-risk-level\" style=\"color:"+(_rl==="HIGH"||_rl==="CRITICAL"?"#ff3b5c":_rl==="MEDIUM"?"#f5c518":"#00d4aa")+"\">&#9888; Risk Level: "+_xe(_rl)+"</div>";html+="<div class=\"pi-ai-text\">"+_xe(String(_mt))+"</div>";if(res.recommendations&&res.recommendations.length){html+="<div class=\"pi-ai-recs-hdr\">Recommendations</div><ul class=\"pi-ai-recs\">";res.recommendations.forEach(function(rec){html+="<li>"+_xe(rec)+"</li>";});html+="</ul>";}html+="</div>";ar2.innerHTML=html;}).catch(function(err){ab.disabled=false;if(ar2)ar2.innerHTML="<div class=\"pi-ai-note\">Error: "+_xe(err.message)+"</div>";});};}}
   }).catch(function(){});
 }
 // Wire nav buttons - use closest() so clicks on child spans still work
