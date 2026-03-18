@@ -237,3 +237,9 @@ td{padding:6px;border-bottom:1px solid #1e2630;vertical-align:top}tr:hover td{ba
 #rb .br:nth-child(3) .bf{background-color:#00d4aa!important}
 #rb .br:nth-child(4) .bf{background-color:#f5c518!important}
 #rb .br:nth-child(5) .bf{background-color:#ff8c42!important}
+
+.econ-tab{background:none;border:none;border-bottom:2px solid transparent;color:#64748b;padding:8px 14px;cursor:pointer;font-size:11px;font-family:inherit;text-transform:uppercase;letter-spacing:1px;transition:all .2s}
+.econ-tab:hover{color:#94a3b8;background:#0d1117}
+.econ-tab.active{color:#4d9eff;border-bottom:2px solid #4d9eff}
+#pro-map-canvas{width:100%!important;height:320px!important;display:block}
+#pro-map-tooltip{font-family:var(--font-mono,monospace)}
