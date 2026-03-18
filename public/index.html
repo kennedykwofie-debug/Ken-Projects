@@ -212,22 +212,22 @@
 <div class="pi-shell">
   <nav class="pi-nav">
     <div class="pi-nav-logo">&#10022; PRO INTEL</div>
-    <button class="pi-nav-btn active" data-section="geo" onclick="piNav(this)">
+    <button class="pi-nav-btn active" data-section="geo">
       <span class="pi-nav-icon">&#127758;</span>
       <span class="pi-nav-label">Geo Risk</span>
       <span class="pi-nav-badge" id="pi-geo-badge">50</span>
     </button>
-    <button class="pi-nav-btn" data-section="cyber" onclick="piNav(this)">
+    <button class="pi-nav-btn" data-section="cyber">
       <span class="pi-nav-icon">&#128274;</span>
       <span class="pi-nav-label">Cyber</span>
       <span class="pi-nav-badge" id="pi-cyber-badge">0</span>
     </button>
-    <button class="pi-nav-btn" data-section="econ" onclick="piNav(this)">
+    <button class="pi-nav-btn" data-section="econ">
       <span class="pi-nav-icon">&#128200;</span>
       <span class="pi-nav-label">Economic</span>
       <span class="pi-nav-badge" id="pi-econ-badge">8</span>
     </button>
-    <button class="pi-nav-btn" data-section="ai" onclick="piNav(this)">
+    <button class="pi-nav-btn" data-section="ai">
       <span class="pi-nav-icon">&#129504;</span>
       <span class="pi-nav-label">AI Analysis</span>
       <span class="pi-nav-badge pi-ai-badge" id="pi-ai-badge">PRO</span>
@@ -237,7 +237,7 @@
       <div class="pi-stat"><div class="pi-stat-val" id="pro-c2-count">-</div><div class="pi-stat-lbl">C2 Servers</div></div>
       <div class="pi-stat"><div class="pi-stat-val" id="pro-macro-risk" style="font-size:11px">-</div><div class="pi-stat-lbl">Macro Risk</div></div>
     </div>
-    <button id="pro-refresh-btn" class="pi-refresh-btn" onclick="loadPro()">&#8635; Refresh</button>
+    <button id="pro-refresh-btn" class="pi-refresh-btn">&#8635; Refresh</button>
   </nav>
   <main class="pi-main">
     <section class="pi-section active" id="pi-sec-geo">
@@ -263,10 +263,10 @@
     <section class="pi-section" id="pi-sec-econ">
       <div class="pi-sec-hdr"><span>&#128200; Economic Risk Signals</span><span class="pi-sec-sub" id="pro-econ-badge">Loading...</span></div>
       <div class="pi-econ-tabs">
-        <button class="pi-etab active" data-etab="overview" onclick="piEconTab(this)">Overview</button>
-        <button class="pi-etab" data-etab="rates" onclick="piEconTab(this)">Rates &amp; Spreads</button>
-        <button class="pi-etab" data-etab="volatility" onclick="piEconTab(this)">Volatility</button>
-        <button class="pi-etab" data-etab="commodities" onclick="piEconTab(this)">Commodities &amp; FX</button>
+        <button class="pi-etab active" data-etab="overview">Overview</button>
+        <button class="pi-etab" data-etab="rates">Rates &amp; Spreads</button>
+        <button class="pi-etab" data-etab="volatility">Volatility</button>
+        <button class="pi-etab" data-etab="commodities">Commodities &amp; FX</button>
       </div>
       <div id="pro-econ-list" class="pi-econ-body"><div class="lt">Loading...</div></div>
     </section>
