@@ -401,5 +401,4 @@ if(_pab){_pab.addEventListener('click',function(){
     }).catch(function(){res.innerHTML='<span style="color:#ff3b5c">Error.</span>';_pab.disabled=false;_pab.textContent='\u25ba Analyse with AI';});
 });}
 var _prb=g('pro-refresh-btn');if(_prb)_prb.addEventListener('click',loadPro);
-;
 })();
