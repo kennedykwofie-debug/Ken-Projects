@@ -342,202 +342,113 @@ go()
 
 // ── PRO INTEL MODULE ──────────────────────────────────────────────────────────
 var PROAPI='https://spectacular-wisdom-production.up.railway.app';
-var _CN={AF:{n:'Afghanistan',lon:67.7,lat:33.9},AL:{n:'Albania',lon:20.2,lat:41.2},DZ:{n:'Algeria',lon:2.6,lat:28.0},AO:{n:'Angola',lon:17.9,lat:-11.2},AR:{n:'Argentina',lon:-64.0,lat:-34.0},AM:{n:'Armenia',lon:45.0,lat:40.1},AZ:{n:'Azerbaijan',lon:47.6,lat:40.1},BD:{n:'Bangladesh',lon:90.4,lat:23.7},BY:{n:'Belarus',lon:28.0,lat:53.7},BJ:{n:'Benin',lon:2.3,lat:9.3},BO:{n:'Bolivia',lon:-65.0,lat:-17.0},BA:{n:'Bosnia',lon:17.7,lat:44.2},BR:{n:'Brazil',lon:-51.9,lat:-14.2},BF:{n:'Burkina Faso',lon:-1.6,lat:12.4},BI:{n:'Burundi',lon:29.9,lat:-3.4},KH:{n:'Cambodia',lon:104.9,lat:12.6},CM:{n:'Cameroon',lon:12.4,lat:3.8},CF:{n:'C.African Rep.',lon:20.9,lat:6.6},TD:{n:'Chad',lon:18.7,lat:15.5},CN:{n:'China',lon:104.2,lat:35.9},CO:{n:'Colombia',lon:-74.3,lat:4.6},CD:{n:'DR Congo',lon:24.0,lat:-4.0},CI:{n:"Cote d'Ivoire",lon:-5.6,lat:7.5},CU:{n:'Cuba',lon:-79.5,lat:21.5},EC:{n:'Ecuador',lon:-77.9,lat:-1.8},EG:{n:'Egypt',lon:30.8,lat:26.8},SV:{n:'El Salvador',lon:-88.9,lat:13.8},ET:{n:'Ethiopia',lon:40.5,lat:9.1},GE:{n:'Georgia',lon:43.4,lat:42.3},GH:{n:'Ghana',lon:-1.0,lat:7.9},GT:{n:'Guatemala',lon:-90.2,lat:15.8},GN:{n:'Guinea',lon:-11.4,lat:11.0},GW:{n:'Guinea-Bissau',lon:-15.2,lat:12.0},HT:{n:'Haiti',lon:-72.3,lat:19.0},HN:{n:'Honduras',lon:-86.2,lat:15.2},IN:{n:'India',lon:78.9,lat:20.6},ID:{n:'Indonesia',lon:113.9,lat:-0.8},IR:{n:'Iran',lon:53.7,lat:32.4},IQ:{n:'Iraq',lon:43.7,lat:33.2},JM:{n:'Jamaica',lon:-77.3,lat:18.1},JO:{n:'Jordan',lon:36.2,lat:31.2},KZ:{n:'Kazakhstan',lon:66.9,lat:48.0},KE:{n:'Kenya',lon:37.9,lat:0.0},KP:{n:'North Korea',lon:127.5,lat:40.3},LB:{n:'Lebanon',lon:35.9,lat:33.9},LR:{n:'Liberia',lon:-9.4,lat:6.4},LY:{n:'Libya',lon:17.2,lat:26.3},MG:{n:'Madagascar',lon:46.9,lat:-19.0},MW:{n:'Malawi',lon:34.3,lat:-13.3},ML:{n:'Mali',lon:-1.3,lat:17.6},MR:{n:'Mauritania',lon:-10.9,lat:20.3},MX:{n:'Mexico',lon:-102.5,lat:23.6},MD:{n:'Moldova',lon:28.4,lat:47.4},MZ:{n:'Mozambique',lon:35.5,lat:-18.7},MM:{n:'Myanmar',lon:95.9,lat:16.9},NP:{n:'Nepal',lon:84.1,lat:28.4},NI:{n:'Nicaragua',lon:-85.2,lat:12.9},NE:{n:'Niger',lon:8.1,lat:17.6},NG:{n:'Nigeria',lon:8.7,lat:9.1},PK:{n:'Pakistan',lon:69.3,lat:30.4},PS:{n:'Palestine',lon:35.3,lat:31.9},PA:{n:'Panama',lon:-80.8,lat:8.5},PY:{n:'Paraguay',lon:-58.5,lat:-23.4},PE:{n:'Peru',lon:-75.0,lat:-9.2},PH:{n:'Philippines',lon:122.9,lat:12.9},RU:{n:'Russia',lon:96.7,lat:61.5},RW:{n:'Rwanda',lon:29.9,lat:-2.0},SN:{n:'Senegal',lon:-14.5,lat:14.5},SO:{n:'Somalia',lon:46.2,lat:6.0},SD:{n:'Sudan',lon:30.2,lat:15.6},SS:{n:'South Sudan',lon:31.3,lat:6.9},SY:{n:'Syria',lon:38.0,lat:35.0},TJ:{n:'Tajikistan',lon:71.3,lat:38.9},TH:{n:'Thailand',lon:100.9,lat:15.9},TL:{n:'Timor-Leste',lon:125.7,lat:-8.9},TG:{n:'Togo',lon:0.8,lat:8.6},TN:{n:'Tunisia',lon:9.5,lat:33.9},TM:{n:'Turkmenistan',lon:59.6,lat:40.5},UG:{n:'Uganda',lon:32.3,lat:1.4},UA:{n:'Ukraine',lon:31.2,lat:49.0},UZ:{n:'Uzbekistan',lon:63.9,lat:41.4},VE:{n:'Venezuela',lon:-66.6,lat:6.4},VN:{n:'Vietnam',lon:108.3,lat:14.1},YE:{n:'Yemen',lon:47.6,lat:15.6},ZM:{n:'Zambia',lon:27.8,lat:-13.1},ZW:{n:'Zimbabwe',lon:29.9,lat:-19.0}};
+var _CN={AF:{n:'Afghanistan',lon:67.7,lat:33.9},AL:{n:'Albania',lon:20.2,lat:41.2},DZ:{n:'Algeria',lon:2.6,lat:28.0},AO:{n:'Angola',lon:17.9,lat:-11.2},AR:{n:'Argentina',lon:-64.0,lat:-34.0},AM:{n:'Armenia',lon:45.0,lat:40.1},AZ:{n:'Azerbaijan',lon:47.6,lat:40.1},BD:{n:'Bangladesh',lon:90.4,lat:23.7},BY:{n:'Belarus',lon:28.0,lat:53.7},BJ:{n:'Benin',lon:2.3,lat:9.3},BO:{n:'Bolivia',lon:-65.0,lat:-17.0},BA:{n:'Bosnia',lon:17.7,lat:44.2},BR:{n:'Brazil',lon:-51.9,lat:-14.2},BF:{n:'Burkina Faso',lon:-1.6,lat:12.4},BI:{n:'Burundi',lon:29.9,lat:-3.4},KH:{n:'Cambodia',lon:104.9,lat:12.6},CM:{n:'Cameroon',lon:12.4,lat:3.8},CF:{n:'C.African Rep.',lon:20.9,lat:6.6},TD:{n:'Chad',lon:18.7,lat:15.5},CN:{n:'China',lon:104.2,lat:35.9},CO:{n:'Colombia',lon:-74.3,lat:4.6},CD:{n:'DR Congo',lon:24.0,lat:-4.0},CI:{n:'Cote dIvoire',lon:-5.6,lat:7.5},CU:{n:'Cuba',lon:-79.5,lat:21.5},EC:{n:'Ecuador',lon:-77.9,lat:-1.8},EG:{n:'Egypt',lon:30.8,lat:26.8},SV:{n:'El Salvador',lon:-88.9,lat:13.8},ET:{n:'Ethiopia',lon:40.5,lat:9.1},GE:{n:'Georgia',lon:43.4,lat:42.3},GH:{n:'Ghana',lon:-1.0,lat:7.9},GT:{n:'Guatemala',lon:-90.2,lat:15.8},GN:{n:'Guinea',lon:-11.4,lat:11.0},HT:{n:'Haiti',lon:-72.3,lat:19.0},HN:{n:'Honduras',lon:-86.2,lat:15.2},IN:{n:'India',lon:78.9,lat:20.6},ID:{n:'Indonesia',lon:113.9,lat:-0.8},IR:{n:'Iran',lon:53.7,lat:32.4},IQ:{n:'Iraq',lon:43.7,lat:33.2},JO:{n:'Jordan',lon:36.2,lat:31.2},KZ:{n:'Kazakhstan',lon:66.9,lat:48.0},KE:{n:'Kenya',lon:37.9,lat:0.0},KP:{n:'North Korea',lon:127.5,lat:40.3},LB:{n:'Lebanon',lon:35.9,lat:33.9},LR:{n:'Liberia',lon:-9.4,lat:6.4},LY:{n:'Libya',lon:17.2,lat:26.3},MG:{n:'Madagascar',lon:46.9,lat:-19.0},ML:{n:'Mali',lon:-1.3,lat:17.6},MR:{n:'Mauritania',lon:-10.9,lat:20.3},MX:{n:'Mexico',lon:-102.5,lat:23.6},MM:{n:'Myanmar',lon:95.9,lat:16.9},NP:{n:'Nepal',lon:84.1,lat:28.4},NI:{n:'Nicaragua',lon:-85.2,lat:12.9},NE:{n:'Niger',lon:8.1,lat:17.6},NG:{n:'Nigeria',lon:8.7,lat:9.1},PK:{n:'Pakistan',lon:69.3,lat:30.4},PS:{n:'Palestine',lon:35.3,lat:31.9},PE:{n:'Peru',lon:-75.0,lat:-9.2},PH:{n:'Philippines',lon:122.9,lat:12.9},RU:{n:'Russia',lon:96.7,lat:61.5},RW:{n:'Rwanda',lon:29.9,lat:-2.0},SN:{n:'Senegal',lon:-14.5,lat:14.5},SO:{n:'Somalia',lon:46.2,lat:6.0},SD:{n:'Sudan',lon:30.2,lat:15.6},SS:{n:'South Sudan',lon:31.3,lat:6.9},SY:{n:'Syria',lon:38.0,lat:35.0},TJ:{n:'Tajikistan',lon:71.3,lat:38.9},TH:{n:'Thailand',lon:100.9,lat:15.9},TG:{n:'Togo',lon:0.8,lat:8.6},TN:{n:'Tunisia',lon:9.5,lat:33.9},TM:{n:'Turkmenistan',lon:59.6,lat:40.5},UG:{n:'Uganda',lon:32.3,lat:1.4},UA:{n:'Ukraine',lon:31.2,lat:49.0},UZ:{n:'Uzbekistan',lon:63.9,lat:41.4},VE:{n:'Venezuela',lon:-66.6,lat:6.4},VN:{n:'Vietnam',lon:108.3,lat:14.1},YE:{n:'Yemen',lon:47.6,lat:15.6},ZM:{n:'Zambia',lon:27.8,lat:-13.1},ZW:{n:'Zimbabwe',lon:29.9,lat:-19.0}};
 function _xe(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
-function _lvlCol(l){return l==="CRITICAL"?"#ff3b5c":l==="HIGH"?"#ff8c42":l==="ELEVATED"?"#f5c518":l==="MODERATE"?"#4d9eff":"#00d4aa";}
-function _chgHtml(v){if(v==null)return"";var s=v>0?"+":"";var c=v>0?"#ff3b5c":v<0?"#00d4aa":"#64748b";return'<span style="color:'+c+';font-size:11px;margin-left:4px">'+s+(v*1).toFixed(2)+'</span>';}
-var _mapData=null,_mapSelected=null;
-function _lonLatToXY(lon,lat,W,H){
-  var x=(lon+180)/360*W;
-  var latR=lat*Math.PI/180;
-  var y=H/2-W*Math.log(Math.tan(Math.PI/4+latR/2))/(2*Math.PI);
-  return [x,y];
-}
-function _drawMap(data,W,H,ctx){
-  ctx.fillStyle="#0a0e14";ctx.fillRect(0,0,W,H);
-  // Draw graticule grid
-  ctx.strokeStyle="#111820";ctx.lineWidth=0.5;
-  for(var lon=-180;lon<=180;lon+=30){var xy1=_lonLatToXY(lon,-85,W,H);var xy2=_lonLatToXY(lon,85,W,H);ctx.beginPath();ctx.moveTo(xy1[0],xy1[1]);ctx.lineTo(xy2[0],xy2[1]);ctx.stroke();}
-  for(var lat2=-60;lat2<=60;lat2+=30){ctx.beginPath();for(var lo=-180;lo<=180;lo+=1){var p=_lonLatToXY(lo,lat2,W,H);if(lo===-180)ctx.moveTo(p[0],p[1]);else ctx.lineTo(p[0],p[1]);}ctx.stroke();}
-  // Draw country dots sized by risk
-  var byCode={};
-  data.forEach(function(c){byCode[c.country]=c;});
-  Object.keys(_CN).forEach(function(code){
-    var info=_CN[code];var xy=_lonLatToXY(info.lon,info.lat,W,H);
-    var c=byCode[code];
-    if(c){
-      var col=_lvlCol(c.level);var r=c.score>=85?7:c.score>=70?5:c.score>=50?4:3;
-      ctx.beginPath();ctx.arc(xy[0],xy[1],r+2,0,2*Math.PI);ctx.fillStyle="rgba(0,0,0,0.3)";ctx.fill();
-      ctx.beginPath();ctx.arc(xy[0],xy[1],r,0,2*Math.PI);ctx.fillStyle=col;ctx.fill();
-      if(c.score>=80){ctx.beginPath();ctx.arc(xy[0],xy[1],r+4,0,2*Math.PI);ctx.strokeStyle=col;ctx.lineWidth=1;ctx.globalAlpha=0.3;ctx.stroke();ctx.globalAlpha=1;}
-    } else {
-      ctx.beginPath();ctx.arc(xy[0],xy[1],2,0,2*Math.PI);ctx.fillStyle="#1e2630";ctx.fill();
-    }
-  });
-  // Legend
-  var lx=12,ly=H-60;var levels=[["CRITICAL","#ff3b5c"],["HIGH","#ff8c42"],["ELEVATED","#f5c518"],["MODERATE","#4d9eff"],["LOW","#00d4aa"]];
-  ctx.font="9px monospace";
-  levels.forEach(function(lv,i){ctx.beginPath();ctx.arc(lx+6,ly+i*14,4,0,2*Math.PI);ctx.fillStyle=lv[1];ctx.fill();ctx.fillStyle="#94a3b8";ctx.fillText(lv[0],lx+14,ly+i*14+4);});
-}
-function _initMap(data,W,H){
-  _mapData=data;
-  var canvas=document.getElementById("pro-map-canvas");
-  if(!canvas)return;
-  canvas.width=W;canvas.height=H;
-  var ctx=canvas.getContext("2d");
-  _drawMap(data,W,H,ctx);
-  var byCode={};data.forEach(function(c){byCode[c.country]=c;});
-  function getHit(ex,ey){
-    var best=null,bestD=99;
-    Object.keys(_CN).forEach(function(code){
-      var info=_CN[code];var xy=_lonLatToXY(info.lon,info.lat,W,H);
-      var d=Math.sqrt(Math.pow(ex-xy[0],2)+Math.pow(ey-xy[1],2));
-      if(d<12&&d<bestD){bestD=d;best=code;}
-    });
-    return best;
+function _lc(l){return l==="CRITICAL"?"#ff3b5c":l==="HIGH"?"#ff8c42":l==="ELEVATED"?"#f5c518":l==="MODERATE"?"#4d9eff":"#00d4aa";}
+function _chgH(v){if(v==null)return"";var s=v>0?"+":"";var c=v>0?"#ff3b5c":v<0?"#00d4aa":"#64748b";return"<span style=\"color:"+c+";\">" +s+(v*1).toFixed(2)+"</span>";}
+function piNav(btn){document.querySelectorAll(".pi-nav-btn").forEach(function(b){b.classList.remove("active");});document.querySelectorAll(".pi-section").forEach(function(s){s.classList.remove("active");});btn.classList.add("active");var sec=document.getElementById("pi-sec-"+btn.dataset.section);if(sec)sec.classList.add("active");}
+var _econD=null;
+function piEconTab(btn){document.querySelectorAll(".pi-etab").forEach(function(b){b.classList.remove("active");});btn.classList.add("active");if(_econD)_renderEcon(_econD,btn.dataset.etab);}
+var _geoRiskMap={};
+function _buildSVGMap(data){
+  data.forEach(function(c){_geoRiskMap[c.country]=c;});
+  var container=document.getElementById("pi-map-container");if(!container)return;
+  var svg=document.getElementById("pi-world-svg");svg.innerHTML="";
+  function _rwD3(){
+    var d3=window.d3;var tj=window.topojson;if(!d3||!tj){setTimeout(_rwD3,300);return;}
+    var W=container.offsetWidth||900,H=420;
+    var proj=d3.geoNaturalEarth1().scale(W/6.2).translate([W/2,H/2]);
+    var path=d3.geoPath().projection(proj);
+    d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(function(world){
+      var countries=tj.feature(world,world.objects.countries);
+      var borders=tj.mesh(world,world.objects.countries,function(a,b){return a!==b;});
+      var grat=d3.geoGraticule();
+      d3.select(svg).insert("rect","path").attr("width",W).attr("height",H).attr("fill","#060c15");
+      d3.select(svg).append("path").datum(grat()).attr("d",path).attr("fill","none").attr("stroke","#111d2a").attr("stroke-width","0.4");
+      var ISO_NUM={"004":"AF","008":"AL","012":"DZ","024":"AO","032":"AR","051":"AM","031":"AZ","050":"BD","112":"BY","204":"BJ","068":"BO","070":"BA","076":"BR","854":"BF","108":"BI","116":"KH","120":"CM","140":"CF","148":"TD","156":"CN","170":"CO","180":"CD","384":"CI","192":"CU","218":"EC","818":"EG","222":"SV","231":"ET","268":"GE","288":"GH","320":"GT","324":"GN","332":"HT","340":"HN","356":"IN","360":"ID","364":"IR","368":"IQ","400":"JO","398":"KZ","404":"KE","408":"KP","422":"LB","430":"LR","434":"LY","450":"MG","466":"ML","478":"MR","484":"MX","104":"MM","524":"NP","558":"NI","562":"NE","566":"NG","586":"PK","275":"PS","604":"PE","608":"PH","643":"RU","646":"RW","686":"SN","706":"SO","729":"SD","728":"SS","760":"SY","762":"TJ","764":"TH","768":"TG","788":"TN","795":"TM","800":"UG","804":"UA","860":"UZ","862":"VE","704":"VN","887":"YE","894":"ZM","716":"ZW"};
+      var tooltip=document.getElementById("pro-map-tooltip");
+      var detail=document.getElementById("pro-map-detail");
+      d3.select(svg).selectAll(".country").data(countries.features).enter().append("path")
+        .attr("class","country").attr("d",path)
+        .attr("fill",function(f){var code=ISO_NUM[String(f.id).padStart(3,"0")];var c=code&&_geoRiskMap[code];return c?_lc(c.level)+"33":"#1a2535";})
+        .attr("stroke",function(f){var code=ISO_NUM[String(f.id).padStart(3,"0")];var c=code&&_geoRiskMap[code];return c?_lc(c.level):"#243044";})
+        .attr("stroke-width",function(f){var code=ISO_NUM[String(f.id).padStart(3,"0")];var c=code&&_geoRiskMap[code];return c&&(c.level==="CRITICAL"||c.level==="HIGH")?"1":"0.3";})
+        .on("mouseover",function(event,f){
+          var code=ISO_NUM[String(f.id).padStart(3,"0")];var c=code&&_geoRiskMap[code];if(!c)return;
+          var col=_lc(c.level);var nm=(_CN[code]&&_CN[code].n)||code;
+          var drv=(c.drivers||[]).map(function(d){return"<span class=\"pi-ttip-drv\">"+_xe(d)+"</span>";}).join("");
+          tooltip.innerHTML="<div class=\"pi-ttip-name\" style=\"color:"+col+"\">"+_xe(nm)+" <span class=\"pi-ttip-code\">"+code+"</span></div>";
+          tooltip.innerHTML+="<div class=\"pi-ttip-score\"><span style=\"color:"+col+";font-size:26px;font-weight:900\">"+c.score+"</span><span style=\"color:"+col+";font-size:11px;margin-left:5px\">"+c.level+"</span></div>";
+          tooltip.innerHTML+="<div class=\"pi-ttip-trend\">Trend: "+c.trend+"</div>";
+          if(drv)tooltip.innerHTML+="<div class=\"pi-ttip-drvs\">"+drv+"</div>";
+          tooltip.style.display="block";tooltip.style.left=(event.offsetX+14)+"px";tooltip.style.top=Math.max(0,event.offsetY-20)+"px";
+          d3.select(this).attr("fill",col+"99");
+        })
+        .on("mousemove",function(event){tooltip.style.left=(event.offsetX+14)+"px";tooltip.style.top=Math.max(0,event.offsetY-20)+"px";})
+        .on("mouseout",function(event,f){tooltip.style.display="none";var code=ISO_NUM[String(f.id).padStart(3,"0")];var c=code&&_geoRiskMap[code];d3.select(this).attr("fill",c?_lc(c.level)+"33":"#1a2535");})
+        .on("click",function(event,f){
+          var code=ISO_NUM[String(f.id).padStart(3,"0")];var c=code&&_geoRiskMap[code];if(!c||!detail)return;
+          var col=_lc(c.level);var nm=(_CN[code]&&_CN[code].n)||code;
+          var drvH=(c.drivers||[]).map(function(d){return"<span class=\"pi-det-drv\" style=\"border-color:"+col+";color:"+col+"\">"+_xe(d)+"</span>";}).join("");
+          detail.style.display="block";
+          detail.innerHTML="<div class=\"pi-det-inner\"><div><div class=\"pi-det-name\">"+_xe(nm)+" <span class=\"pi-det-code\">["+code+"]</span></div><div class=\"pi-det-score-row\"><span class=\"pi-det-score\" style=\"color:"+col+"\">"+c.score+"</span><span class=\"pi-det-lvl\" style=\"color:"+col+"\">"+c.level+"</span></div><div class=\"pi-det-trend\">Trend: <span>"+c.trend+"</span></div>"+(drvH?"<div class=\"pi-det-drvs-hdr\">Risk Drivers</div><div class=\"pi-det-drvs\">"+drvH+"</div>":"")+"</div><button class=\"pi-det-close\" id=\"pi-det-cls\">&#10005;</button></div>";
+          document.getElementById("pi-det-cls").onclick=function(){detail.style.display="none";};
+        });
+      d3.select(svg).append("path").datum(borders).attr("d",path).attr("fill","none").attr("stroke","#1e2d3d").attr("stroke-width","0.5");
+      data.filter(function(c){return c.level==="CRITICAL"||c.level==="HIGH";}).forEach(function(c){
+        var info=_CN[c.country];if(!info)return;var xy=proj([info.lon,info.lat]);if(!xy)return;var col=_lc(c.level);
+        d3.select(svg).append("circle").attr("cx",xy[0]).attr("cy",xy[1]).attr("r",c.level==="CRITICAL"?7:5).attr("fill",col).attr("opacity","0.9").attr("pointer-events","none");
+        if(c.level==="CRITICAL"){d3.select(svg).append("circle").attr("cx",xy[0]).attr("cy",xy[1]).attr("r",12).attr("fill","none").attr("stroke",col).attr("stroke-width","1.2").attr("opacity","0.45").attr("pointer-events","none");}
+        d3.select(svg).append("text").attr("x",xy[0]).attr("y",xy[1]-11).attr("text-anchor","middle").attr("font-size","9").attr("fill",col).attr("font-family","monospace").attr("font-weight","700").attr("pointer-events","none").text(c.country);
+      });
+      var leg=document.getElementById("pi-map-legend");if(leg)leg.innerHTML=[["CRITICAL","#ff3b5c"],["HIGH","#ff8c42"],["ELEVATED","#f5c518"],["MODERATE","#4d9eff"],["LOW","#00d4aa"]].map(function(lv){return"<span class=\"pi-legend-item\"><span class=\"pi-legend-dot\" style=\"background:"+lv[1]+"\"></span>"+lv[0]+"</span>";}).join("");
+    }).catch(function(e){console.error("Map load failed",e);});
   }
-  var tt=document.getElementById("pro-map-tooltip");
-  canvas.addEventListener("mousemove",function(e){
-    var r=canvas.getBoundingClientRect();var sx=W/r.width,sy=H/r.height;
-    var ex=(e.clientX-r.left)*sx,ey=(e.clientY-r.top)*sy;
-    var code=getHit(ex,ey);
-    if(code&&byCode[code]){
-      var c=byCode[code];var col=_lvlCol(c.level);
-      var drivers=(c.drivers||[]).map(function(d){return'<span style="display:inline-block;margin:1px 2px 0;padding:1px 6px;border-radius:8px;font-size:10px;background:#161b22;border:1px solid #2a3440;color:#94a3b8">'+_xe(d)+'</span>';}).join("");
-      tt.innerHTML='<div style="font-size:13px;font-weight:700;color:'+col+'">'+_xe(_CN[code].n)+' <span style="font-size:10px;color:#64748b">'+code+'</span></div>';
-      tt.innerHTML+='<div style="margin-top:4px"><span style="font-size:22px;font-weight:900;color:'+col+'">'+c.score+'</span><span style="font-size:11px;color:'+col+';margin-left:4px;vertical-align:top;margin-top:5px;display:inline-block">'+c.level+'</span></div>';
-      tt.innerHTML+='<div style="font-size:10px;color:#64748b;margin-top:2px">Trend: '+_xe(c.trend)+'</div>';
-      if(drivers)tt.innerHTML+='<div style="margin-top:5px">'+drivers+'</div>';
-      var px=(e.clientX-r.left+canvas.offsetLeft);var py=(e.clientY-r.top+canvas.offsetTop);
-      tt.style.display="block";
-      tt.style.left=(e.offsetX+16)+"px";
-      tt.style.top=(e.offsetY-10)+"px";
-      canvas.style.cursor="pointer";
-    } else {tt.style.display="none";canvas.style.cursor="crosshair";}
-  });
-  canvas.addEventListener("mouseleave",function(){if(tt)tt.style.display="none";});
-  canvas.addEventListener("click",function(e){
-    var r=canvas.getBoundingClientRect();var sx=W/r.width,sy=H/r.height;
-    var ex=(e.clientX-r.left)*sx,ey=(e.clientY-r.top)*sy;
-    var code=getHit(ex,ey);
-    var det=document.getElementById("pro-map-detail");
-    if(code&&byCode[code]&&det){
-      var c=byCode[code];var col=_lvlCol(c.level);
-      var drivers=(c.drivers||[]).map(function(d){return'<span style="display:inline-block;margin:2px 3px 0 0;padding:2px 8px;border-radius:10px;font-size:11px;background:#161b22;border:1px solid '+col+';color:'+col+'">'+_xe(d)+'</span>';}).join("");
-      det.style.display="block";
-      det.innerHTML='<div style="display:flex;align-items:flex-start;justify-content:space-between">';
-      det.innerHTML+='<div><div style="font-size:16px;font-weight:700;color:#e2e8f0">'+_xe(_CN[code].n)+' <span style="font-size:11px;color:#64748b;font-weight:400">'+_xe(code)+'</span></div>';
-      det.innerHTML+='<div style="margin-top:8px"><span style="font-size:36px;font-weight:900;color:'+col+'">'+c.score+'</span><span style="font-size:12px;color:'+col+';margin-left:6px;vertical-align:top;margin-top:10px;display:inline-block">'+c.level+'</span></div>';
-      det.innerHTML+='<div style="font-size:11px;color:#64748b;margin-top:4px">Trend: <span style="color:#94a3b8">'+_xe(c.trend)+'</span></div>';
-      if(drivers)det.innerHTML+='<div style="margin-top:8px"><div style="font-size:10px;color:#64748b;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Risk Drivers</div>'+drivers+'</div>';
-      det.innerHTML+='</div>';
-      det.innerHTML+='<button onclick="document.getElementById(\'pro-map-detail\').style.display=\'none\'" style="background:none;border:1px solid #2a3440;color:#64748b;padding:4px 8px;border-radius:3px;cursor:pointer;font-size:11px">&#10005;</button></div>';
-    } else if(det){det.style.display="none";}
-  });
-}
-var _econCache=null;
-function switchEconTab(btn){
-  document.querySelectorAll(".econ-tab").forEach(function(b){b.classList.remove("active");});
-  btn.classList.add("active");
-  if(_econCache)_renderEcon(_econCache,btn.dataset.tab);
+  if(!window.d3||!window.topojson){var s1=document.createElement("script");s1.src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js";s1.onload=function(){var s2=document.createElement("script");s2.src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js";s2.onload=_rwD3;document.head.appendChild(s2);};document.head.appendChild(s1);}else _rwD3();
 }
 function _renderEcon(d,tab){
-  _econCache=d;
-  var macro=d.macro_signals||[],risks=d.risk_assessments||[],overall=d.overall_risk||"MEDIUM",concern=d.primary_concern||"";
-  var mr=g("pro-macro-risk");if(mr){var mc=overall==="HIGH"||overall==="CRITICAL"?"#ff3b5c":overall==="MEDIUM"?"#f5c518":"#00d4aa";mr.style.color=mc;mr.style.fontSize="11px";mr.textContent=overall+(concern?" - "+concern.replace(/_/g," ").toUpperCase():"");}
+  _econD=d;var macro=d.macro_signals||[],risks=d.risk_assessments||[],overall=d.overall_risk||"MEDIUM",concern=d.primary_concern||"";
+  var mr=g("pro-macro-risk");if(mr){var mc=overall==="HIGH"||overall==="CRITICAL"?"#ff3b5c":overall==="MEDIUM"?"#f5c518":"#00d4aa";mr.style.color=mc;mr.style.fontWeight="700";mr.textContent=overall+(concern?" - "+concern.replace(/_/g," ").toUpperCase():"");}
   var el2=g("pro-econ-list");if(!el2)return;
   if(!tab||tab==="overview"){
-    var h='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:16px">';
-    risks.forEach(function(r2){var rc=r2.risk==="HIGH"||r2.risk==="CRITICAL"?"#ff3b5c":r2.risk==="MEDIUM"?"#f5c518":"#00d4aa";h+='<div style="background:#0d1117;border:1px solid #1e2630;border-radius:4px;padding:12px;text-align:center"><div style="font-size:10px;color:#64748b;text-transform:capitalize;margin-bottom:4px">'+_xe((r2.signal||"").replace(/_/g," "))+'</div><div style="font-size:20px;font-weight:700;color:'+rc+'">'+_xe(r2.risk||"?")+'</div>'+((r2.status&&r2.status!=="unknown")?('<div style="font-size:10px;color:#94a3b8;margin-top:2px;text-transform:capitalize">'+_xe(r2.status)+'</div>'):"")+(r2.spread!=null?'<div style="font-size:10px;color:#64748b;margin-top:2px">Spread: '+r2.spread.toFixed(2)+'</div>':"")+ '</div>';});
-    h+='</div><div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">All Indicators</div>';
-    macro.forEach(function(m){var vc=m.series_id==="VIXCLS"||m.series_id==="GVZCLS"?(m.value>30?"#ff3b5c":m.value>20?"#f5c518":"#00d4aa"):m.series_id==="T10Y2Y"?(m.value<0?"#ff3b5c":m.value<0.5?"#f5c518":"#00d4aa"):m.series_id==="STLFSI4"?(m.value>1?"#ff3b5c":m.value>0?"#f5c518":"#00d4aa"):"#e2e8f0";h+='<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid #1e2630"><div style="flex:1"><div style="font-size:12px;color:#e2e8f0;font-weight:600">'+_xe(m.name)+'</div><div style="font-size:10px;color:#64748b">'+_xe(m.series_id)+' &bull; '+_xe(m.date||"")+'</div></div><div style="text-align:right;margin-left:12px"><div style="font-size:14px;font-weight:700;color:'+vc+'">'+_xe(m.value!=null?(m.value*1).toFixed(2):"--")+'</div><div>'+_chgHtml(m.change)+'</div></div></div>';
-    });
+    var h="<div class=\"pi-risk-cards\">";risks.forEach(function(r2){var rc=r2.risk==="HIGH"||r2.risk==="CRITICAL"?"#ff3b5c":r2.risk==="MEDIUM"?"#f5c518":"#00d4aa";h+="<div class=\"pi-risk-card\" style=\"border-color:"+rc+"40\"><div class=\"pi-risk-card-lbl\">"+_xe((r2.signal||"").replace(/_/g," "))+"</div><div class=\"pi-risk-card-val\" style=\"color:"+rc+"\">"+_xe(r2.risk||"?")+"</div>"+(r2.status&&r2.status!=="unknown"?"<div class=\"pi-risk-card-sub\">"+_xe(r2.status)+"</div>":"")+(r2.spread!=null?"<div class=\"pi-risk-card-sub\">Spread: "+r2.spread.toFixed(2)+"</div>":"")+"</div>";});h+="</div><div class=\"pi-indicator-table\">";
+    macro.forEach(function(m){var vc=m.series_id==="VIXCLS"||m.series_id==="GVZCLS"?(m.value>30?"#ff3b5c":m.value>20?"#f5c518":"#00d4aa"):m.series_id==="T10Y2Y"?(m.value<0?"#ff3b5c":m.value<0.5?"#f5c518":"#00d4aa"):m.series_id==="STLFSI4"?(m.value>1?"#ff3b5c":m.value>0?"#f5c518":"#00d4aa"):"#e2e8f0";h+="<div class=\"pi-ind-row\"><div class=\"pi-ind-info\"><div class=\"pi-ind-name\">"+_xe(m.name)+"</div><div class=\"pi-ind-meta\">"+_xe(m.series_id)+" &bull; "+_xe(m.date||"")+"</div></div><div class=\"pi-ind-val\" style=\"color:"+vc+"\">"+_xe(m.value!=null?(m.value*1).toFixed(2):"--")+"</div><div class=\"pi-ind-chg\">"+_chgH(m.change)+"</div></div>";});h+="</div>";
     el2.innerHTML=h;
+  } else {
+    var ids=tab==="rates"?["DFF","T10Y2Y","BAMLH0A0HYM2"]:tab==="volatility"?["VIXCLS","GVZCLS","STLFSI4"]:["DCOILWTICO","DTWEXBGS"];
+    var filtered=macro.filter(function(m){return ids.indexOf(m.series_id)>=0;});
+    var titles2={"rates":"Interest Rates & Credit Spreads","volatility":"Market Volatility & Stress","commodities":"Commodities & Currency"};
+    var h2="<div class=\"pi-ind-sec-title\">"+( titles2[tab]||"")+"</div><div class=\"pi-signal-cards\">";
+    filtered.forEach(function(m){var vc=m.series_id==="VIXCLS"||m.series_id==="GVZCLS"?(m.value>30?"#ff3b5c":m.value>20?"#f5c518":"#00d4aa"):m.series_id==="T10Y2Y"?(m.value<0?"#ff3b5c":m.value<0.5?"#f5c518":"#00d4aa"):m.series_id==="STLFSI4"?(m.value>1?"#ff3b5c":m.value>0?"#f5c518":"#00d4aa"):"#4d9eff";var base=m.value!=null?m.value*1:0;var chg=m.change!=null?m.change*1:0;var bars=[base-chg*3.5,base-chg*2.8,base-chg*2.1,base-chg*1.5,base-chg*0.9,base-chg*0.4,base-chg*0.1,base];var bmin=Math.min.apply(null,bars),bmax=Math.max.apply(null,bars),br=bmax-bmin||1;var bh=bars.map(function(bv,bi){return"<div style=\"flex:1;height:"+Math.max(3,Math.round((bv-bmin)/br*52))+"px;background:"+(bi===7?vc:"#1e2d3d")+";border-radius:1px 1px 0 0;align-self:flex-end\"></div>";}).join("");h2+="<div class=\"pi-sig-card\"><div class=\"pi-sig-header\"><div><div class=\"pi-sig-name\">"+_xe(m.name)+"</div><div class=\"pi-sig-id\">"+_xe(m.series_id)+" &bull; "+_xe(m.date||"")+"</div></div><div class=\"pi-sig-val-block\"><div class=\"pi-sig-val\" style=\"color:"+vc+"\">"+_xe(m.value!=null?(m.value*1).toFixed(2):"--")+"</div><div class=\"pi-sig-chg\">"+_chgH(m.change)+" vs prev</div></div></div><div class=\"pi-sig-chart\">"+bh+"</div></div>";});
+    h2+="</div>";
+    el2.innerHTML=h2;
   }
-  else if(tab==="rates"){
-    var ids=["DFF","T10Y2Y","BAMLH0A0HYM2"];var filtered=macro.filter(function(m){return ids.indexOf(m.series_id)>=0;});
-    el2.innerHTML=_buildChartCards(filtered,"Interest Rates & Spreads");
-  }
-  else if(tab==="volatility"){
-    var ids2=["VIXCLS","GVZCLS","STLFSI4"];var filtered2=macro.filter(function(m){return ids2.indexOf(m.series_id)>=0;});
-    el2.innerHTML=_buildChartCards(filtered2,"Volatility & Stress Indicators");
-  }
-  else if(tab==="commodities"){
-    var ids3=["DCOILWTICO","DTWEXBGS"];var filtered3=macro.filter(function(m){return ids3.indexOf(m.series_id)>=0;});
-    el2.innerHTML=_buildChartCards(filtered3,"Commodities & FX");
-  }
-}
-function _buildChartCards(signals,title){
-  if(!signals.length)return'<div class="lt">No data for this category</div>';
-  var h='<div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">'+title+'</div>';
-  signals.forEach(function(m,i){
-    var vc=m.series_id==="VIXCLS"||m.series_id==="GVZCLS"?(m.value>30?"#ff3b5c":m.value>20?"#f5c518":"#00d4aa"):m.series_id==="T10Y2Y"?(m.value<0?"#ff3b5c":m.value<0.5?"#f5c518":"#00d4aa"):m.series_id==="STLFSI4"?(m.value>1?"#ff3b5c":m.value>0?"#f5c518":"#00d4aa"):"#4d9eff";
-    h+='<div style="background:#0d1117;border:1px solid #1e2630;border-radius:6px;padding:14px;margin-bottom:10px">';
-    h+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">';
-    h+='<div><div style="font-size:13px;font-weight:700;color:#e2e8f0">'+_xe(m.name)+'</div><div style="font-size:10px;color:#64748b;margin-top:2px">'+_xe(m.series_id)+' &bull; Last: '+_xe(m.date||"")+'</div></div>';
-    h+='<div style="text-align:right"><div style="font-size:28px;font-weight:900;color:'+vc+'">'+_xe(m.value!=null?(m.value*1).toFixed(2):"--")+'</div><div>'+_chgHtml(m.change)+'<span style="font-size:10px;color:#64748b"> vs prev</span></div></div>';
-    h+='</div>';
-    h+='<div style="position:relative;height:50px;background:#080b10;border-radius:3px;overflow:hidden">';
-    var pct=Math.min(100,Math.max(5,m.value!=null?Math.abs(m.value)/50*100:50));
-    h+='<div style="position:absolute;bottom:0;left:0;right:0;height:100%;display:flex;align-items:flex-end;gap:2px;padding:0 4px">';
-    var base=m.value!=null?m.value*1:0;var chg=m.change!=null?m.change*1:0;
-    var bars=[base-chg*4,base-chg*3.2,base-chg*2.5,base-chg*1.8,base-chg*1.2,base-chg*0.6,base-chg*0.2,base];
-    var bmin=Math.min.apply(null,bars),bmax=Math.max.apply(null,bars);
-    var brange=bmax-bmin||1;
-    bars.forEach(function(bv,bi){
-      var bh=Math.max(4,Math.round((bv-bmin)/brange*46));
-      var bc=bi===7?vc:"#1e2d3d";
-      h+='<div style="flex:1;height:'+bh+'px;background:'+bc+';border-radius:1px 1px 0 0;transition:all 0.3s"></div>';
-    });
-    h+='</div></div>';
-    h+='</div>';
-  });
-  return h;
 }
 function loadPro(){
-  var geoB=g("pro-geo-badge"),cyberB=g("pro-cyber-badge"),econB=g("pro-econ-badge");
-  if(geoB)geoB.textContent="LOADING";if(cyberB)cyberB.textContent="LOADING";if(econB)econB.textContent="LOADING";
+  var gb=g("pi-geo-badge"),cb=g("pi-cyber-badge"),eb=g("pi-econ-badge");
+  if(gb)gb.textContent="...";if(cb)cb.textContent="...";if(eb)eb.textContent="...";
   fetch(PROAPI+"/geo/cii").then(function(r){return r.json();}).then(function(d){
-    var data=d.data||[];
-    if(geoB)geoB.textContent=data.length+" COUNTRIES";
-    var cc=g("pro-crit-countries");if(cc)cc.textContent=data.filter(function(c){return c.level==="CRITICAL";}).length;
-    var hotH="";data.filter(function(c){return c.level==="CRITICAL";}).slice(0,6).forEach(function(c){var nm=(_CN[c.country]&&_CN[c.country].n)||c.country;hotH+='<span title="'+nm+'" style="display:inline-block;margin:0 4px 4px 0;padding:3px 8px;border-radius:3px;font-size:11px;font-weight:700;background:#2d0a0a;border:1px solid #ff3b5c;color:#ff3b5c">'+_xe(c.country)+' '+c.score+'</span>';});
-    var gh=g("pro-geo-hotspots");if(gh)gh.innerHTML=hotH?'<div style="font-size:10px;color:#ff3b5c;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;padding:8px 12px 0">Critical Hotspots</div><div style="padding:4px 12px 0">'+hotH+"</div>":"";
-    var mc=document.getElementById("pro-map-canvas");if(mc){var W=mc.parentElement.offsetWidth||700;var H=320;_initMap(data,W,H);}
-    var listH="";data.slice(0,15).forEach(function(c){
-      var col=_lvlCol(c.level);var nm=(_CN[c.country]&&_CN[c.country].n)||c.country;var drivers=(c.drivers||[]);
-      var drvH=drivers.map(function(dr){return '<span style="display:inline-block;margin:2px 3px 0 0;padding:1px 7px;border-radius:10px;font-size:10px;background:#161b22;border:1px solid #2a3440;color:#94a3b8">'+_xe(dr)+'</span>';}).join("");
-      var trend=c.trend==="improving"?"&#8679; Improving":c.trend==="deteriorating"?"&#8681; Worsening":"&#8596; Stable";
-      var tCol=c.trend==="improving"?"#00d4aa":c.trend==="deteriorating"?"#ff3b5c":"#64748b";
-      listH+='<div class="_geo-row" style="border-bottom:1px solid #1e2630">';
-      listH+='<div class="_geo-hdr" style="display:flex;align-items:center;gap:8px;padding:7px 0;cursor:pointer">';
-      listH+='<div style="width:34px;text-align:center;font-size:10px;font-weight:700;color:'+col+';background:#0d1117;border:1px solid '+col+';border-radius:3px;padding:2px 3px">'+_xe(c.country)+'</div>';
-      listH+='<div style="flex:1;min-width:0"><div style="font-size:12px;color:#e2e8f0;font-weight:600">'+_xe(nm)+'</div><div style="background:#1e2630;border-radius:2px;height:4px;margin-top:3px"><div style="width:'+c.score+'%;height:4px;border-radius:2px;background:'+col+'"></div></div></div>';
-      listH+='<div style="text-align:right;min-width:70px"><div style="font-size:14px;font-weight:700;color:'+col+'">'+c.score+'</div><div style="font-size:10px;color:'+col+'">'+_xe(c.level)+'</div></div>';
-      listH+='<div style="font-size:10px;color:'+tCol+';min-width:72px;text-align:right">'+trend+'</div></div>';
-      listH+='<div class="_geo-drivers" style="display:none;padding:4px 0 8px 42px">'+( drivers.length?'<div style="font-size:10px;color:#64748b;margin-bottom:4px">Risk drivers:</div>'+drvH:'<div style="font-size:10px;color:#64748b">No drivers listed</div>')+'</div></div>';
-    });
-    var gl=g("pro-geo-list");if(gl){gl.innerHTML=listH||'<div class="lt">No data</div>';
-    gl.querySelectorAll("._geo-hdr").forEach(function(hdr){hdr.addEventListener("click",function(){var d=hdr.parentElement.querySelector("._geo-drivers");if(d)d.style.display=d.style.display==="block"?"none":"block";});});}
-  }).catch(function(){if(geoB)geoB.textContent="ERROR";});
+    var data=d.data||[];if(gb)gb.textContent=data.length;var cc=g("pro-crit-countries");if(cc)cc.textContent=data.filter(function(c){return c.level==="CRITICAL";}).length;var geoBadge=g("pro-geo-badge");if(geoBadge)geoBadge.textContent=data.length+" COUNTRIES";
+    var gh=g("pro-geo-hotspots");if(gh){var hh="";data.filter(function(c){return c.level==="CRITICAL";}).slice(0,7).forEach(function(c){var nm=(_CN[c.country]&&_CN[c.country].n)||c.country;hh+="<span class=\"pi-hotspot\" title=\""+nm+"\">"+_xe(c.country)+" "+c.score+"</span>";});gh.innerHTML=hh?"<div class=\"pi-hotspot-lbl\">&#9888; Critical Hotspots</div>"+hh:"";}
+    _buildSVGMap(data);
+    var lh="";data.slice(0,20).forEach(function(c){var col=_lc(c.level);var nm=(_CN[c.country]&&_CN[c.country].n)||c.country;var drvs=c.drivers||[];var drvH=drvs.map(function(dr){return"<span class=\"pi-drv-tag\">"+_xe(dr)+"</span>";}).join("");var trend=c.trend==="improving"?"&#8679;":c.trend==="deteriorating"?"&#8681;":"&#8596;";var tc=c.trend==="improving"?"#00d4aa":c.trend==="deteriorating"?"#ff3b5c":"#64748b";lh+="<div class=\"pi-crow\"><div class=\"pi-crow-hdr\"><span class=\"pi-ccode\" style=\"color:"+col+";border-color:"+col+"\">"+_xe(c.country)+"</span><span class=\"pi-cname\">"+_xe(nm)+"</span><div class=\"pi-cbar-wrap\"><div class=\"pi-cbar\" style=\"width:"+c.score+"%;background:"+col+"\"></div></div><span class=\"pi-cscore\" style=\"color:"+col+"\">"+c.score+"</span><span class=\"pi-clvl\" style=\"color:"+col+"\">"+c.level+"</span><span class=\"pi-ctrend\" style=\"color:"+tc+"\">"+trend+"</span></div>"+(drvH?"<div class=\"pi-drv-row\">"+drvH+"</div>":"")+"</div>";});
+    var gl=g("pro-geo-list");if(gl){gl.innerHTML=lh||"<div class=\"lt\">No data</div>";gl.querySelectorAll(".pi-crow-hdr").forEach(function(h){h.addEventListener("click",function(){var r=h.nextElementSibling;if(r&&r.classList.contains("pi-drv-row")){r.style.display=r.style.display==="flex"?"none":"flex";}});});}
+  }).catch(function(){if(gb)gb.textContent="!"});
   fetch(PROAPI+"/cyber/threats").then(function(r){return r.json();}).then(function(d){
-    var c2=d.c2_servers||[],mal=d.malware_domains||[],pul=d.threat_pulses||[];
-    if(cyberB)cyberB.textContent=(c2.length+mal.length+pul.length)+" FEEDS";
-    var pc=g("pro-c2-count");if(pc)pc.textContent=c2.length;
-    var h="";
-    if(c2.length){h+='<div style="font-size:10px;color:#ff3b5c;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">C2 Servers ('+c2.length+')</div>';c2.slice(0,8).forEach(function(s){h+='<div style="padding:4px 0;border-bottom:1px solid #1e2630;font-size:11px;font-family:monospace"><span style="color:#ff3b5c">'+_xe(s.ip_address||s.ip||"-")+'</span><span style="color:#64748b;margin-left:8px">'+_xe(s.malware||s.malware_family||"-")+'</span></div>';});}
-    if(mal.length){h+='<div style="font-size:10px;color:#ff8c42;text-transform:uppercase;letter-spacing:1px;margin:10px 0 6px">Malware Domains ('+mal.length+')</div>';mal.slice(0,6).forEach(function(m){h+='<div style="padding:4px 0;border-bottom:1px solid #1e2630;font-size:11px;font-family:monospace;color:#ff8c42;word-break:break-all">'+_xe(m.url||m.domain||"-")+'</div>';});}
-    if(pul.length){h+='<div style="font-size:10px;color:#a78bfa;text-transform:uppercase;letter-spacing:1px;margin:10px 0 6px">Threat Pulses ('+pul.length+')</div>';pul.slice(0,5).forEach(function(p){h+='<div style="padding:5px 0;border-bottom:1px solid #1e2630"><div style="font-size:11px;color:#e2e8f0">'+_xe((p.name||"").substring(0,70))+'</div><div style="font-size:10px;color:#64748b">'+_xe(p.author||"")+'</div></div>';});}
-    if(!h)h='<div class="lt" style="padding:12px">No active threats in live feeds</div>';
+    var c2=d.c2_servers||[],mal=d.malware_domains||[],pul=d.threat_pulses||[];var tot=c2.length+mal.length+pul.length;if(cb)cb.textContent=tot;var pc=g("pro-c2-count");if(pc)pc.textContent=c2.length;var cyberBadge=g("pro-cyber-badge");if(cyberBadge)cyberBadge.textContent=tot+" FEEDS";
+    var h="";if(c2.length){h+="<div class=\"pi-threat-group\"><div class=\"pi-tg-hdr\" style=\"color:#ff3b5c\">C2 Servers <span class=\"pi-tg-count\">"+c2.length+"</span></div>";c2.slice(0,10).forEach(function(s){h+="<div class=\"pi-threat-row\"><span class=\"pi-tip\" style=\"color:#ff3b5c\">"+_xe(s.ip_address||s.ip||"-")+"</span><span class=\"pi-tfam\">"+_xe(s.malware||s.malware_family||"-")+"</span></div>";});h+="</div>";}
+    if(mal.length){h+="<div class=\"pi-threat-group\"><div class=\"pi-tg-hdr\" style=\"color:#ff8c42\">Malware Domains <span class=\"pi-tg-count\">"+mal.length+"</span></div>";mal.slice(0,8).forEach(function(m){h+="<div class=\"pi-threat-row\"><span class=\"pi-turl\" style=\"color:#ff8c42\">"+_xe(m.url||m.domain||"-")+"</span></div>";});h+="</div>";}
+    if(pul.length){h+="<div class=\"pi-threat-group\"><div class=\"pi-tg-hdr\" style=\"color:#a78bfa\">Threat Pulses <span class=\"pi-tg-count\">"+pul.length+"</span></div>";pul.slice(0,6).forEach(function(p){h+="<div class=\"pi-pulse-row\"><div class=\"pi-pulse-name\">"+_xe((p.name||"").substring(0,80))+"</div><div class=\"pi-pulse-author\">"+_xe(p.author||"")+"</div></div>";});h+="</div>";}
+    if(!h)h="<div class=\"pi-no-data\">&#128274; No active threats in live feeds</div>";
     var cl=g("pro-cyber-list");if(cl)cl.innerHTML=h;
-  }).catch(function(){if(cyberB)cyberB.textContent="ERROR";});
+  }).catch(function(){if(cb)cb.textContent="!"});
   fetch(PROAPI+"/economic/signals").then(function(r){return r.json();}).then(function(d){
-    var econB2=g("pro-econ-badge");if(econB2)econB2.textContent=(d.macro_signals||[]).length+" INDICATORS";
-    _renderEcon(d,"overview");
-  }).catch(function(){if(econB)econB.textContent="ERROR";});
+    var econBadge=g("pro-econ-badge");if(econBadge)econBadge.textContent=(d.macro_signals||[]).length+" INDICATORS";if(eb)eb.textContent=(d.macro_signals||[]).length;_renderEcon(d,"overview");
+  }).catch(function(){if(eb)eb.textContent="!"});
   fetch(PROAPI+"/ai/status").then(function(r){return r.json();}).then(function(d){
-    var as=g("pro-ai-status");if(as)as.textContent=d.available?"READY":"OFFLINE";
-    var ab=g("pro-ai-btn");if(ab&&!d.available){ab.disabled=true;ab.style.opacity="0.5";var ar=g("pro-ai-result");if(ar)ar.innerHTML='<span style="color:#64748b">AI requires GROQ_KEY in Railway variables.</span>';}
+    var as=g("pro-ai-status");if(as){as.textContent=d.available?"READY":"OFFLINE";as.style.color=d.available?"#00d4aa":"#ff3b5c";}
+    var aib=g("pi-ai-badge");if(aib)aib.textContent=d.available?"READY":"OFF";
+    var ab=g("pro-ai-btn");if(ab){if(!d.available){ab.disabled=true;ab.style.opacity="0.4";var ar=g("pro-ai-result");if(ar)ar.innerHTML="<div class=\"pi-ai-note\">GROQ_KEY required.</div>";}else{ab.disabled=false;ab.style.opacity="1";ab.onclick=function(){var inp=g("pro-ai-input");if(!inp||!inp.value.trim())return;var ar2=g("pro-ai-result");if(ar2)ar2.innerHTML="<div class=\"pi-ai-thinking\">&#129504; Analysing...</div>";ab.disabled=true;fetch(PROAPI+"/ai/risk",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({scenario:inp.value.trim()})}).then(function(r2){return r2.json();}).then(function(res){ab.disabled=false;if(!ar2)return;var html="<div class=\"pi-ai-response\">"+(res.risk_level?"<div class=\"pi-ai-risk-level\" style=\"color:"+(res.risk_level==="HIGH"||res.risk_level==="CRITICAL"?"#ff3b5c":res.risk_level==="MEDIUM"?"#f5c518":"#00d4aa")+"\">Risk Level: "+_xe(res.risk_level)+"</div>":"")+(res.analysis||res.summary?"<div class=\"pi-ai-text\">"+_xe(res.analysis||res.summary)+"</div>":"");if(res.recommendations&&res.recommendations.length){html+="<div class=\"pi-ai-recs-hdr\">Recommendations</div><ul class=\"pi-ai-recs\">";res.recommendations.forEach(function(rec){html+="<li>"+_xe(rec)+"</li>";});html+="</ul>";}html+="</div>";ar2.innerHTML=html;}).catch(function(err){ab.disabled=false;if(ar2)ar2.innerHTML="<div class=\"pi-ai-note\">Error: "+_xe(err.message)+"</div>";});};}}
   }).catch(function(){});
 }
 var _prb=g('pro-refresh-btn');if(_prb)_prb.addEventListener('click',loadPro);
