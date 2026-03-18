@@ -14,4 +14,5 @@ ENV PORT=8000
 
 EXPOSE 8000
 
-CMD uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 1 --log-level info
+# Shell form so $PORT is expanded at runtime
+CMD uvicorn src.main:app --host 0.0.0.0 --port $PORT --workers 1 --log-level info
