@@ -209,73 +209,54 @@
 
 <!-- PRO INTEL PAGE -->
 <div id="page-pro" class="page">
-  <div class="fil" style="justify-content:space-between">
-    <span style="font-size:12px;color:#a78bfa;font-weight:700;text-transform:uppercase;letter-spacing:1px">✦ DARKWATCH Pro Intelligence</span>
-    <button id="pro-refresh-btn" class="btn" style="border-color:#a78bfa;color:#a78bfa">&#8635; Refresh All</button>
+<div class="pro-hdr"><span class="pro-title">&#10022; DARKWATCH PRO INTELLIGENCE</span><button id="pro-refresh-btn" class="btn-sm">&#8635; Refresh All</button></div>
+<div class="stat-row">
+  <div class="stat-card"><div class="stat-label">CRITICAL COUNTRIES</div><div class="stat-val" id="pro-crit-countries">-</div></div>
+  <div class="stat-card"><div class="stat-label">ACTIVE C2 SERVERS</div><div class="stat-val" id="pro-c2-count">-</div></div>
+  <div class="stat-card"><div class="stat-label">MACRO RISK</div><div class="stat-val" id="pro-macro-risk">-</div></div>
+  <div class="stat-card"><div class="stat-label">AI STATUS</div><div class="stat-val" id="pro-ai-status" style="color:#ff3b5c">OFFLINE</div></div>
+</div>
+<div class="pro-grid">
+  <div class="pro-panel pro-panel-wide">
+    <div class="panel-hdr"><span class="panel-title">GEOPOLITICAL RISK INDEX</span><span class="panel-badge" id="pro-geo-badge">50 COUNTRIES</span></div>
+    <div id="pro-geo-hotspots" style="padding:8px 12px 4px"></div>
+    <div id="pro-world-map" style="width:100%;position:relative;background:#0a0e14;border-top:1px solid #1e2630">
+      <canvas id="pro-map-canvas" style="width:100%;height:320px;display:block;cursor:crosshair"></canvas>
+      <div id="pro-map-tooltip" style="position:absolute;display:none;background:#0d1117;border:1px solid #2a3440;border-radius:4px;padding:10px 14px;pointer-events:none;min-width:200px;z-index:10;box-shadow:0 4px 20px rgba(0,0,0,.6)"></div>
+    </div>
+    <div id="pro-map-detail" style="display:none;padding:12px;border-top:1px solid #1e2630;background:#080b10"></div>
+    <div style="padding:8px 12px;border-top:1px solid #1e2630">
+      <div class="panel-label" style="margin-bottom:6px">TOP RISK COUNTRIES</div>
+      <div id="pro-geo-list"></div>
+    </div>
   </div>
-  <div style="padding:12px 16px">
-    <!-- Pro stat cards -->
-    <div class="st" style="margin-bottom:16px">
-      <div class="sc r"><div class="sl">Critical Countries</div><div class="sv" style="color:#ff3b5c" id="pro-crit-countries">-</div></div>
-      <div class="sc o"><div class="sl">Active C2 Servers</div><div class="sv" style="color:#ff8c42" id="pro-c2-count">-</div></div>
-      <div class="sc a"><div class="sl">Macro Risk</div><div class="sv" style="color:#f5c518;font-size:13px" id="pro-macro-risk">-</div></div>
-      <div class="sc b"><div class="sl">AI Status</div><div class="sv" style="color:#4d9eff;font-size:12px" id="pro-ai-status">-</div></div>
+  <div class="pro-panel">
+    <div class="panel-hdr"><span class="panel-title">LIVE CYBER THREATS</span><span class="panel-badge" id="pro-cyber-badge">0 FEEDS</span></div>
+    <div id="pro-cyber-list" style="padding:12px"><div class="lt">Loading...</div></div>
+  </div>
+</div>
+<div class="pro-grid">
+  <div class="pro-panel pro-panel-wide">
+    <div class="panel-hdr"><span class="panel-title">ECONOMIC RISK SIGNALS</span><span class="panel-badge" id="pro-econ-badge">8 INDICATORS</span></div>
+    <div id="pro-econ-tabs" style="display:flex;gap:0;border-bottom:1px solid #1e2630;padding:0 12px">
+      <button class="econ-tab active" data-tab="overview" onclick="switchEconTab(this)">Overview</button>
+      <button class="econ-tab" data-tab="rates" onclick="switchEconTab(this)">Rates</button>
+      <button class="econ-tab" data-tab="volatility" onclick="switchEconTab(this)">Volatility</button>
+      <button class="econ-tab" data-tab="commodities" onclick="switchEconTab(this)">Commodities</button>
     </div>
-
-    <!-- Geo + Cyber row -->
-    <div class="two" style="margin-bottom:16px">
-      <!-- Geopolitical -->
-      <div class="pn">
-        <div class="ph"><div class="pt">Geopolitical Risk Index</div><span id="pro-geo-badge" class="badge">LOADING</span></div>
-        <div style="padding:0 13px 13px">
-          <div id="pro-geo-hotspots" style="margin-bottom:10px"></div>
-          <div style="font-size:10px;color:#64748b;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Top Risk Countries</div>
-          <div id="pro-geo-list" style="display:flex;flex-direction:column;gap:4px;max-height:280px;overflow-y:auto">
-            <div class="lt">Loading...</div>
-          </div>
-        </div>
-      </div>
-      <!-- Cyber Threats Pro -->
-      <div class="pn">
-        <div class="ph"><div class="pt">Live Cyber Threats</div><span id="pro-cyber-badge" class="badge">LOADING</span></div>
-        <div style="padding:0 13px 13px">
-          <div style="font-size:10px;color:#64748b;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">C2 Servers &amp; Malware Domains</div>
-          <div id="pro-cyber-list" style="max-height:320px;overflow-y:auto">
-            <div class="lt">Loading...</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Economic + AI row -->
-    <div class="two">
-      <!-- Economic Signals -->
-      <div class="pn">
-        <div class="ph"><div class="pt">Economic Risk Signals</div><span id="pro-econ-badge" class="badge">LOADING</span></div>
-        <div style="padding:0 13px 13px">
-          <div id="pro-econ-list" style="max-height:320px;overflow-y:auto">
-            <div class="lt">Loading...</div>
-          </div>
-        </div>
-      </div>
-      <!-- AI Risk -->
-      <div class="pn">
-        <div class="ph"><div class="pt">AI Risk Assessment</div><span id="pro-ai-badge" class="badge" style="background:#1e1a3a;color:#a78bfa;border:1px solid #a78bfa">PRO</span></div>
-        <div style="padding:0 13px 13px">
-          <div style="margin-bottom:10px">
-            <input id="pro-ai-input" class="inp" placeholder="Describe a threat scenario..." style="width:100%;margin-bottom:6px">
-            <button id="pro-ai-btn" class="btn btn-primary" style="font-size:11px;background:#1e1a3a;border-color:#a78bfa;color:#a78bfa">&#9654; Analyse with AI</button>
-          </div>
-          <div id="pro-ai-result" style="min-height:80px;background:#0d1117;border:1px solid #1e2630;border-radius:4px;padding:10px;font-size:12px;color:#e2e8f0;line-height:1.6">
-            <span style="color:#64748b">Enter a threat scenario above and click Analyse to get an AI-powered risk assessment.</span>
-          </div>
-        </div>
-      </div>
+    <div id="pro-econ-list" style="padding:12px"><div class="lt">Loading...</div></div>
+  </div>
+  <div class="pro-panel">
+    <div class="panel-hdr"><span class="panel-title">AI RISK ASSESSMENT</span><span class="panel-badge" style="color:#a78bfa;border-color:#a78bfa">PRO</span></div>
+    <div style="padding:12px">
+      <textarea id="pro-ai-input" placeholder="Describe a threat scenario..." style="width:100%;background:#0d1117;border:1px solid #2a3440;color:#e2e8f0;padding:8px;border-radius:4px;font-size:12px;resize:vertical;height:60px;font-family:inherit"></textarea>
+      <button id="pro-ai-btn" class="btn-sm" style="margin-top:6px">&#9658; Analyse with AI</button>
+      <div id="pro-ai-result" style="margin-top:10px;font-size:12px;color:#94a3b8"></div>
     </div>
   </div>
 </div>
+</div>
 
-<!-- ALERTS PAGE -->
 <div id="page-alerts" class="page">
   <div class="page-toolbar flat"><span class="tagline">Real-time alerts from continuous monitoring</span>
     <button id="clear-alerts-btn" class="btn" style="margin-left:auto">Clear All</button>
