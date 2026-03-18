@@ -452,11 +452,90 @@ function loadPro(){
     var gl=g("pro-geo-list");if(gl){gl.innerHTML=lh||"<div class=\"lt\">No data</div>";gl.querySelectorAll(".pi-crow-hdr").forEach(function(h){h.addEventListener("click",function(){var r=h.nextElementSibling;if(r&&r.classList.contains("pi-drv-row")){r.style.display=r.style.display==="flex"?"none":"flex";}});});}
   }).catch(function(){if(gb)gb.textContent="!"});
   fetch(PROAPI+"/cyber/threats").then(function(r){return r.json();}).then(function(d){
-    var c2=d.c2_servers||[],mal=d.malware_domains||[],pul=d.threat_pulses||[];var tot=c2.length+mal.length+pul.length;if(cb)cb.textContent=tot;var pc=g("pro-c2-count");if(pc)pc.textContent=c2.length;var cyberBadge=g("pro-cyber-badge");if(cyberBadge)cyberBadge.textContent=tot+" FEEDS";
-    var h="";if(c2.length){h+="<div class=\"pi-threat-group\"><div class=\"pi-tg-hdr\" style=\"color:#ff3b5c\">C2 Servers <span class=\"pi-tg-count\">"+c2.length+"</span></div>";c2.slice(0,10).forEach(function(s){h+="<div class=\"pi-threat-row\"><span class=\"pi-tip\" style=\"color:#ff3b5c\">"+_xe(s.ip_address||s.ip||"-")+"</span><span class=\"pi-tfam\">"+_xe(s.malware||s.malware_family||"-")+"</span></div>";});h+="</div>";}
-    if(mal.length){h+="<div class=\"pi-threat-group\"><div class=\"pi-tg-hdr\" style=\"color:#ff8c42\">Malware Domains <span class=\"pi-tg-count\">"+mal.length+"</span></div>";mal.slice(0,8).forEach(function(m){h+="<div class=\"pi-threat-row\"><span class=\"pi-turl\" style=\"color:#ff8c42\">"+_xe(m.url||m.domain||"-")+"</span></div>";});h+="</div>";}
-    if(pul.length){h+="<div class=\"pi-threat-group\"><div class=\"pi-tg-hdr\" style=\"color:#a78bfa\">Threat Pulses <span class=\"pi-tg-count\">"+pul.length+"</span></div>";pul.slice(0,6).forEach(function(p){h+="<div class=\"pi-pulse-row\"><div class=\"pi-pulse-name\">"+_xe((p.name||"").substring(0,80))+"</div><div class=\"pi-pulse-author\">"+_xe(p.author||"")+"</div></div>";});h+="</div>";}
-    if(!h)h="<div class=\"pi-no-data\">&#128274; No active threats in live feeds</div>";
+    var c2=d.c2_servers||[],mal=d.malware_domains||[],pul=d.threat_pulses||[],sum=d.summary||{};
+    var tot=c2.length+mal.length+pul.length;if(cb)cb.textContent=tot;var pc=g("pro-c2-count");if(pc)pc.textContent=c2.length;
+    var cyberBadge=g("pro-cyber-badge");if(cyberBadge)cyberBadge.textContent=c2.length+" C2 · "+mal.length+" URLs · "+pul.length+" PULSES";
+    var h="";
+    // Summary stats row
+    h+="<div class=\"ct-stats\">";
+    h+="<div class=\"ct-stat\"><div class=\"ct-stat-val ct-crit\">"+( sum.critical||0)+"</div><div class=\"ct-stat-lbl\">CRITICAL</div></div>";
+    h+="<div class=\"ct-stat\"><div class=\"ct-stat-val ct-high\">"+( sum.high||0)+"</div><div class=\"ct-stat-lbl\">HIGH</div></div>";
+    h+="<div class=\"ct-stat\"><div class=\"ct-stat-val\">"+c2.length+"</div><div class=\"ct-stat-lbl\">C2 SERVERS</div></div>";
+    h+="<div class=\"ct-stat\"><div class=\"ct-stat-val\">"+mal.length+"</div><div class=\"ct-stat-lbl\">MALWARE URLs</div></div>";
+    if(sum.malware_families&&sum.malware_families.length){h+="<div class=\"ct-stat ct-stat-wide\"><div class=\"ct-stat-lbl\" style=\"margin-bottom:4px\">ACTIVE FAMILIES</div><div class=\"ct-families\">";sum.malware_families.forEach(function(f){h+="<span class=\"ct-fam-tag\">"+_xe(f)+"</span>";});h+="</div></div>";}
+    h+="</div>";
+    // C2 server cards
+    if(c2.length){
+      h+="<div class=\"ct-section-hdr\">&#9888; Active C2 Servers <span class=\"ct-count\">"+c2.length+"</span></div>";
+      c2.slice(0,20).forEach(function(s){
+        var sc=s.severity==="CRITICAL"?"#ff3b5c":s.severity==="HIGH"?"#ff8c42":s.severity==="MEDIUM"?"#f5c518":"#4d9eff";
+        var flag=s.country_code?String.fromCodePoint(...s.country_code.split("").map(function(c){return c.charCodeAt(0)+127397;})):"";
+        var geo="";
+        if(s.city&&s.country)geo=_xe(s.city)+", "+_xe(s.country);
+        else if(s.country)geo=_xe(s.country);
+        var last=s.last_seen?s.last_seen.substring(0,10):"";
+        h+="<div class=\"ct-c2-card\">";
+        h+="<div class=\"ct-c2-top\">";
+        h+="<div class=\"ct-c2-left\">";
+        h+="<div class=\"ct-sev-pill\" style=\"background:"+sc+"22;color:"+sc+";border-color:"+sc+"44\">"+_xe(s.severity||"HIGH")+"</div>";
+        h+="<div class=\"ct-ip-row\">";
+        h+="<span class=\"ct-ip\">"+_xe(s.ip_address||s.ip||"-")+"</span>";
+        h+="<span class=\"ct-port\">:"+_xe(String(s.port||443))+"</span>";
+        h+="<button class=\"ct-copy\" onclick=\"navigator.clipboard.writeText('"+_xe(s.ip_address||s.ip||"")+"')\">&#128203;</button>";
+        h+="</div>";
+        h+="<div class=\"ct-fam-row\">";
+        h+="<span class=\"ct-fam-badge\" style=\"color:"+sc+"\">"+_xe(s.malware_family||"Unknown")+"</span>";
+        h+="<span class=\"ct-fam-cat\">"+_xe(s.malware_cat||"Malware")+"</span>";
+        h+="</div>";
+        if(s.malware_desc)h+="<div class=\"ct-fam-desc\">"+_xe(s.malware_desc)+"</div>";
+        h+="</div>";
+        h+="<div class=\"ct-c2-right\">";
+        if(geo)h+="<div class=\"ct-geo\">"+( flag?" "+flag+" ":"")+geo+"</div>";
+        if(s.isp)h+="<div class=\"ct-isp\">"+_xe(s.isp.substring(0,40))+"</div>";
+        if(s.asn)h+="<div class=\"ct-asn\">"+_xe(s.asn.substring(0,30))+"</div>";
+        var badges="";
+        if(s.is_proxy)badges+="<span class=\"ct-badge ct-badge-warn\">PROXY</span>";
+        if(s.is_hosting)badges+="<span class=\"ct-badge ct-badge-info\">HOSTING</span>";
+        if(badges)h+="<div class=\"ct-badges\">"+badges+"</div>";
+        h+="<div class=\"ct-meta-row\">";
+        h+="<span class=\"ct-src-tag\">"+_xe(s.source||"feodo")+"</span>";
+        if(last)h+="<span class=\"ct-last-seen\">Last: "+_xe(last)+"</span>";
+        h+="<span class=\"ct-conf\">"+_xe(s.confidence||"high")+"</span>";
+        h+="</div>";
+        h+="</div></div></div>";
+      });
+    }
+    // Malware domains section
+    if(mal.length){
+      h+="<div class=\"ct-section-hdr\">&#127760; Malware URLs <span class=\"ct-count\">"+mal.length+"</span></div>";
+      mal.slice(0,15).forEach(function(m){
+        var tags=(m.tags||[]).map(function(t){return"<span class=\"ct-tag\">"+_xe(t)+"</span>";}).join("");
+        h+="<div class=\"ct-url-row\">";
+        h+="<div class=\"ct-url-top\">";
+        h+="<span class=\"ct-threat-type\">"+_xe((m.threat||"malware").replace(/_/g," ").toUpperCase())+"</span>";
+        h+="<span class=\"ct-domain\">"+_xe((m.domain||"").substring(0,60))+"</span>";
+        h+="<button class=\"ct-copy\" onclick=\"navigator.clipboard.writeText('"+_xe(m.url||"")+"')\">&#128203;</button>";
+        h+="</div>";
+        h+="<div class=\"ct-url-full\">"+_xe((m.url||"").substring(0,100))+"</div>";
+        if(tags)h+="<div class=\"ct-tag-row\">"+tags+"</div>";
+        if(m.date_added)h+="<div class=\"ct-url-date\">Added: "+_xe(m.date_added.substring(0,10))+"</div>";
+        h+="</div>";
+      });
+    }
+    // Pulses
+    if(pul.length){
+      h+="<div class=\"ct-section-hdr\">&#128268; Threat Pulses <span class=\"ct-count\">"+pul.length+"</span></div>";
+      pul.slice(0,8).forEach(function(p){
+        h+="<div class=\"ct-pulse-card\">";
+        h+="<div class=\"ct-pulse-name\">"+_xe((p.name||"").substring(0,80))+"</div>";
+        h+="<div class=\"ct-pulse-meta\">";
+        if(p.author)h+="<span class=\"ct-pulse-author\">by "+_xe(p.author)+"</span>";
+        if(p.indicators)h+="<span class=\"ct-pulse-ioc\">"+p.indicators+" IOCs</span>";
+        h+="</div>";
+        h+="</div>";
+      });
+    }
+    if(!c2.length&&!mal.length&&!pul.length)h="<div class=\"pi-no-data\">&#128274; No active threats in live feeds</div>";
     var cl=g("pro-cyber-list");if(cl)cl.innerHTML=h;
   }).catch(function(){if(cb)cb.textContent="!"});
   fetch(PROAPI+"/economic/signals").then(function(r){return r.json();}).then(function(d){
