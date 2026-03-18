@@ -1,27 +1,22 @@
-"""
-Feodo Tracker (abuse.ch) — C2 botnet infrastructure feed.
-Fully public. https://feodotracker.abuse.ch/
-Tracks command-and-control servers used by banking trojans and ransomware.
-"""
-
+"""Feodo Tracker (abuse.ch) C2 botnet feed."""
 import csv
 import io
 import logging
 from typing import Any, Dict, List
 
-from src.shared.http import get_text
+from src.shared.http import get
 
 logger = logging.getLogger(__name__)
 
 _URL = "https://feodotracker.abuse.ch/downloads/ipblocklist_aggressive.csv"
-_ALLOWED_HOST = "feodotracker.abuse.ch"
 
-_VALID_MALWARE_FAMILIES = {
+_VALID_FAMILIES = {
     "Dridex", "Emotet", "QakBot", "TrickBot", "BazarLoader",
-    "IcedID", "AsyncRAT", "Cobalt Strike", "AgentTesla",
-}]:
+    "IcedID", "AsyncRAT", "CobaltStrike", "AgentTesla",
+}
+
+
 def _safe_ip(v: str) -> str:
-    """Basic IP format validation — 4 octets, each 0-255."""
     parts = v.strip().split(".")
     if len(parts) != 4:
         return ""
@@ -31,24 +26,21 @@ def _safe_ip(v: str) -> str:
     except ValueError:
         pass
     return ""
-:
+
+
 def _sanitise_row(row: Dict[str, str]) -> Dict[str, Any]:
     ip = _safe_ip(row.get("dst_ip", "") or row.get("ip_address", ""))
     if not ip:
         return {}
-    port_raw = row.get("dst_port", "") or row.get("port", "")
     try:
-        port = int(port_raw)
+        port = int(row.get("dst_port", "") or row.get("port", "") or 0)
         if not (1 <= port <= 65535):
             port = 0
     except (ValueError, TypeError):
         port = 0
-
     malware = row.get("malware", "") or row.get("malware_family", "")
-    # Only include known families; don't pass arbitrary strings
-    if malware not in _VALID_MALWARE_FAMILIES:
+    if malware not in _VALID_FAMILIES:
         malware = "Unknown"
-
     return {
         "ip": ip,
         "port": port,
@@ -62,31 +54,23 @@ def _sanitise_row(row: Dict[str, str]) -> Dict[str, Any]:
 
 
 async def fetch_c2_blocklist() -> List[Dict[str, Any]]:
-    """
-    Fetch and parse the Feodo Tracker C2 IP blocklist.
-    Returns sanitised list of C2 server records.
-    """
     try:
-        raw = await get_text(_URL)
+        resp = await get(_URL)
+        if isinstance(resp, str):
+            raw = resp
+        else:
+            return []
     except Exception as e:
-        logger.error(f"Feodo Tracker fetch failed: {e}")
+        logger.error(f"Feodo fetch failed: {e}")
         return []
-
     results = []
-    reader = csv.DictReader(
-        io.StringIO(raw),
-        delimiter=",",
-    )
-    for row in reader:
-        # Skip comment lines
+    for row in csv.DictReader(io.StringIO(raw)):
         if not row or list(row.values())[0].startswith("#"):
             continue
-        sanitised = _sanitise_row(row)
-        if sanitised:
-            results.append(sanitised)
-
-        if len(results) >= 5000:  # cap memory
+        s = _sanitise_row(row)
+        if s:
+            results.append(s)
+        if len(results) >= 5000:
             break
-
-    logger.info(f"Feodo Tracker: {len(results)} C2 records loaded")
+    logger.info(f"Feodo: {len(results)} C2 records")
     return results
