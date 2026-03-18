@@ -29,7 +29,7 @@ WORKDIR /app
 # Copy only installed packages from builder
 COPY --from=builder /install /usr/local
 
-# Copy application source — no .env files, no secrets
+# Copy application source
 COPY src/ ./src/
 
 # Security hardening
@@ -38,13 +38,10 @@ RUN chmod -R 550 /app \
 
 USER darkwatch
 
-# Expose port (Railway sets $PORT)
 EXPOSE 8000
 
-# Health check — Railway uses this to confirm service is alive
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
 
-# Start with Uvicorn — production-grade ASGI server
-# --no-access-log: Railway captures stdout; redundant logging wastes cycles
-CMD ["sh", "-c", "uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 2 --no-access-log --log-level warning"]
+# Shell form CMD so $PORT variable expands correctly
+CMD uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 2 --no-access-log --log-level warning
