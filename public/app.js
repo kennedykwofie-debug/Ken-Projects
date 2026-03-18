@@ -357,18 +357,21 @@ function _buildSVGMap(data){
   function _rwD3(){
     var d3=window.d3;var tj=window.topojson;if(!d3||!tj){setTimeout(_rwD3,300);return;}
     var W=container.offsetWidth||900,H=420;
+    svg.setAttribute("width",W);svg.setAttribute("height",H);
     var proj=d3.geoNaturalEarth1().scale(W/6.2).translate([W/2,H/2]);
     var path=d3.geoPath().projection(proj);
+    // Create ONE group for everything that should pan/zoom together
+    var mapG=d3.select(svg).append("g").attr("class","map-root");
     d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(function(world){
       var countries=tj.feature(world,world.objects.countries);
       var borders=tj.mesh(world,world.objects.countries,function(a,b){return a!==b;});
       var grat=d3.geoGraticule();
-      d3.select(svg).insert("rect","path").attr("width",W).attr("height",H).attr("fill","#060c15");
-      d3.select(svg).append("path").datum(grat()).attr("d",path).attr("fill","none").attr("stroke","#111d2a").attr("stroke-width","0.4");
+      mapG.append("rect").attr("width",W).attr("height",H).attr("fill","#060c15");
+      mapG.append("path").datum(grat()).attr("d",path).attr("fill","none").attr("stroke","#111d2a").attr("stroke-width","0.4");
       var ISO_NUM={"004":"AF","008":"AL","012":"DZ","024":"AO","032":"AR","051":"AM","031":"AZ","050":"BD","112":"BY","204":"BJ","068":"BO","070":"BA","076":"BR","854":"BF","108":"BI","116":"KH","120":"CM","140":"CF","148":"TD","156":"CN","170":"CO","180":"CD","384":"CI","192":"CU","218":"EC","818":"EG","222":"SV","231":"ET","268":"GE","288":"GH","320":"GT","324":"GN","332":"HT","340":"HN","356":"IN","360":"ID","364":"IR","368":"IQ","400":"JO","398":"KZ","404":"KE","408":"KP","422":"LB","430":"LR","434":"LY","450":"MG","466":"ML","478":"MR","484":"MX","104":"MM","524":"NP","558":"NI","562":"NE","566":"NG","586":"PK","275":"PS","604":"PE","608":"PH","643":"RU","646":"RW","686":"SN","706":"SO","729":"SD","728":"SS","760":"SY","762":"TJ","764":"TH","768":"TG","788":"TN","795":"TM","800":"UG","804":"UA","860":"UZ","862":"VE","704":"VN","887":"YE","894":"ZM","716":"ZW"};
       var tooltip=document.getElementById("pro-map-tooltip");
       var detail=document.getElementById("pro-map-detail");
-      d3.select(svg).selectAll(".country").data(countries.features).enter().append("path")
+      mapG.selectAll(".country").data(countries.features).enter().append("path")
         .attr("class","country").attr("d",path)
         .attr("fill",function(f){var code=ISO_NUM[String(f.id).padStart(3,"0")];var c=code&&_geoRiskMap[code];return c?_lc(c.level)+"33":"#1a2535";})
         .attr("stroke",function(f){var code=ISO_NUM[String(f.id).padStart(3,"0")];var c=code&&_geoRiskMap[code];return c?_lc(c.level):"#243044";})
@@ -394,14 +397,12 @@ function _buildSVGMap(data){
           detail.innerHTML="<div class=\"pi-det-inner\"><div><div class=\"pi-det-name\">"+_xe(nm)+" <span class=\"pi-det-code\">["+code+"]</span></div><div class=\"pi-det-score-row\"><span class=\"pi-det-score\" style=\"color:"+col+"\">"+c.score+"</span><span class=\"pi-det-lvl\" style=\"color:"+col+"\">"+c.level+"</span></div><div class=\"pi-det-trend\">Trend: <span>"+c.trend+"</span></div>"+(drvH?"<div class=\"pi-det-drvs-hdr\">Risk Drivers</div><div class=\"pi-det-drvs\">"+drvH+"</div>":"")+"</div><button class=\"pi-det-close\" id=\"pi-det-cls\">&#10005;</button></div>";
           document.getElementById("pi-det-cls").onclick=function(){detail.style.display="none";};
         });
-      d3.select(svg).append("path").datum(borders).attr("d",path).attr("fill","none").attr("stroke","#1e2d3d").attr("stroke-width","0.5");
-      // Pan + zoom
-      var mapG=d3.select(svg).insert("g","path").attr("class","map-g");
-      d3.select(svg).selectAll("path.country,path:not(.map-g)").each(function(){mapG.node().appendChild(this);});
+      mapG.append("path").datum(borders).attr("d",path).attr("fill","none").attr("stroke","#1e2d3d").attr("stroke-width","0.5");
+      // Pan + zoom — svg zooms the mapG group
       var zoom=d3.zoom().scaleExtent([0.5,8]).on("zoom",function(event){
         mapG.attr("transform",event.transform);
       });
-      d3.select(svg).call(zoom);
+      d3.select(svg).call(zoom).on("dblclick.zoom",null);
       // Reset zoom button hint
       var resetHint=document.createElement("div");
       resetHint.style.cssText="position:absolute;bottom:8px;right:8px;font-size:10px;color:#64748b;background:#0a0e14;border:1px solid #1e2630;padding:3px 8px;border-radius:3px;cursor:pointer;user-select:none";
@@ -413,9 +414,9 @@ function _buildSVGMap(data){
 
       data.filter(function(c){return c.level==="CRITICAL"||c.level==="HIGH";}).forEach(function(c){
         var info=_CN[c.country];if(!info)return;var xy=proj([info.lon,info.lat]);if(!xy)return;var col=_lc(c.level);
-        d3.select(svg).append("circle").attr("cx",xy[0]).attr("cy",xy[1]).attr("r",c.level==="CRITICAL"?7:5).attr("fill",col).attr("opacity","0.9").attr("pointer-events","none");
-        if(c.level==="CRITICAL"){d3.select(svg).append("circle").attr("cx",xy[0]).attr("cy",xy[1]).attr("r",12).attr("fill","none").attr("stroke",col).attr("stroke-width","1.2").attr("opacity","0.45").attr("pointer-events","none");}
-        d3.select(svg).append("text").attr("x",xy[0]).attr("y",xy[1]-11).attr("text-anchor","middle").attr("font-size","9").attr("fill",col).attr("font-family","monospace").attr("font-weight","700").attr("pointer-events","none").text(c.country);
+        mapG.append("circle").attr("cx",xy[0]).attr("cy",xy[1]).attr("r",c.level==="CRITICAL"?7:5).attr("fill",col).attr("opacity","0.9").attr("pointer-events","none");
+        if(c.level==="CRITICAL"){mapG.append("circle").attr("cx",xy[0]).attr("cy",xy[1]).attr("r",12).attr("fill","none").attr("stroke",col).attr("stroke-width","1.2").attr("opacity","0.45").attr("pointer-events","none");}
+        mapG.append("text").attr("x",xy[0]).attr("y",xy[1]-11).attr("text-anchor","middle").attr("font-size","9").attr("fill",col).attr("font-family","monospace").attr("font-weight","700").attr("pointer-events","none").text(c.country);
       });
       var leg=document.getElementById("pi-map-legend");if(leg)leg.innerHTML=[["CRITICAL","#ff3b5c"],["HIGH","#ff8c42"],["ELEVATED","#f5c518"],["MODERATE","#4d9eff"],["LOW","#00d4aa"]].map(function(lv){return"<span class=\"pi-legend-item\"><span class=\"pi-legend-dot\" style=\"background:"+lv[1]+"\"></span>"+lv[0]+"</span>";}).join("");
     }).catch(function(e){console.error("Map load failed",e);});
