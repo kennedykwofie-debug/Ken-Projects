@@ -209,51 +209,78 @@
 
 <!-- PRO INTEL PAGE -->
 <div id="page-pro" class="page">
-<div class="pro-hdr"><span class="pro-title">&#10022; DARKWATCH PRO INTELLIGENCE</span><button id="pro-refresh-btn" class="btn-sm">&#8635; Refresh All</button></div>
-<div class="stat-row">
-  <div class="stat-card"><div class="stat-label">CRITICAL COUNTRIES</div><div class="stat-val" id="pro-crit-countries">-</div></div>
-  <div class="stat-card"><div class="stat-label">ACTIVE C2 SERVERS</div><div class="stat-val" id="pro-c2-count">-</div></div>
-  <div class="stat-card"><div class="stat-label">MACRO RISK</div><div class="stat-val" id="pro-macro-risk">-</div></div>
-  <div class="stat-card"><div class="stat-label">AI STATUS</div><div class="stat-val" id="pro-ai-status" style="color:#ff3b5c">OFFLINE</div></div>
-</div>
-<div class="pro-grid">
-  <div class="pro-panel pro-panel-wide">
-    <div class="panel-hdr"><span class="panel-title">GEOPOLITICAL RISK INDEX</span><span class="panel-badge" id="pro-geo-badge">50 COUNTRIES</span></div>
-    <div id="pro-geo-hotspots" style="padding:8px 12px 4px"></div>
-    <div id="pro-world-map" style="width:100%;position:relative;background:#0a0e14;border-top:1px solid #1e2630">
-      <canvas id="pro-map-canvas" style="width:100%;height:320px;display:block;cursor:crosshair"></canvas>
-      <div id="pro-map-tooltip" style="position:absolute;display:none;background:#0d1117;border:1px solid #2a3440;border-radius:4px;padding:10px 14px;pointer-events:none;min-width:200px;z-index:10;box-shadow:0 4px 20px rgba(0,0,0,.6)"></div>
+<div class="pi-shell">
+  <nav class="pi-nav">
+    <div class="pi-nav-logo">&#10022; PRO INTEL</div>
+    <button class="pi-nav-btn active" data-section="geo" onclick="piNav(this)">
+      <span class="pi-nav-icon">&#127758;</span>
+      <span class="pi-nav-label">Geo Risk</span>
+      <span class="pi-nav-badge" id="pi-geo-badge">50</span>
+    </button>
+    <button class="pi-nav-btn" data-section="cyber" onclick="piNav(this)">
+      <span class="pi-nav-icon">&#128274;</span>
+      <span class="pi-nav-label">Cyber</span>
+      <span class="pi-nav-badge" id="pi-cyber-badge">0</span>
+    </button>
+    <button class="pi-nav-btn" data-section="econ" onclick="piNav(this)">
+      <span class="pi-nav-icon">&#128200;</span>
+      <span class="pi-nav-label">Economic</span>
+      <span class="pi-nav-badge" id="pi-econ-badge">8</span>
+    </button>
+    <button class="pi-nav-btn" data-section="ai" onclick="piNav(this)">
+      <span class="pi-nav-icon">&#129504;</span>
+      <span class="pi-nav-label">AI Analysis</span>
+      <span class="pi-nav-badge pi-ai-badge" id="pi-ai-badge">PRO</span>
+    </button>
+    <div class="pi-nav-stats">
+      <div class="pi-stat"><div class="pi-stat-val" id="pro-crit-countries">-</div><div class="pi-stat-lbl">Critical</div></div>
+      <div class="pi-stat"><div class="pi-stat-val" id="pro-c2-count">-</div><div class="pi-stat-lbl">C2 Servers</div></div>
+      <div class="pi-stat"><div class="pi-stat-val" id="pro-macro-risk" style="font-size:11px">-</div><div class="pi-stat-lbl">Macro Risk</div></div>
     </div>
-    <div id="pro-map-detail" style="display:none;padding:12px;border-top:1px solid #1e2630;background:#080b10"></div>
-    <div style="padding:8px 12px;border-top:1px solid #1e2630">
-      <div class="panel-label" style="margin-bottom:6px">TOP RISK COUNTRIES</div>
-      <div id="pro-geo-list"></div>
-    </div>
-  </div>
-  <div class="pro-panel">
-    <div class="panel-hdr"><span class="panel-title">LIVE CYBER THREATS</span><span class="panel-badge" id="pro-cyber-badge">0 FEEDS</span></div>
-    <div id="pro-cyber-list" style="padding:12px"><div class="lt">Loading...</div></div>
-  </div>
-</div>
-<div class="pro-grid">
-  <div class="pro-panel pro-panel-wide">
-    <div class="panel-hdr"><span class="panel-title">ECONOMIC RISK SIGNALS</span><span class="panel-badge" id="pro-econ-badge">8 INDICATORS</span></div>
-    <div id="pro-econ-tabs" style="display:flex;gap:0;border-bottom:1px solid #1e2630;padding:0 12px">
-      <button class="econ-tab active" data-tab="overview" onclick="switchEconTab(this)">Overview</button>
-      <button class="econ-tab" data-tab="rates" onclick="switchEconTab(this)">Rates</button>
-      <button class="econ-tab" data-tab="volatility" onclick="switchEconTab(this)">Volatility</button>
-      <button class="econ-tab" data-tab="commodities" onclick="switchEconTab(this)">Commodities</button>
-    </div>
-    <div id="pro-econ-list" style="padding:12px"><div class="lt">Loading...</div></div>
-  </div>
-  <div class="pro-panel">
-    <div class="panel-hdr"><span class="panel-title">AI RISK ASSESSMENT</span><span class="panel-badge" style="color:#a78bfa;border-color:#a78bfa">PRO</span></div>
-    <div style="padding:12px">
-      <textarea id="pro-ai-input" placeholder="Describe a threat scenario..." style="width:100%;background:#0d1117;border:1px solid #2a3440;color:#e2e8f0;padding:8px;border-radius:4px;font-size:12px;resize:vertical;height:60px;font-family:inherit"></textarea>
-      <button id="pro-ai-btn" class="btn-sm" style="margin-top:6px">&#9658; Analyse with AI</button>
-      <div id="pro-ai-result" style="margin-top:10px;font-size:12px;color:#94a3b8"></div>
-    </div>
-  </div>
+    <button id="pro-refresh-btn" class="pi-refresh-btn" onclick="loadPro()">&#8635; Refresh</button>
+  </nav>
+  <main class="pi-main">
+    <section class="pi-section active" id="pi-sec-geo">
+      <div class="pi-sec-hdr"><span>&#127758; Geopolitical Risk Index</span><span class="pi-sec-sub" id="pro-geo-badge">Loading...</span></div>
+      <div id="pro-geo-hotspots" class="pi-hotspots"></div>
+      <div class="pi-map-wrap">
+        <div id="pi-map-container" style="width:100%;height:420px;position:relative;background:#060a10">
+          <svg id="pi-world-svg" style="width:100%;height:100%;display:block"></svg>
+          <div id="pro-map-tooltip" class="pi-tooltip" style="display:none"></div>
+        </div>
+        <div class="pi-map-legend" id="pi-map-legend"></div>
+        <div id="pro-map-detail" class="pi-map-detail" style="display:none"></div>
+      </div>
+      <div class="pi-country-list-wrap">
+        <div class="pi-sec-sub-hdr">Top Risk Countries <span style="color:#64748b;font-weight:400;font-size:10px">— click row to expand risk drivers</span></div>
+        <div id="pro-geo-list" class="pi-country-list"></div>
+      </div>
+    </section>
+    <section class="pi-section" id="pi-sec-cyber">
+      <div class="pi-sec-hdr"><span>&#128274; Live Cyber Threats</span><span class="pi-sec-sub" id="pro-cyber-badge">Loading...</span></div>
+      <div id="pro-cyber-list" class="pi-cyber-body"><div class="lt">Loading...</div></div>
+    </section>
+    <section class="pi-section" id="pi-sec-econ">
+      <div class="pi-sec-hdr"><span>&#128200; Economic Risk Signals</span><span class="pi-sec-sub" id="pro-econ-badge">Loading...</span></div>
+      <div class="pi-econ-tabs">
+        <button class="pi-etab active" data-etab="overview" onclick="piEconTab(this)">Overview</button>
+        <button class="pi-etab" data-etab="rates" onclick="piEconTab(this)">Rates &amp; Spreads</button>
+        <button class="pi-etab" data-etab="volatility" onclick="piEconTab(this)">Volatility</button>
+        <button class="pi-etab" data-etab="commodities" onclick="piEconTab(this)">Commodities &amp; FX</button>
+      </div>
+      <div id="pro-econ-list" class="pi-econ-body"><div class="lt">Loading...</div></div>
+    </section>
+    <section class="pi-section" id="pi-sec-ai">
+      <div class="pi-sec-hdr"><span>&#129504; AI Risk Assessment</span><span class="pi-sec-sub" style="color:#a78bfa;border-color:#a78bfa">Powered by Groq · Llama 3.3</span></div>
+      <div class="pi-ai-body">
+        <div class="pi-ai-status-row"><span>Model Status:</span><span id="pro-ai-status" style="color:#ff3b5c;font-weight:700">OFFLINE</span></div>
+        <div class="pi-ai-hint">Describe a threat scenario, geopolitical event, or market condition for AI-powered intelligence analysis.</div>
+        <textarea id="pro-ai-input" class="pi-ai-textarea" placeholder="e.g. Impact of Ukraine conflict escalation on EU energy supply chains and financial markets..."></textarea>
+        <button id="pro-ai-btn" class="pi-ai-submit">&#9658;&nbsp; Analyse with AI</button>
+        <div id="pro-ai-result" class="pi-ai-result"></div>
+      </div>
+    </section>
+  </main>
 </div>
 </div>
 
