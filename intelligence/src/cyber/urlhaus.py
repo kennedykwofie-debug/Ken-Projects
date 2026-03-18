@@ -4,14 +4,12 @@ import io
 import logging
 from typing import Any, Dict, List
 
-from src.shared.http import get
+from src.shared.http import get_text
 
 logger = logging.getLogger(__name__)
 
 # Free CSV download - no auth required
 _URL = "https://urlhaus.abuse.ch/downloads/csv_recent/"
-
-_VALID_TAGS = {"malware_download", "botnet_cc", "phishing", "exploit", "ransomware"}
 
 
 def _parse_row(row: Dict[str, str]) -> Dict[str, Any]:
@@ -33,27 +31,23 @@ def _parse_row(row: Dict[str, str]) -> Dict[str, Any]:
 
 async def fetch_malicious_urls() -> List[Dict[str, Any]]:
     try:
-        raw = await get(_URL)
-        if not isinstance(raw, str):
-            return []
+        raw = await get_text(_URL)
     except Exception as e:
         logger.error(f"URLhaus fetch failed: {e}")
         return []
-
     results = []
-    # Skip comment lines starting with #
-    lines = [l for l in raw.splitlines() if not l.strip().startswith("#")]
+    # Strip comment lines
+    lines = [l for l in raw.splitlines() if l.strip() and not l.strip().startswith("#")]
     cleaned = "\n".join(lines)
     try:
         for row in csv.DictReader(io.StringIO(cleaned)):
             parsed = _parse_row(row)
             if parsed:
                 results.append(parsed)
-            if len(results) >= 500:
+            if len(results) >= 200:
                 break
     except Exception as e:
         logger.error(f"URLhaus CSV parse failed: {e}")
         return []
-
     logger.info(f"URLhaus: {len(results)} malicious URLs")
     return results
