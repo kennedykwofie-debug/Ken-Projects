@@ -7,7 +7,7 @@ function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").
 function cvCls(v){return !v?"medium":v>=9?"critical":v>=7?"high":"medium";}
 function g(id){return document.getElementById(id);}
 function rel(iso){if(!iso)return"never";var diff=Date.now()-new Date(iso).getTime();var mm=Math.floor(diff/60000),hh=Math.floor(diff/3600000),dd=Math.floor(diff/86400000);return mm<60?mm+"m ago":hh<24?hh+"h ago":dd+"d ago";}
-function showPage(name){document.querySelectorAll(".page").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".nvb").forEach(function(b){b.classList.remove("active");});var pg=g("page-"+name);if(pg)pg.classList.add("active");document.querySelectorAll("[data-page=\""+name+"\"]").forEach(function(b){b.classList.add("active");});if(name==="assets")loadAssets();if(name==="creds")loadCreds();if(name==="alerts")loadAlerts();}
+function showPage(name){document.querySelectorAll(".page").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".nvb").forEach(function(b){b.classList.remove("active");});var pg=g("page-"+name);if(pg)pg.classList.add("active");document.querySelectorAll("[data-page=\""+name+"\"]").forEach(function(b){b.classList.add("active");});if(name==="assets")loadAssets();if(name==="creds")loadCreds();if(name==="alerts")loadAlerts();if(name==="pro")loadPro();}
 document.querySelectorAll(".nvb").forEach(function(btn){btn.addEventListener("click",function(){showPage(btn.dataset.page);});});
 function sw(tid,el){document.querySelectorAll(".tc").forEach(function(t){t.classList.remove("on");});document.querySelectorAll(".tab").forEach(function(t){t.classList.remove("on");});g(tid).classList.add("on");el.classList.add("on");}
 document.querySelectorAll(".tab").forEach(function(btn){btn.addEventListener("click",function(){sw(btn.dataset.tab,btn);});});
@@ -338,5 +338,68 @@ function loadAlerts(){fetch(API+"/monitor/alerts").then(function(r){return r.jso
 g("clear-alerts-btn").addEventListener("click",loadAlerts);
 g("fi").addEventListener("change",go);g("fr").addEventListener("change",go);g("fs").addEventListener("change",go);g("rfbtn").addEventListener("click",rf);
 setInterval(function(){var ap=document.querySelector(".page.active");if(!ap)return;if(ap.id==="page-assets")loadAssets();if(ap.id==="page-creds")loadCreds();if(ap.id==="page-alerts")loadAlerts();},30000);
-go();
+go()
+
+// ── PRO INTEL MODULE ──────────────────────────────────────────────────────────
+var PROAPI='https://spectacular-wisdom-production.up.railway.app';
+function esc2(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function loadPro(){
+  var geoB=g('pro-geo-badge'),cyberB=g('pro-cyber-badge'),econB=g('pro-econ-badge');
+  if(geoB)geoB.textContent='LOADING';if(cyberB)cyberB.textContent='LOADING';if(econB)econB.textContent='LOADING';
+  fetch(PROAPI+'/geo/cii').then(function(r){return r.json();}).then(function(d){
+    var data=d.data||[];
+    if(geoB)geoB.textContent=data.length+' COUNTRIES';
+    var cc=g('pro-crit-countries');if(cc)cc.textContent=data.filter(function(c){return c.level==='CRITICAL';}).length;
+    var crit=data.filter(function(c){return c.level==='CRITICAL';}).slice(0,4);
+    var hotH='';crit.forEach(function(c){hotH+='<span style="display:inline-block;margin:0 4px 4px 0;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:700;background:#2d0a0a;border:1px solid #ff3b5c;color:#ff3b5c">'+esc2(c.country)+' '+c.score+'</span>';});
+    var geoHot=g('pro-geo-hotspots');if(geoHot)geoHot.innerHTML=hotH?'<div style="font-size:10px;color:#64748b;margin-bottom:4px">CRITICAL HOTSPOTS</div>'+hotH:'';
+    var lvlC={CRITICAL:'#ff3b5c',HIGH:'#ff8c42',ELEVATED:'#f5c518',MODERATE:'#4d9eff',LOW:'#00d4aa'};
+    var listH='';data.slice(0,15).forEach(function(c){var col=lvlC[c.level]||'#64748b';var pct=Math.round(c.score);listH+='<div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid #1e2630"><span style="font-family:monospace;font-size:11px;color:#e2e8f0;width:28px">'+esc2(c.country)+'</span><div style="flex:1;background:#1e2630;border-radius:2px;height:6px"><div style="width:'+pct+'%;height:6px;border-radius:2px;background:'+col+'"></div></div><span style="font-size:11px;color:'+col+';width:28px;text-align:right">'+c.score+'</span><span style="font-size:10px;color:'+col+';width:60px">'+esc2(c.level)+'</span></div>';});
+    var gl=g('pro-geo-list');if(gl)gl.innerHTML=listH||'<div class="lt">No data</div>';
+  }).catch(function(){if(geoB)geoB.textContent='ERROR';});
+  fetch(PROAPI+'/cyber/threats').then(function(r){return r.json();}).then(function(d){
+    var c2=d.c2_servers||[],mal=d.malware_domains||[],pul=d.threat_pulses||[];
+    if(cyberB)cyberB.textContent=(c2.length+mal.length+pul.length)+' FEEDS';
+    var pc=g('pro-c2-count');if(pc)pc.textContent=c2.length;
+    var h='';
+    if(c2.length){h+='<div style="font-size:10px;color:#ff3b5c;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">C2 Servers ('+c2.length+')</div>';c2.slice(0,8).forEach(function(s){h+='<div style="padding:4px 0;border-bottom:1px solid #1e2630;font-size:11px;font-family:monospace"><span style="color:#ff3b5c">'+esc2(s.ip_address||s.ip||'-')+'</span><span style="color:#64748b;margin-left:8px">'+esc2(s.malware||s.malware_type||'-')+'</span></div>';});}
+    if(mal.length){h+='<div style="font-size:10px;color:#ff8c42;text-transform:uppercase;letter-spacing:1px;margin:10px 0 6px">Malware Domains ('+mal.length+')</div>';mal.slice(0,6).forEach(function(m){h+='<div style="padding:4px 0;border-bottom:1px solid #1e2630;font-size:11px;font-family:monospace"><span style="color:#ff8c42">'+esc2(m.url||m.domain||'-')+'</span></div>';});}
+    if(pul.length){h+='<div style="font-size:10px;color:#a78bfa;text-transform:uppercase;letter-spacing:1px;margin:10px 0 6px">Threat Pulses ('+pul.length+')</div>';pul.slice(0,5).forEach(function(p){h+='<div style="padding:5px 0;border-bottom:1px solid #1e2630"><div style="font-size:11px;color:#e2e8f0">'+esc2((p.name||'').substring(0,60))+'</div><div style="font-size:10px;color:#64748b">'+esc2(p.author||'')+'</div></div>';});}
+    if(!h)h='<div class="lt" style="padding:12px">No active threats in live feeds</div>';
+    var cl=g('pro-cyber-list');if(cl)cl.innerHTML=h;
+  }).catch(function(){if(cyberB)cyberB.textContent='ERROR';});
+  fetch(PROAPI+'/economic/signals').then(function(r){return r.json();}).then(function(d){
+    var risks=d.risk_assessments||[],macro=d.macro_signals||[];
+    if(econB)econB.textContent=risks.length+' SIGNALS';
+    var highR=risks.filter(function(r){return r.risk==='HIGH'||r.risk==='CRITICAL';});
+    var overall=highR.length?highR[0].risk:'MEDIUM';
+    var mr=g('pro-macro-risk');
+    if(mr){mr.textContent=overall;mr.style.color=overall==='CRITICAL'?'#ff3b5c':overall==='HIGH'?'#ff8c42':overall==='MEDIUM'?'#f5c518':'#00d4aa';}
+    var h='';
+    if(risks.length){h+='<div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Risk Assessments</div>';risks.forEach(function(r){var col=r.risk==='HIGH'||r.risk==='CRITICAL'?'#ff3b5c':r.risk==='MEDIUM'?'#f5c518':'#00d4aa';h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #1e2630"><div><div style="font-size:11px;color:#e2e8f0;text-transform:capitalize">'+esc2((r.signal||'').replace(/_/g,' '))+'</div><div style="font-size:10px;color:#64748b">'+esc2(r.status||'')+'</div></div><span style="font-size:11px;font-weight:700;color:'+col+'">'+esc2(r.risk||'-')+'</span></div>';});}
+    if(macro.length){h+='<div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin:12px 0 6px">Macro Signals</div>';macro.slice(0,5).forEach(function(m){h+='<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1e2630"><span style="font-size:11px;color:#e2e8f0">'+esc2(m.indicator||m.series||'-')+'</span><span style="font-size:11px;font-family:monospace;color:#4d9eff">'+esc2(String(m.value||'-'))+'</span></div>';});}
+    if(!h)h='<div class="lt" style="padding:12px">No economic signals</div>';
+    var el2=g('pro-econ-list');if(el2)el2.innerHTML=h;
+  }).catch(function(){if(econB)econB.textContent='ERROR';});
+  fetch(PROAPI+'/ai/status').then(function(r){return r.json();}).then(function(d){
+    var as=g('pro-ai-status');if(as)as.textContent=d.available?'READY':'OFFLINE';
+    var ab=g('pro-ai-btn');
+    if(ab&&!d.available){ab.disabled=true;ab.style.opacity='0.5';var ar=g('pro-ai-result');if(ar)ar.innerHTML='<span style="color:#64748b">AI requires GROQ_KEY in Railway environment variables.</span>';}
+  }).catch(function(){});
+}
+var _pab=g('pro-ai-btn');
+if(_pab){_pab.addEventListener('click',function(){
+  var inp=g('pro-ai-input'),res=g('pro-ai-result');if(!inp||!res)return;
+  var q=inp.value.trim();if(!q){inp.style.borderColor='#ff3b5c';return;}
+  inp.style.borderColor='';_pab.disabled=true;_pab.textContent='Analysing...';
+  res.innerHTML='<span style="color:#a78bfa">Analysing...</span>';
+  fetch(PROAPI+'/ai/risk',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:q})})
+    .then(function(r){return r.json();}).then(function(d){
+      var txt=d.assessment||d.result||d.response||JSON.stringify(d,null,2);
+      res.innerHTML='<div style="white-space:pre-wrap;color:#e2e8f0">'+esc2(txt)+'</div>';
+      _pab.disabled=false;_pab.textContent='\u25ba Analyse with AI';
+    }).catch(function(){res.innerHTML='<span style="color:#ff3b5c">Error.</span>';_pab.disabled=false;_pab.textContent='\u25ba Analyse with AI';});
+});}
+var _prb=g('pro-refresh-btn');if(_prb)_prb.addEventListener('click',loadPro);
+;
 })();
