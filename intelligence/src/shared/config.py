@@ -20,6 +20,12 @@ class Settings:
     fred_key: Optional[str] = os.getenv("FRED_KEY")
     finnhub_key: Optional[str] = os.getenv("FINNHUB_KEY")
     groq_key: Optional[str] = os.getenv("GROQ_KEY")
+    censys_key: Optional[str] = os.getenv("CENSYS_KEY")
+    vulncheck_key: Optional[str] = os.getenv("VULNCHECK_KEY")
+    intelx_key: Optional[str] = os.getenv("INTELX_KEY")
+    alpha_vantage_key: Optional[str] = os.getenv("ALPHA_VANTAGE_KEY")
+    dehashed_key: Optional[str] = os.getenv("DEHASHED_KEY")
+    leak_lookup_key: Optional[str] = os.getenv("LEAK_LOOKUP_KEY")
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
 
 
