@@ -47,6 +47,8 @@ app.include_router(investigate_router)
 app.include_router(posture_router)
 app.include_router(vuln_router)
 app.include_router(news_router)
+from src.credentials.router import router as credentials_router
+app.include_router(credentials_router, prefix="/credentials", tags=["Credentials"])
 
 @app.get("/health")
 async def health():
