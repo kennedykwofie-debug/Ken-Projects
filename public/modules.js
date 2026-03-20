@@ -266,7 +266,6 @@
 
   // ── NAV WIRING ────────────────────────────────────────────────────────────
   var newPages = ['darkweb','investigate','posture','vuln','news'];
-  var loadFns  = {darkweb:window.loadDarkWeb, vuln:window.loadVulns, news:window.loadNews};
 
   newPages.forEach(function(name){
     var btn=document.querySelector('[data-page="'+name+'"]');
@@ -281,16 +280,31 @@
       if(pg) pg.classList.add('active');
       nb.classList.add('active');
       var tok=localStorage.getItem('dw_access_token');
-      var fn=window['loadDarkWeb'.replace('darkweb',name)] || (name==='darkweb'?window.loadDarkWeb:name==='vuln'?window.loadVulns:name==='news'?window.loadNews:null);
-      if(fn){ tok?fn():window.dwShowLoginModal&&window.dwShowLoginModal(fn); }
-      // wire news tab buttons
-      if(name==='news'){
-        document.querySelectorAll('.news-tab').forEach(function(tb){
-          tb.onclick=function(){window.loadNews(this.dataset.cat);};
-        });
-        var si=document.getElementById('news-search-input');
-        if(si) si.onkeydown=function(e){if(e.key==='Enter') window.searchNews();};
+      function go(){
+        if(name==='darkweb') window.loadDarkWeb();
+        if(name==='vuln')    window.loadVulns();
+        if(name==='news'){
+          window.loadNews();
+          document.querySelectorAll('.news-tab').forEach(function(tb){tb.onclick=function(){window.loadNews(this.dataset.cat);};});
+          var si=document.getElementById('news-search-input');
+          if(si) si.onkeydown=function(e){if(e.key==='Enter') window.searchNews();};
+        }
+        if(name==='investigate'){
+          var inp=document.getElementById('inv-input');
+          if(inp && !inp.value) {
+            inp.value='45.33.32.156';
+            window.runInvestigation();
+          }
+        }
+        if(name==='posture'){
+          var pd=document.getElementById('pos-domain');
+          if(pd && !pd.value) {
+            pd.value='github.com';
+            window.runPostureScan();
+          }
+        }
       }
+      tok ? go() : (window.dwShowLoginModal && window.dwShowLoginModal(go));
     },true);
   });
 
