@@ -4,6 +4,8 @@
  */
 (function(){
   var PROAPI='https://spectacular-wisdom-production.up.railway.app';
+  // Warm up the API on page load to avoid cold-start failures
+  fetch(PROAPI+'/health').catch(function(){});
   function authH(){var t=localStorage.getItem('dw_access_token');return t?{'Content-Type':'application/json','Authorization':'Bearer '+t}:{'Content-Type':'application/json'};}
   function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
   function stat(label,val,color){return '<div style="background:#0f1117;border:1px solid #1e293b;border-radius:8px;padding:12px 16px;"><div style="color:#64748b;font-size:10px;letter-spacing:1px;margin-bottom:6px;">'+label+'</div><div style="color:'+(color||'#e2e8f0')+';font-size:22px;font-weight:700;">'+val+'</div></div>';}
@@ -209,6 +211,18 @@
 
   var vulnInput=document.getElementById('vuln-search');
   if(vulnInput) vulnInput.addEventListener('keydown',function(e){if(e.key==='Enter') window.searchVulns();});
+  // Wire search button directly (override any onclick)
+  var vulnBtn=document.querySelector('#page-vuln button[onclick*="searchVulns"], #page-vuln button[onclick*="loadVulns"][onclick*="search"]');
+  if(!vulnBtn){
+    // find the purple Search button next to the input
+    vulnBtn = vulnInput && vulnInput.nextElementSibling;
+  }
+  if(vulnBtn) vulnBtn.onclick=function(e){e.stopImmediatePropagation();window.searchVulns&&window.searchVulns();};
+  // Also wire investigate and posture buttons directly
+  var invBtn=document.querySelector('#page-investigate button');
+  if(invBtn) invBtn.onclick=function(e){e.stopImmediatePropagation();window.runInvestigation&&window.runInvestigation();};
+  var posBtn=document.querySelector('#page-posture button');
+  if(posBtn) posBtn.onclick=function(e){e.stopImmediatePropagation();window.runPostureScan&&window.runPostureScan();};
 
   // ── NEWS FEED ─────────────────────────────────────────────────────────────
   window.loadNews = async function(category){
