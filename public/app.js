@@ -49,7 +49,7 @@ window._rmW=function(wtype,wval){fetch(API+"/monitor/watchlist",{method:"DELETE"
 g("add-asset-btn").addEventListener("click",function(){var addIpVal=g("add-ip").value.trim(),addDmVal=g("add-domain").value.trim();if(!addIpVal&&!addDmVal){alert("Enter an IP or domain");return;}var abody={};if(addIpVal)abody.ip=addIpVal;if(addDmVal){abody.domain=addDmVal;abody.credDomain=addDmVal;}fetch(API+"/monitor/watchlist",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(abody)}).then(function(){g("add-ip").value="";g("add-domain").value="";loadAssets();}).catch(function(){});});
 g("scan-btn").addEventListener("click",function(){var scanBtn=g("scan-btn");scanBtn.textContent="Scanning...";g("asset-badge").textContent="SCANNING";fetch(API+"/monitor/scan",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"}).then(function(){setTimeout(function(){scanBtn.textContent="Run Scan Now";loadAssets();loadAlerts();},15000);}).catch(function(){scanBtn.textContent="Run Scan Now";});});
 
-// ── Bulk Import Panel ────────────────────────────────────────────────────────
+// ââ Bulk Import Panel ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 (function(){
 var PREFIXES=[
 "admin","administrator","webmaster","hostmaster","postmaster","abuse","noc","security",
@@ -340,7 +340,7 @@ g("fi").addEventListener("change",go);g("fr").addEventListener("change",go);g("f
 setInterval(function(){var ap=document.querySelector(".page.active");if(!ap)return;if(ap.id==="page-assets")loadAssets();if(ap.id==="page-creds")loadCreds();if(ap.id==="page-alerts")loadAlerts();},30000);
 go()
 
-// ── PRO INTEL MODULE ──────────────────────────────────────────────────────────
+// ââ PRO INTEL MODULE ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 var PROAPI='https://spectacular-wisdom-production.up.railway.app';
 var _CN={AF:{n:'Afghanistan',lon:67.7,lat:33.9},AL:{n:'Albania',lon:20.2,lat:41.2},DZ:{n:'Algeria',lon:2.6,lat:28.0},AO:{n:'Angola',lon:17.9,lat:-11.2},AR:{n:'Argentina',lon:-64.0,lat:-34.0},AM:{n:'Armenia',lon:45.0,lat:40.1},AZ:{n:'Azerbaijan',lon:47.6,lat:40.1},BD:{n:'Bangladesh',lon:90.4,lat:23.7},BY:{n:'Belarus',lon:28.0,lat:53.7},BJ:{n:'Benin',lon:2.3,lat:9.3},BO:{n:'Bolivia',lon:-65.0,lat:-17.0},BA:{n:'Bosnia',lon:17.7,lat:44.2},BR:{n:'Brazil',lon:-51.9,lat:-14.2},BF:{n:'Burkina Faso',lon:-1.6,lat:12.4},BI:{n:'Burundi',lon:29.9,lat:-3.4},KH:{n:'Cambodia',lon:104.9,lat:12.6},CM:{n:'Cameroon',lon:12.4,lat:3.8},CF:{n:'C.African Rep.',lon:20.9,lat:6.6},TD:{n:'Chad',lon:18.7,lat:15.5},CN:{n:'China',lon:104.2,lat:35.9},CO:{n:'Colombia',lon:-74.3,lat:4.6},CD:{n:'DR Congo',lon:24.0,lat:-4.0},CI:{n:'Cote dIvoire',lon:-5.6,lat:7.5},CU:{n:'Cuba',lon:-79.5,lat:21.5},EC:{n:'Ecuador',lon:-77.9,lat:-1.8},EG:{n:'Egypt',lon:30.8,lat:26.8},SV:{n:'El Salvador',lon:-88.9,lat:13.8},ET:{n:'Ethiopia',lon:40.5,lat:9.1},GE:{n:'Georgia',lon:43.4,lat:42.3},GH:{n:'Ghana',lon:-1.0,lat:7.9},GT:{n:'Guatemala',lon:-90.2,lat:15.8},GN:{n:'Guinea',lon:-11.4,lat:11.0},HT:{n:'Haiti',lon:-72.3,lat:19.0},HN:{n:'Honduras',lon:-86.2,lat:15.2},IN:{n:'India',lon:78.9,lat:20.6},ID:{n:'Indonesia',lon:113.9,lat:-0.8},IR:{n:'Iran',lon:53.7,lat:32.4},IQ:{n:'Iraq',lon:43.7,lat:33.2},JO:{n:'Jordan',lon:36.2,lat:31.2},KZ:{n:'Kazakhstan',lon:66.9,lat:48.0},KE:{n:'Kenya',lon:37.9,lat:0.0},KP:{n:'North Korea',lon:127.5,lat:40.3},LB:{n:'Lebanon',lon:35.9,lat:33.9},LR:{n:'Liberia',lon:-9.4,lat:6.4},LY:{n:'Libya',lon:17.2,lat:26.3},MG:{n:'Madagascar',lon:46.9,lat:-19.0},ML:{n:'Mali',lon:-1.3,lat:17.6},MR:{n:'Mauritania',lon:-10.9,lat:20.3},MX:{n:'Mexico',lon:-102.5,lat:23.6},MM:{n:'Myanmar',lon:95.9,lat:16.9},NP:{n:'Nepal',lon:84.1,lat:28.4},NI:{n:'Nicaragua',lon:-85.2,lat:12.9},NE:{n:'Niger',lon:8.1,lat:17.6},NG:{n:'Nigeria',lon:8.7,lat:9.1},PK:{n:'Pakistan',lon:69.3,lat:30.4},PS:{n:'Palestine',lon:35.3,lat:31.9},PE:{n:'Peru',lon:-75.0,lat:-9.2},PH:{n:'Philippines',lon:122.9,lat:12.9},RU:{n:'Russia',lon:96.7,lat:61.5},RW:{n:'Rwanda',lon:29.9,lat:-2.0},SN:{n:'Senegal',lon:-14.5,lat:14.5},SO:{n:'Somalia',lon:46.2,lat:6.0},SD:{n:'Sudan',lon:30.2,lat:15.6},SS:{n:'South Sudan',lon:31.3,lat:6.9},SY:{n:'Syria',lon:38.0,lat:35.0},TJ:{n:'Tajikistan',lon:71.3,lat:38.9},TH:{n:'Thailand',lon:100.9,lat:15.9},TG:{n:'Togo',lon:0.8,lat:8.6},TN:{n:'Tunisia',lon:9.5,lat:33.9},TM:{n:'Turkmenistan',lon:59.6,lat:40.5},UG:{n:'Uganda',lon:32.3,lat:1.4},UA:{n:'Ukraine',lon:31.2,lat:49.0},UZ:{n:'Uzbekistan',lon:63.9,lat:41.4},VE:{n:'Venezuela',lon:-66.6,lat:6.4},VN:{n:'Vietnam',lon:108.3,lat:14.1},YE:{n:'Yemen',lon:47.6,lat:15.6},ZM:{n:'Zambia',lon:27.8,lat:-13.1},ZW:{n:'Zimbabwe',lon:29.9,lat:-19.0}};
 function _xe(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
@@ -398,7 +398,7 @@ function _buildSVGMap(data){
           document.getElementById("pi-det-cls").onclick=function(){detail.style.display="none";};
         });
       mapG.append("path").datum(borders).attr("d",path).attr("fill","none").attr("stroke","#1e2d3d").attr("stroke-width","0.5");
-      // Pan + zoom — svg zooms the mapG group
+      // Pan + zoom â svg zooms the mapG group
       var zoom=d3.zoom().scaleExtent([0.5,8]).on("zoom",function(event){
         mapG.attr("transform",event.transform);
       });
@@ -406,7 +406,7 @@ function _buildSVGMap(data){
       // Reset zoom button hint
       var resetHint=document.createElement("div");
       resetHint.style.cssText="position:absolute;bottom:8px;right:8px;font-size:10px;color:#64748b;background:#0a0e14;border:1px solid #1e2630;padding:3px 8px;border-radius:3px;cursor:pointer;user-select:none";
-      resetHint.textContent="Scroll to zoom · Drag to pan · Dbl-click reset";
+      resetHint.textContent="Scroll to zoom Â· Drag to pan Â· Dbl-click reset";
       resetHint.title="Double-click to reset zoom";
       resetHint.ondblclick=function(){d3.select(svg).transition().duration(500).call(zoom.transform,d3.zoomIdentity);};
       container.appendChild(resetHint);
@@ -454,7 +454,7 @@ function loadPro(){
   fetch(PROAPI+"/cyber/threats").then(function(r){return r.json();}).then(function(d){
     var c2=d.c2_servers||[],mal=d.malware_domains||[],pul=d.threat_pulses||[],sum=d.summary||{};
     var tot=c2.length+mal.length+pul.length;if(cb)cb.textContent=tot;var pc=g("pro-c2-count");if(pc)pc.textContent=c2.length;
-    var cyberBadge=g("pro-cyber-badge");if(cyberBadge)cyberBadge.textContent=c2.length+" C2 · "+mal.length+" URLs · "+pul.length+" PULSES";
+    var cyberBadge=g("pro-cyber-badge");if(cyberBadge)cyberBadge.textContent=c2.length+" C2 Â· "+mal.length+" URLs Â· "+pul.length+" PULSES";
     var h="";
     // Summary stats row
     h+="<div class=\"ct-stats\">";
@@ -563,4 +563,7 @@ document.querySelectorAll(".pi-etab").forEach(function(btn){
 var _prf=document.getElementById("pro-refresh-btn");
 if(_prf)_prf.addEventListener("click",loadPro);
 var _prb=g('pro-refresh-btn');if(_prb)_prb.addEventListener('click',loadPro);
+
+window.loadPro=typeof loadPro!=="undefined"?loadPro:function(){};
+window.piNav=typeof piNav!=="undefined"?piNav:function(){};
 })();
