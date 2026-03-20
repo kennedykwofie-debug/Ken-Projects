@@ -12,14 +12,14 @@ class Settings:
     JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", "")
     JWT_ALGORITHM: str = "HS256"
     cache_ttl: int = 300
-    SHODAN_KEY: Optional[str] = os.getenv("SHODAN_KEY")
-    HIBP_KEY: Optional[str] = os.getenv("HIBP_KEY")
-    ACLED_KEY: Optional[str] = os.getenv("ACLED_KEY")
-    ACLED_EMAIL: Optional[str] = os.getenv("ACLED_EMAIL")
-    ABUSEIPDB_KEY: Optional[str] = os.getenv("ABUSEIPDB_KEY")
-    FRED_KEY: Optional[str] = os.getenv("FRED_KEY")
-    FINNHUB_KEY: Optional[str] = os.getenv("FINNHUB_KEY")
-    GROQ_KEY: Optional[str] = os.getenv("GROQ_KEY")
+    shodan_key: Optional[str] = os.getenv("SHODAN_KEY")
+    hibp_key: Optional[str] = os.getenv("HIBP_KEY")
+    acled_key: Optional[str] = os.getenv("ACLED_KEY")
+    acled_email: Optional[str] = os.getenv("ACLED_EMAIL")
+    abuseipdb_key: Optional[str] = os.getenv("ABUSEIPDB_KEY")
+    fred_key: Optional[str] = os.getenv("FRED_KEY")
+    finnhub_key: Optional[str] = os.getenv("FINNHUB_KEY")
+    groq_key: Optional[str] = os.getenv("GROQ_KEY")
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
 
 
