@@ -269,6 +269,8 @@
   document.addEventListener('click', function(e){
     var btn = e.target.closest('[data-page]');
     if(!btn) return;
+    // Only fire for nav buttons — ignore data-page elements inside .page content areas
+    if(btn.closest('.page')) return;
     var name = btn.dataset.page;
     var newPages = ['darkweb','investigate','posture','vuln','news'];
     if(newPages.indexOf(name) === -1) return;
