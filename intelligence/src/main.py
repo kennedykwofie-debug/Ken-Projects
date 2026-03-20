@@ -59,3 +59,6 @@ app.include_router(ai_router)
 @app.get("/health", tags=["System"])
 async def health():
     return {"status": "ok", "version": "2.0.0"}
+
+# v2
+ 
