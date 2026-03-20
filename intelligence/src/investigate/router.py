@@ -7,19 +7,31 @@ from .enrichment import enrich_ip, enrich_domain, enrich_hash
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/investigate", tags=["Investigation"])
 
-_IP_RE = re.compile(r'^(?:d{1,3}.){3}d{1,3}$')
+_IP_RE = re.compile(r'^(\d{1,3}\.){3}\d{1,3}$')
 _HASH_RE = re.compile(r'^[a-fA-F0-9]{32,64}$')
-_DOMAIN_RE = re.compile(r'^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?.)+[a-zA-Z]{2,}$')
+_DOMAIN_RE = re.compile(r'^(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$')
+
+def _detect_type(indicator: str) -> str:
+    i = indicator.strip()
+    parts = i.split('.')
+    if len(parts) == 4 and all(p.isdigit() and 0 <= int(p) <= 255 for p in parts):
+        return 'ip'
+    if _HASH_RE.match(i):
+        return 'hash'
+    if '.' in i and _DOMAIN_RE.match(i):
+        return 'domain'
+    return 'unknown'
 
 @router.get("/enrich/{indicator:path}")
 async def enrich_indicator(indicator: str, _: User = Depends(require_analyst)):
     """Auto-detect indicator type (IP / domain / hash) and enrich from all sources."""
     indicator = indicator.strip()
-    if _IP_RE.match(indicator):
+    kind = _detect_type(indicator)
+    if kind == 'ip':
         return await enrich_ip(indicator)
-    elif _HASH_RE.match(indicator):
+    elif kind == 'hash':
         return await enrich_hash(indicator)
-    elif _DOMAIN_RE.match(indicator):
+    elif kind == 'domain':
         return await enrich_domain(indicator)
     else:
         raise HTTPException(400, f"Cannot detect type for: {indicator}. Provide IP, domain, or MD5/SHA256 hash.")
