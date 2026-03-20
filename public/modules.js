@@ -265,57 +265,45 @@
   };
 
   // ── NAV WIRING ────────────────────────────────────────────────────────────
-  var newPages = ['darkweb','investigate','posture','vuln','news'];
-
-  newPages.forEach(function(name){
-    var btn=document.querySelector('[data-page="'+name+'"]');
+  // Use document-level capture to intercept ALL nav clicks reliably
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('[data-page]');
     if(!btn) return;
-    var nb=btn.cloneNode(true);
-    btn.parentNode.replaceChild(nb,btn);
-    nb.addEventListener('click',function(e){
-      e.stopImmediatePropagation();
-      document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
-      document.querySelectorAll('.nvb,[data-page]').forEach(function(b){b.classList.remove('active');});
-      var pg=document.getElementById('page-'+name);
-      if(pg) pg.classList.add('active');
-      nb.classList.add('active');
-      var tok=localStorage.getItem('dw_access_token');
-      function go(){
-        if(name==='darkweb') window.loadDarkWeb();
-        if(name==='vuln')    window.loadVulns();
-        if(name==='news'){
-          window.loadNews();
-          document.querySelectorAll('.news-tab').forEach(function(tb){tb.onclick=function(){window.loadNews(this.dataset.cat);};});
-          var si=document.getElementById('news-search-input');
-          if(si) si.onkeydown=function(e){if(e.key==='Enter') window.searchNews();};
-        }
-        if(name==='investigate'){
-          var inp=document.getElementById('inv-input');
-          if(inp && !inp.value) {
-            inp.value='45.33.32.156';
-            window.runInvestigation();
-          }
-        }
-        if(name==='posture'){
-          var pd=document.getElementById('pos-domain');
-          if(pd && !pd.value) {
-            pd.value='github.com';
-            window.runPostureScan();
-          }
-        }
+    var name = btn.dataset.page;
+    var newPages = ['darkweb','investigate','posture','vuln','news'];
+    if(newPages.indexOf(name) === -1) return;
+    e.stopImmediatePropagation();
+    e.preventDefault();
+    // Switch page
+    document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+    document.querySelectorAll('.nvb,[data-page]').forEach(function(b){b.classList.remove('active');});
+    var pg = document.getElementById('page-'+name);
+    if(pg) pg.classList.add('active');
+    btn.classList.add('active');
+    // Load data
+    var tok = localStorage.getItem('dw_access_token');
+    function go(){
+      if(name==='darkweb')    window.loadDarkWeb();
+      if(name==='vuln')       window.loadVulns();
+      if(name==='news'){      window.loadNews(); }
+      if(name==='investigate'){
+        var inp=document.getElementById('inv-input');
+        if(inp && !inp.value){ inp.value='45.33.32.156'; }
+        window.runInvestigation();
       }
-      tok ? go() : (window.dwShowLoginModal && window.dwShowLoginModal(go));
-    },true);
-  });
+      if(name==='posture'){
+        var pd=document.getElementById('pos-domain');
+        if(pd && !pd.value){ pd.value='github.com'; }
+        window.runPostureScan();
+      }
+    }
+    tok ? go() : (window.dwShowLoginModal && window.dwShowLoginModal(go));
+  }, true);
 
-  // Override showPage for auto-loading
-  var _orig=window.showPage;
-  window.showPage=function(name){
-    if(typeof _orig==='function') _orig(name);
-    var tok=localStorage.getItem('dw_access_token');
-    if(name==='darkweb' && typeof window.loadDarkWeb==='function'){ tok?window.loadDarkWeb():null; }
-    if(name==='vuln'    && typeof window.loadVulns==='function'){    tok?window.loadVulns():null; }
-    if(name==='news'    && typeof window.loadNews==='function'){     tok?window.loadNews():null; }
-  };
+  // News tab buttons
+  document.addEventListener('click', function(e){
+    var tb = e.target.closest('.news-tab');
+    if(tb) window.loadNews(tb.dataset.cat);
+  });
 
 })();
