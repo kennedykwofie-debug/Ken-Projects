@@ -10,7 +10,7 @@
   function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
   function stat(label,val,color){return '<div style="background:#0f1117;border:1px solid #1e293b;border-radius:8px;padding:12px 16px;"><div style="color:#64748b;font-size:10px;letter-spacing:1px;margin-bottom:6px;">'+label+'</div><div style="color:'+(color||'#e2e8f0')+';font-size:22px;font-weight:700;">'+val+'</div></div>';}
 
-  // ââ DARK WEB ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // Ã¢ÂÂÃ¢ÂÂ DARK WEB Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
   window.loadDarkWeb = async function(){
     var el=document.getElementById('dw-stats');
     if(el) el.innerHTML='<div style="color:#64748b;grid-column:1/-1;text-align:center;padding:20px;">Loading...</div>';
@@ -49,7 +49,7 @@
     }catch(e){el.innerHTML='<span style="color:#ff3b5c;font-size:12px;">'+esc(e.message)+'</span>';}
   };
 
-  // ââ INVESTIGATION âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // Ã¢ÂÂÃ¢ÂÂ INVESTIGATION Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
   window.runInvestigation = async function(){
     var indicator=document.getElementById('inv-input').value.trim();
     if(!indicator)return;
@@ -109,7 +109,7 @@
   var invInput=document.getElementById('inv-input');
   if(invInput) invInput.addEventListener('keydown',function(e){if(e.key==='Enter') window.runInvestigation();});
 
-  // ââ POSTURE âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // Ã¢ÂÂÃ¢ÂÂ POSTURE Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
   window.runPostureScan = async function(){
     var domain=document.getElementById('pos-domain').value.trim();
     if(!domain)return;
@@ -154,7 +154,7 @@
   var posInput=document.getElementById('pos-domain');
   if(posInput) posInput.addEventListener('keydown',function(e){if(e.key==='Enter') window.runPostureScan();});
 
-  // ââ CVE INTEL âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // Ã¢ÂÂÃ¢ÂÂ CVE INTEL Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
   window.loadVulns = async function(){
     var cEl=document.getElementById('vuln-critical');
     var kEl=document.getElementById('vuln-kev');
@@ -224,7 +224,7 @@
   var posBtn=document.querySelector('#page-posture button');
   if(posBtn) posBtn.onclick=function(e){e.stopImmediatePropagation();window.runPostureScan&&window.runPostureScan();};
 
-  // ââ NEWS FEED âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // Ã¢ÂÂÃ¢ÂÂ NEWS FEED Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
   window.loadNews = async function(category){
     category = category || 'headlines';
     var el=document.getElementById('news-feed');
@@ -278,39 +278,49 @@
     }catch(e){el.innerHTML='<div style="color:#ff3b5c;">'+esc(e.message)+'</div>';}
   };
 
-  // ââ NAV WIRING ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // Ã¢ÂÂÃ¢ÂÂ NAV WIRING Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
   // Use document-level capture to intercept ALL nav clicks reliably
   document.addEventListener('click', function(e){
     var btn = e.target.closest('[data-page]');
     if(!btn) return;
-    // Only fire for nav buttons â ignore data-page elements inside .page content areas
     if(btn.closest('.page')) return;
     var name = btn.dataset.page;
     var newPages = ['darkweb','investigate','posture','vuln','news'];
     if(newPages.indexOf(name) === -1) return;
     e.stopImmediatePropagation();
     e.preventDefault();
-    // Switch page
     document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
     document.querySelectorAll('.nvb,[data-page]').forEach(function(b){b.classList.remove('active');});
     var pg = document.getElementById('page-'+name);
     if(pg) pg.classList.add('active');
     btn.classList.add('active');
-    // Load data
     var tok = localStorage.getItem('dw_access_token');
     function go(){
-      if(name==='darkweb')    window.loadDarkWeb();
-      if(name==='vuln')       window.loadVulns();
-      if(name==='news'){      window.loadNews(); }
-      if(name==='investigate'){
-        window.runInvestigation();
-      }
-      if(name==='posture'){
-        window.runPostureScan();
-      }
+      if(name==='darkweb') window.loadDarkWeb && window.loadDarkWeb();
+      if(name==='vuln')    window.loadVulns && window.loadVulns();
+      if(name==='news')    window.loadNews && window.loadNews();
+      if(name==='investigate') window.runInvestigation && window.runInvestigation();
+      if(name==='posture') window.runPostureScan && window.runPostureScan();
     }
     tok ? go() : (window.dwShowLoginModal && window.dwShowLoginModal(go));
   }, true);
+
+  // Handle Pro Intel sidebar section clicks for new modules
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('.pi-nav-btn[data-section]');
+    if(!btn) return;
+    var section = btn.dataset.section;
+    var tok = localStorage.getItem('dw_access_token');
+    function go(){
+      if(section==='darkweb')     window.loadDarkWeb && window.loadDarkWeb();
+      if(section==='cve')         window.loadVulns && window.loadVulns();
+      if(section==='news')        window.loadNews && window.loadNews('headlines');
+      if(section==='investigate') { /* user types and clicks */ }
+      if(section==='posture')     { /* user types and clicks */ }
+    }
+    // Small delay to let piNav() render the section first
+    setTimeout(function(){ tok ? go() : null; }, 100);
+  });
 
   // News tab buttons
   document.addEventListener('click', function(e){
