@@ -11,13 +11,17 @@ logger = logging.getLogger(__name__)
 
 _BASE = "https://finnhub.io/api/v1"
 
+# ETF/crypto symbols available on Finnhub free tier
 _SYMBOLS = [
-    ("GC=F", "Gold", "commodity"),
-    ("CL=F", "WTI Crude Oil", "commodity"),
-    ("DX-Y.NYB", "US Dollar Index", "currency"),
-    ("^TNX", "10Y Treasury Yield", "bond"),
-    ("^VIX", "VIX", "volatility"),
-    ("BTC-USD", "Bitcoin", "crypto"),
+    ("SPY",              "S&P 500",          "equity"),
+    ("QQQ",              "Nasdaq 100",        "equity"),
+    ("GLD",              "Gold (GLD ETF)",    "commodity"),
+    ("USO",              "WTI Crude Oil",     "commodity"),
+    ("UUP",              "US Dollar Index",   "currency"),
+    ("TLT",              "20Y Treasury",      "bond"),
+    ("VIXY",             "VIX (Volatility)",  "volatility"),
+    ("BINANCE:BTCUSDT",  "Bitcoin",           "crypto"),
+    ("BINANCE:ETHUSD",   "Ethereum",          "crypto"),
 ]
 
 
@@ -27,7 +31,7 @@ async def fetch_quote(symbol: str) -> Dict[str, Any]:
         logger.warning("FINNHUB_KEY not configured")
         return {}
     try:
-        async with httpx.AsyncClient(timeout=20.0, verify=True) as client:
+        async with httpx.AsyncClient(timeout=20.0) as client:
             resp = await client.get(
                 f"{_BASE}/quote",
                 params={"symbol": symbol, "token": settings.finnhub_key},
@@ -35,7 +39,6 @@ async def fetch_quote(symbol: str) -> Dict[str, Any]:
             resp.raise_for_status()
             data = resp.json()
         if not data or not data.get("c"):
-            logger.warning(f"Finnhub {symbol}: no price data")
             return {}
         return {
             "symbol": symbol,
