@@ -1,4 +1,4 @@
-"""Dark Web Monitor router — /darkweb/*"""
+"""Dark Web Monitor router â /darkweb/*"""
 import logging
 from fastapi import APIRouter, Depends, Query
 from src.auth.dependencies import get_current_user, require_analyst
@@ -43,3 +43,32 @@ async def darkweb_summary(_: User = Depends(require_analyst)):
             "top_groups":sorted(groups.items(),key=lambda x:x[1],reverse=True)[:8],
             "top_sectors":sorted(sectors.items(),key=lambda x:x[1],reverse=True)[:6],
             "top_countries":sorted(countries.items(),key=lambda x:x[1],reverse=True)[:6]}
+
+
+@router.get("/intelx/search")
+async def intelx_search(q: str, limit: int = 10) -> Dict[str, Any]:
+    """Search Intelligence X for dark web mentions."""
+    if not q:
+        return {"results": [], "count": 0}
+    from src.shared.cache import cache
+    cache_key = f"intelx:search:{q[:50]}:v1"
+    cached = await cache.get(cache_key)
+    if cached:
+        return cached
+    from src.darkweb.intelx import search
+    result = await search(q, limit=limit)
+    await cache.set(cache_key, result, ttl=900)
+    return result
+
+@router.get("/intelx/credentials/{domain}")
+async def intelx_credentials(domain: str) -> Dict[str, Any]:
+    """Search IntelX for leaked credentials for a domain."""
+    from src.shared.cache import cache
+    cache_key = f"intelx:creds:{domain}:v1"
+    cached = await cache.get(cache_key)
+    if cached:
+        return cached
+    from src.darkweb.intelx import search_credentials
+    result = await search_credentials(domain)
+    await cache.set(cache_key, result, ttl=900)
+    return result
