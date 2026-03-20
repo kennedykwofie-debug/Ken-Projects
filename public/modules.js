@@ -335,89 +335,98 @@
   });
 
 
-  // ── VulnCheck active exploits ─────────────────────────────────────────
-  window.loadVulncheckExploited = async function(){
-    var el = document.getElementById('vuln-exploited');
-    if(!el) return;
-    el.innerHTML = '<div style="color:#64748b;font-size:12px;">Loading...</div>';
-    var data = await authH(PROAPI+'/vuln/exploited?limit=15');
-    if(!data){ el.innerHTML='<div style="color:#ff3b5c;font-size:12px;">Failed to load</div>'; return; }
-    var cves = data.cves||[];
-    if(cves.length===0){ el.innerHTML='<div style="color:#64748b;font-size:12px;">No data</div>'; return; }
-    var h='';
-    cves.forEach(function(c){
-      var rang=c.ransomware?'<span style="background:#ff3b5c22;color:#ff3b5c;font-size:9px;padding:1px 5px;border-radius:3px;margin-left:6px;">RANSOMWARE</span>':'';
-      var epss=c.epss?'<span style="color:#f5c518;font-size:10px;margin-left:6px;">EPSS '+(parseFloat(c.epss)*100).toFixed(1)+'%</span>':'';
-      h+='<div style="background:#ff3b5c0a;border:1px solid #ff3b5c22;border-radius:6px;padding:10px 12px;margin-bottom:6px;">';
-      h+='<div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin-bottom:4px;">';
-      h+='<span style="color:#ff3b5c;font-weight:700;font-size:12px;font-family:monospace;">'+(c.id||c.name||'Unknown')+'</span>'+rang+epss+'</div>';
-      if(c.description) h+='<div style="color:#94a3b8;font-size:11px;">'+(c.description||'').substring(0,150)+'</div>';
-      h+='</div>';
-    });
-    el.innerHTML=h;
-  };
-
   // ── IntelX dark web search ────────────────────────────────────────────
   window.searchIntelX = async function(query){
     if(!query) return;
-    var resEl=document.getElementById('intelx-results');
-    if(resEl) resEl.innerHTML='<div style="color:#64748b;font-size:12px;">Searching Intelligence X...</div>';
-    var data=await authH(PROAPI+'/darkweb/intelx/search?q='+encodeURIComponent(query)+'&limit=10');
-    if(!data||!resEl){ if(resEl) resEl.innerHTML='<div style="color:#ff3b5c;font-size:12px;">Search failed</div>'; return; }
-    var recs=data.results||[];
-    if(recs.length===0){ resEl.innerHTML='<div style="color:#64748b;font-size:12px;">No results found in Intelligence X</div>'; return; }
-    var h='<div style="color:#a78bfa;font-size:10px;letter-spacing:1px;font-weight:700;margin-bottom:10px;">'+recs.length+' RESULTS FOUND ('+data.count+' total)</div>';
+    var resEl = document.getElementById('intelx-results');
+    if(resEl) resEl.innerHTML = '<div style="color:#64748b;font-size:12px;padding:12px;">Searching Intelligence X...</div>';
+    var data = await authH(PROAPI+'/darkweb/intelx/search?q='+encodeURIComponent(query)+'&limit=10');
+    if(!resEl) return;
+    if(!data){ resEl.innerHTML='<div style="color:#ff3b5c;font-size:12px;padding:12px;">Search failed — check your IntelX key</div>'; return; }
+    var recs = data.results||[];
+    if(recs.length===0){ resEl.innerHTML='<div style="color:#64748b;font-size:12px;padding:12px;">No results found in Intelligence X</div>'; return; }
+    var h = '<div style="color:#a78bfa;font-size:10px;letter-spacing:1px;font-weight:700;margin-bottom:10px;">'+recs.length+' RESULTS ('+data.count+' total in corpus)</div>';
     recs.forEach(function(r){
-      var bktColor={'pastes':'#f5c518','leaks':'#ff3b5c','darkweb':'#ff3b5c'}[r.bucket]||'#64748b';
-      h+='<div style="background:#0f1117;border:1px solid #1e293b;border-radius:6px;padding:8px 12px;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;">';
-      h+='<span style="color:#e2e8f0;font-size:12px;flex:1;margin-right:8px;">'+(r.name||'').substring(0,70)+'</span>';
-      h+='<span style="background:'+bktColor+'22;color:'+bktColor+';font-size:9px;padding:2px 6px;border-radius:3px;margin-right:8px;white-space:nowrap;">'+(r.bucket||'unknown')+'</span>';
-      h+='<span style="color:#475569;font-size:10px;white-space:nowrap;">'+(r.date||'').substring(0,10)+'</span></div>';
+      var bc = {'pastes':'#f5c518','leaks':'#ff3b5c','darkweb':'#ff3b5c'}[r.bucket]||'#64748b';
+      h += '<div style="background:#0f1117;border:1px solid #1e293b;border-radius:6px;padding:8px 12px;margin-bottom:4px;display:flex;align-items:center;gap:8px;">';
+      h += '<span style="color:#e2e8f0;font-size:12px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(r.name||'').substring(0,70)+'</span>';
+      h += '<span style="background:'+bc+'22;color:'+bc+';font-size:9px;padding:2px 6px;border-radius:3px;white-space:nowrap;">'+(r.bucket||'unknown')+'</span>';
+      h += '<span style="color:#475569;font-size:10px;white-space:nowrap;">'+(r.date||'').substring(0,10)+'</span>';
+      h += '</div>';
     });
-    resEl.innerHTML=h;
+    resEl.innerHTML = h;
   };
 
   // ── Credentials breach search ─────────────────────────────────────────
   window.searchCredentials = async function(domain){
+    if(!domain){ domain = document.getElementById('cred-domain-input')?.value; }
     if(!domain) return;
-    var resEl=document.getElementById('cred-results');
-    if(resEl) resEl.innerHTML='<div style="color:#64748b;font-size:12px;">Searching breach databases...</div>';
-    var data=await authH(PROAPI+'/credentials/search/'+encodeURIComponent(domain));
-    if(!data||!resEl){ if(resEl) resEl.innerHTML='<div style="color:#ff3b5c;font-size:12px;">Search failed</div>'; return; }
-    var total=data.total_exposed||0;
-    if(total===0){ resEl.innerHTML='<div style="color:#22c55e;padding:12px;font-size:13px;">&#10003; No exposed credentials found for this domain</div>'; return; }
-    var dh=data.dehashed||{entries:[],total:0};
-    var ll=data.leaklookup||{breaches:[],total:0};
-    var h='<div style="color:#ff3b5c;font-weight:700;font-size:14px;margin-bottom:14px;">'+total+' EXPOSED RECORDS FOUND</div>';
+    var resEl = document.getElementById('cred-results');
+    if(resEl) resEl.innerHTML = '<div style="color:#64748b;font-size:12px;padding:12px;">Searching DeHashed and Leak-Lookup...</div>';
+    var data = await authH(PROAPI+'/credentials/search/'+encodeURIComponent(domain));
+    if(!resEl) return;
+    if(!data){ resEl.innerHTML='<div style="color:#ff3b5c;font-size:12px;padding:12px;">Search failed</div>'; return; }
+    var total = data.total_exposed||0;
+    if(total===0){
+      resEl.innerHTML='<div style="color:#22c55e;padding:14px;font-size:13px;display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">&#10003;</span> No exposed credentials found for <strong>'+esc(domain)+'</strong></div>';
+      return;
+    }
+    var dh = data.dehashed||{entries:[],total:0};
+    var ll = data.leaklookup||{breaches:[],total:0};
+    var h = '<div style="background:#ff3b5c11;border:1px solid #ff3b5c33;border-radius:8px;padding:14px;margin-bottom:16px;">';
+    h += '<div style="color:#ff3b5c;font-weight:700;font-size:16px;">&#9888; '+total+' Exposed Records Found</div>';
+    h += '<div style="color:#94a3b8;font-size:12px;margin-top:4px;">Domain: <strong>'+esc(domain)+'</strong></div></div>';
     if(dh.total>0){
-      h+='<div style="color:#64748b;font-size:10px;letter-spacing:1px;font-weight:700;margin-bottom:8px;">DEHASHED ('+dh.total+' records)</div>';
-      (dh.entries||[]).slice(0,8).forEach(function(e){
-        h+='<div style="background:#ff3b5c08;border:1px solid #ff3b5c22;border-radius:6px;padding:8px 12px;margin-bottom:4px;display:flex;gap:10px;font-size:11px;">';
-        h+='<span style="color:#e2e8f0;flex:1;">'+(e.email||e.username||'(redacted)')+'</span>';
-        h+='<span style="color:#64748b;">'+esc(e.database_name)+'</span>';
-        if(e.password||e.hashed_password) h+='<span style="color:#f5c518;">&#128274;</span>';
-        h+='</div>';
+      h += '<div style="color:#64748b;font-size:10px;letter-spacing:1px;font-weight:700;margin-bottom:8px;">DEHASHED — '+dh.total+' RECORDS</div>';
+      (dh.entries||[]).slice(0,10).forEach(function(e){
+        h += '<div style="background:#ff3b5c06;border:1px solid #ff3b5c1a;border-radius:6px;padding:8px 12px;margin-bottom:4px;display:flex;gap:12px;font-size:11px;align-items:center;">';
+        h += '<span style="color:#e2e8f0;flex:1;">'+esc(e.email||e.username||'(redacted)')+'</span>';
+        h += '<span style="color:#64748b;">'+esc(e.database_name||'')+'</span>';
+        if(e.password||e.hashed_password) h += '<span style="color:#f5c518;font-size:13px;" title="Password hash exposed">&#128274;</span>';
+        h += '</div>';
       });
+      if(dh.total>10) h += '<div style="color:#64748b;font-size:11px;padding:6px 12px;">...and '+(dh.total-10)+' more records</div>';
     }
     if(ll.total>0){
-      h+='<div style="color:#64748b;font-size:10px;letter-spacing:1px;font-weight:700;margin:12px 0 8px;">LEAK-LOOKUP ('+ll.total+' breach sources)</div>';
-      (ll.breaches||[]).slice(0,8).forEach(function(b){
-        h+='<div style="background:#f5c51808;border:1px solid #f5c51822;border-radius:4px;padding:6px 10px;margin-bottom:3px;color:#e2e8f0;font-size:11px;">'+(b.source||b)+' '+(b.count?'('+b.count+')':'')+'</div>';
+      h += '<div style="color:#64748b;font-size:10px;letter-spacing:1px;font-weight:700;margin:16px 0 8px;">LEAK-LOOKUP — '+ll.total+' BREACH SOURCES</div>';
+      (ll.breaches||[]).slice(0,10).forEach(function(b){
+        h += '<div style="background:#f5c51806;border:1px solid #f5c5181a;border-radius:4px;padding:6px 12px;margin-bottom:3px;display:flex;justify-content:space-between;font-size:11px;">';
+        h += '<span style="color:#e2e8f0;">'+esc(b.source||String(b))+'</span>';
+        if(b.count) h += '<span style="color:#f5c518;">'+b.count+' records</span>';
+        h += '</div>';
       });
     }
-    resEl.innerHTML=h;
+    resEl.innerHTML = h;
   };
 
-  // Wire credentials + intelx buttons via pi-nav click
-  setTimeout(function(){
-    var credBtn = document.querySelector('.pi-nav-btn[data-section="credentials"]');
-    var ixBtn   = document.querySelector('.pi-nav-btn[data-section="intelx"]');
-    // auto-load vulncheck exploited when CVE section clicked
-    document.addEventListener('click', function(e){
-      var btn = e.target.closest('.pi-nav-btn[data-section="cve"]');
-      if(btn) setTimeout(function(){ window.loadVulncheckExploited && window.loadVulncheckExploited(); }, 400);
+  // ── VulnCheck exploited feed ──────────────────────────────────────────
+  window.loadVulncheckExploited = async function(){
+    var el = document.getElementById('vuln-exploited');
+    if(!el) return;
+    el.innerHTML = '<div style="color:#64748b;font-size:12px;">Loading active exploitation data...</div>';
+    var data = await authH(PROAPI+'/vuln/exploited?limit=15');
+    if(!data){ el.innerHTML='<div style="color:#ff3b5c;font-size:12px;">VulnCheck unavailable</div>'; return; }
+    var cves = data.cves||[];
+    if(cves.length===0){ el.innerHTML='<div style="color:#64748b;font-size:12px;">No active exploitation data</div>'; return; }
+    var h = '<div style="color:#ff3b5c;font-size:10px;letter-spacing:1px;font-weight:700;margin-bottom:8px;">'+cves.length+' CVEs ACTIVELY EXPLOITED IN THE WILD</div>';
+    cves.forEach(function(c){
+      var rang = c.ransomware ? '<span style="background:#ff3b5c22;color:#ff3b5c;font-size:9px;padding:1px 6px;border-radius:3px;margin-left:6px;">RANSOMWARE</span>' : '';
+      var epss = c.epss ? '<span style="color:#f5c518;font-size:10px;margin-left:8px;">EPSS '+(parseFloat(c.epss)*100).toFixed(1)+'%</span>' : '';
+      h += '<div style="background:#ff3b5c08;border:1px solid #ff3b5c22;border-radius:6px;padding:10px 12px;margin-bottom:6px;">';
+      h += '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin-bottom:4px;">';
+      h += '<span style="color:#ff3b5c;font-weight:700;font-size:12px;font-family:monospace;">'+(c.id||c.name||'Unknown')+'</span>'+rang+epss;
+      h += '</div>';
+      if(c.description) h += '<div style="color:#94a3b8;font-size:11px;line-height:1.4;">'+(c.description||'').substring(0,150)+'...</div>';
+      h += '</div>';
     });
-  }, 600);
+    el.innerHTML = h;
+  };
+
+  // Auto-trigger on CVE section click
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('.pi-nav-btn[data-section="cve"]');
+    if(btn) setTimeout(function(){ window.loadVulncheckExploited&&window.loadVulncheckExploited(); }, 300);
+  });
 
 
 })();
