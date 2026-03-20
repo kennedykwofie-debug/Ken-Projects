@@ -1,4 +1,4 @@
-"""Vulnerability Intelligence router — /vuln/*"""
+"""Vulnerability Intelligence router â /vuln/*"""
 import logging
 from typing import List, Optional
 from fastapi import APIRouter, Depends, Query
@@ -36,3 +36,17 @@ async def critical_cves(_: User = Depends(get_current_user)):
     import asyncio
     cves, kev = await asyncio.gather(cves_task, kev_task)
     return {"recent_critical_cves":cves.get("cves",[]),"actively_exploited_kev":kev.get("vulns",[])[:10],"summary":{"critical_last_14d":cves.get("total",0),"total_kev":kev.get("total",0)}}
+
+
+@router.get("/exploited")
+async def get_exploited(limit: int = 20) -> Dict[str, Any]:
+    """CVEs actively exploited right now via VulnCheck."""
+    from src.shared.cache import cache
+    cached = await cache.get("vulncheck:exploited:v1")
+    if cached:
+        return cached
+    from src.vuln.vulncheck import get_exploited_cves
+    cves = await get_exploited_cves(limit=limit)
+    result = {"cves": cves, "count": len(cves), "source": "vulncheck"}
+    await cache.set("vulncheck:exploited:v1", result, ttl=1800)
+    return result
