@@ -1,6 +1,6 @@
-"""Vulnerability Intelligence router â /vuln/*"""
+"""Vulnerability Intelligence router Ã¢ÂÂ /vuln/*"""
 import logging
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel
 from src.auth.dependencies import get_current_user, require_analyst
