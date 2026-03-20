@@ -15,14 +15,9 @@
     <button class="nvb active" data-page="intel">Intel Feed</button>
     <button class="nvb" data-page="assets">Asset Monitor</button>
     <button class="nvb" data-page="creds">Credential Leaks</button>
-    <button class="nvb" data-page="pro">Pro Intel ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¦</button>
+    <button class="nvb" data-page="pro">Pro Intel ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¦</button>
     <button class="nvb" data-page="alerts">Alerts <span id="alert-count" class="alert-dot" style="display:none">0</span></button>
-    <button class="nvb" data-page="darkweb">Dark Web</button>
-    <button class="nvb" data-page="investigate">Investigate</button>
-    <button class="nvb" data-page="posture">Posture</button>
-    <button class="nvb" data-page="vuln">CVE Intel</button>
-    <button class="nvb" data-page="news">News Feed</button>
-  </nav>
+    </nav>
   <span class="clk" id="ck">00:00:00 UTC</span>
 </div>
 
@@ -218,7 +213,8 @@
 <div class="pi-shell">
   <nav class="pi-nav">
     <div class="pi-nav-logo">&#10022; PRO INTEL</div>
-    <button class="pi-nav-btn active" data-section="geo">
+    <div class="pi-nav-group-label">GEOPOLITICAL & CYBER</div>
+        <button class="pi-nav-btn active" data-section="geo">
       <span class="pi-nav-icon">&#127758;</span>
       <span class="pi-nav-label">Geo Risk</span>
       <span class="pi-nav-badge" id="pi-geo-badge">50</span>
@@ -238,6 +234,30 @@
       <span class="pi-nav-label">AI Analysis</span>
       <span class="pi-nav-badge pi-ai-badge" id="pi-ai-badge">PRO</span>
     </button>
+        <div class="pi-nav-group-label">THREAT INTELLIGENCE</div>
+        <button class="pi-nav-btn" data-section="darkweb">
+          <span class="pi-nav-icon">&#128373;</span>
+          <span class="pi-nav-label">Dark Web</span>
+          <span class="pi-nav-badge" id="pi-dw-badge"></span>
+        </button>
+        <button class="pi-nav-btn" data-section="cve">
+          <span class="pi-nav-icon">&#9888;</span>
+          <span class="pi-nav-label">CVE Intel</span>
+          <span class="pi-nav-badge" id="pi-cve-badge"></span>
+        </button>
+        <button class="pi-nav-btn" data-section="news">
+          <span class="pi-nav-icon">&#128240;</span>
+          <span class="pi-nav-label">News Feed</span>
+        </button>
+        <div class="pi-nav-group-label">INVESTIGATION</div>
+        <button class="pi-nav-btn" data-section="investigate">
+          <span class="pi-nav-icon">&#128269;</span>
+          <span class="pi-nav-label">Investigate</span>
+        </button>
+        <button class="pi-nav-btn" data-section="posture">
+          <span class="pi-nav-icon">&#127759;</span>
+          <span class="pi-nav-label">Posture</span>
+        </button>
     <div class="pi-nav-stats">
       <div class="pi-stat"><div class="pi-stat-val" id="pro-crit-countries">-</div><div class="pi-stat-lbl">Critical</div></div>
       <div class="pi-stat"><div class="pi-stat-val" id="pro-c2-count">-</div><div class="pi-stat-lbl">C2 Servers</div></div>
@@ -258,7 +278,7 @@
         <div id="pro-map-detail" class="pi-map-detail" style="display:none"></div>
       </div>
       <div class="pi-country-list-wrap">
-        <div class="pi-sec-sub-hdr">Top Risk Countries <span style="color:#64748b;font-weight:400;font-size:10px">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ click row to expand risk drivers</span></div>
+        <div class="pi-sec-sub-hdr">Top Risk Countries <span style="color:#64748b;font-weight:400;font-size:10px">ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ click row to expand risk drivers</span></div>
         <div id="pro-geo-list" class="pi-country-list"></div>
       </div>
     </section>
@@ -277,7 +297,7 @@
       <div id="pro-econ-list" class="pi-econ-body"><div class="lt">Loading...</div></div>
     </section>
     <section class="pi-section" id="pi-sec-ai">
-      <div class="pi-sec-hdr"><span>&#129504; AI Risk Assessment</span><span class="pi-sec-sub" style="color:#a78bfa;border-color:#a78bfa">Powered by Groq ÃÂÃÂÃÂÃÂ· Llama 3.3</span></div>
+      <div class="pi-sec-hdr"><span>&#129504; AI Risk Assessment</span><span class="pi-sec-sub" style="color:#a78bfa;border-color:#a78bfa">Powered by Groq ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ· Llama 3.3</span></div>
       <div class="pi-ai-body">
         <div class="pi-ai-status-row"><span>Model Status:</span><span id="pro-ai-status" style="color:#ff3b5c;font-weight:700">OFFLINE</span></div>
         <div class="pi-ai-hint">Describe a threat scenario, geopolitical event, or market condition for AI-powered intelligence analysis.</div>
@@ -286,7 +306,56 @@
         <div id="pro-ai-result" class="pi-ai-result"></div>
       </div>
     </section>
-  </main>
+  
+        <section class="pi-section" id="pi-sec-darkweb">
+          <div class="pi-sec-hdr"><span>&#128373; Dark Web Monitor</span><button onclick="window.loadDarkWeb&&window.loadDarkWeb()" style="background:#ff3b5c22;border:1px solid #ff3b5c44;color:#ff3b5c;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:11px;margin-left:auto;">&#8635; Refresh</button></div>
+          <div id="dw-stats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div><div style="color:#64748b;font-size:10px;letter-spacing:1px;margin-bottom:10px;">RECENT RANSOMWARE VICTIMS</div><div id="dw-victims"></div></div>
+            <div>
+              <div style="color:#64748b;font-size:10px;letter-spacing:1px;margin-bottom:10px;">TOP ACTIVE GROUPS</div><div id="dw-groups"></div>
+              <div style="color:#64748b;font-size:10px;letter-spacing:1px;margin:14px 0 10px;">TOP TARGETED SECTORS</div><div id="dw-sectors"></div>
+              <div style="margin-top:16px;"><div style="color:#64748b;font-size:10px;letter-spacing:1px;margin-bottom:8px;">DOMAIN BREACH CHECK</div>
+              <div style="display:flex;gap:8px;"><input id="dw-domain-input" type="text" placeholder="domain.com" style="flex:1;background:#1e293b;border:1px solid #334155;border-radius:4px;padding:7px 10px;color:#e2e8f0;font-size:12px;outline:none;" onkeydown="if(event.key==='Enter')window.checkDomainBreaches&&window.checkDomainBreaches()">
+              <button onclick="window.checkDomainBreaches&&window.checkDomainBreaches()" style="background:#ff3b5c;color:#fff;border:none;border-radius:4px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;">Check</button></div>
+              <div id="dw-breach-result" style="margin-top:8px;"></div></div>
+            </div>
+          </div>
+        </section>
+        <section class="pi-section" id="pi-sec-cve">
+          <div class="pi-sec-hdr"><span>&#9888; CVE Intelligence</span><button onclick="window.loadVulns&&window.loadVulns()" style="background:#a855f722;border:1px solid #a855f744;color:#a855f7;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:11px;margin-left:auto;">&#8635; Refresh</button></div>
+          <div style="display:flex;gap:10px;margin-bottom:16px;"><input id="vuln-search" type="text" placeholder="Search CVEs: Apache, Log4j, Windows RDP..." style="flex:1;background:#1e293b;border:1px solid #334155;border-radius:6px;padding:9px 14px;color:#e2e8f0;font-size:12px;outline:none;" onkeydown="if(event.key==='Enter')window.searchVulns&&window.searchVulns()"><button onclick="window.searchVulns&&window.searchVulns()" style="background:#a855f7;color:#fff;border:none;border-radius:6px;padding:9px 18px;font-size:12px;font-weight:700;cursor:pointer;">Search</button></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div><div style="color:#64748b;font-size:10px;letter-spacing:1px;margin-bottom:10px;">CRITICAL CVEs - LAST 14 DAYS</div><div id="vuln-critical"></div></div>
+            <div><div style="color:#64748b;font-size:10px;letter-spacing:1px;margin-bottom:10px;">CISA ACTIVELY EXPLOITED (KEV)</div><div id="vuln-kev"></div></div>
+          </div>
+          <div id="vuln-search-result" style="margin-top:16px;"></div>
+        </section>
+        <section class="pi-section" id="pi-sec-news">
+          <div class="pi-sec-hdr">
+            <span>&#128240; Intelligence News Feed</span>
+            <div style="display:flex;gap:6px;margin-left:auto;">
+              <button class="news-tab" data-cat="headlines" onclick="window.loadNews&&window.loadNews('headlines')" style="background:#0ea5e9;color:#fff;border:none;border-radius:4px;padding:4px 12px;font-size:10px;font-weight:700;cursor:pointer;">CYBER</button>
+              <button class="news-tab" data-cat="geopolitical" onclick="window.loadNews&&window.loadNews('geopolitical')" style="background:#1e293b;color:#64748b;border:none;border-radius:4px;padding:4px 12px;font-size:10px;font-weight:700;cursor:pointer;">GEO</button>
+              <button class="news-tab" data-cat="cyber" onclick="window.loadNews&&window.loadNews('cyber')" style="background:#1e293b;color:#64748b;border:none;border-radius:4px;padding:4px 12px;font-size:10px;font-weight:700;cursor:pointer;">VULN</button>
+              <input id="news-search-input" type="text" placeholder="Search news..." style="background:#1e293b;border:1px solid #334155;border-radius:4px;padding:4px 10px;color:#e2e8f0;font-size:11px;outline:none;width:140px;" onkeydown="if(event.key==='Enter')window.searchNews&&window.searchNews()">
+            </div>
+          </div>
+          <div id="news-feed" style="max-height:620px;overflow-y:auto;margin-top:12px;"></div>
+        </section>
+        <section class="pi-section" id="pi-sec-investigate">
+          <div class="pi-sec-hdr"><span>&#128269; Investigation Workbench</span></div>
+          <div style="color:#64748b;font-size:11px;margin-bottom:12px;">Enrich any IP address, domain, or file hash across all intelligence sources</div>
+          <div style="display:flex;gap:10px;margin-bottom:20px;"><input id="inv-input" type="text" placeholder="8.8.8.8  |  malware.example.com  |  d41d8cd98f00b204e9800998ecf8427e" style="flex:1;background:#1e293b;border:1px solid #334155;border-radius:6px;padding:10px 14px;color:#e2e8f0;font-size:13px;outline:none;font-family:monospace;" onkeydown="if(event.key==='Enter')window.runInvestigation&&window.runInvestigation()"><button onclick="window.runInvestigation&&window.runInvestigation()" style="background:#f5c518;color:#000;border:none;border-radius:6px;padding:10px 24px;font-size:13px;font-weight:700;cursor:pointer;">Investigate</button></div>
+          <div id="inv-result"></div>
+        </section>
+        <section class="pi-section" id="pi-sec-posture">
+          <div class="pi-sec-hdr"><span>&#127759; Organisational Posture</span></div>
+          <div style="color:#64748b;font-size:11px;margin-bottom:12px;">Scan your domain against Shodan exposure data and HIBP credential breaches</div>
+          <div style="display:flex;gap:10px;margin-bottom:20px;"><input id="pos-domain" type="text" placeholder="yourdomain.com" style="flex:1;background:#1e293b;border:1px solid #334155;border-radius:6px;padding:10px 14px;color:#e2e8f0;font-size:13px;outline:none;" onkeydown="if(event.key==='Enter')window.runPostureScan&&window.runPostureScan()"><button onclick="window.runPostureScan&&window.runPostureScan()" style="background:#00d4aa;color:#000;border:none;border-radius:6px;padding:10px 24px;font-size:13px;font-weight:700;cursor:pointer;">Scan</button></div>
+          <div id="pos-result"></div>
+        </section>
+      </main>
 </div>
 </div>
 
@@ -303,11 +372,10 @@
 <script src="/app.js" defer></script>
   <script src="/auth.js" defer></script>
 
-  <div class="page" id="page-darkweb"><div class="dw-wrap" style="padding:20px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;"><span style="color:#ff3b5c;font-size:11px;font-weight:700;letter-spacing:2px;">DARK WEB MONITOR</span><button onclick="if(window.dwGatePro&&!window.dwGatePro())return;loadDarkWeb()" style="background:#1e293b;border:1px solid #334155;color:#94a3b8;padding:5px 14px;border-radius:4px;cursor:pointer;font-size:11px;">&#8635; Refresh</button></div><div id="dw-stats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;"><div><div style="color:#64748b;font-size:10px;letter-spacing:1px;margin-bottom:10px;">RECENT RANSOMWARE VICTIMS</div><div id="dw-victims"></div></div><div><div style="color:#64748b;font-size:10px;letter-spacing:1px;margin-bottom:10px;">TOP ACTIVE GROUPS</div><div id="dw-groups"></div><div style="color:#64748b;font-size:10px;letter-spacing:1px;margin:14px 0 10px;">TOP TARGETED SECTORS</div><div id="dw-sectors"></div><div style="margin-top:16px;"><div style="color:#64748b;font-size:10px;letter-spacing:1px;margin-bottom:8px;">DOMAIN BREACH CHECK</div><div style="display:flex;gap:8px;"><input id="dw-domain-input" type="text" placeholder="domain.com" style="flex:1;background:#1e293b;border:1px solid #334155;border-radius:4px;padding:7px 10px;color:#e2e8f0;font-size:12px;outline:none;"><button onclick="window.checkDomainBreaches&&window.checkDomainBreaches()" style="background:#ff3b5c;color:#fff;border:none;border-radius:4px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;">Check</button></div><div id="dw-breach-result" style="margin-top:8px;"></div></div></div></div></div></div>
-  <div class="page" id="page-investigate"><div style="padding:20px;"><div style="margin-bottom:16px;"><span style="color:#f5c518;font-size:11px;font-weight:700;letter-spacing:2px;">INVESTIGATION WORKBENCH</span><span style="color:#64748b;font-size:11px;margin-left:12px;">Enter any IP address, domain, or file hash to enrich across all intelligence sources</span></div><div style="display:flex;gap:10px;margin-bottom:20px;"><input id="inv-input" type="text" placeholder="8.8.8.8 | malware.example.com | d41d8cd98f00b204e9800998ecf8427e" style="flex:1;background:#1e293b;border:1px solid #334155;border-radius:6px;padding:10px 14px;color:#e2e8f0;font-size:13px;outline:none;font-family:monospace;"><button onclick="window.runInvestigation&&window.runInvestigation()" style="background:#f5c518;color:#000;border:none;border-radius:6px;padding:10px 24px;font-size:13px;font-weight:700;cursor:pointer;">Investigate</button></div><div id="inv-result"></div></div></div>
-  <div class="page" id="page-posture"><div style="padding:20px;"><div style="margin-bottom:16px;"><span style="color:#00d4aa;font-size:11px;font-weight:700;letter-spacing:2px;">ORGANISATIONAL POSTURE ASSESSMENT</span><span style="color:#64748b;font-size:11px;margin-left:12px;">Scan your domain against Shodan exposure data and HIBP credential breaches</span></div><div style="display:flex;gap:10px;margin-bottom:20px;"><input id="pos-domain" type="text" placeholder="yourdomain.com" style="flex:1;background:#1e293b;border:1px solid #334155;border-radius:6px;padding:10px 14px;color:#e2e8f0;font-size:13px;outline:none;"><button onclick="window.runPostureScan&&window.runPostureScan()" style="background:#00d4aa;color:#000;border:none;border-radius:6px;padding:10px 24px;font-size:13px;font-weight:700;cursor:pointer;">Scan</button></div><div id="pos-result"></div></div></div>
-  <div class="page" id="page-vuln"><div style="padding:20px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;"><span style="color:#a855f7;font-size:11px;font-weight:700;letter-spacing:2px;">CVE INTELLIGENCE</span><button onclick="if(window.dwGatePro&&!window.dwGatePro())return;loadVulns()" style="background:#1e293b;border:1px solid #334155;color:#94a3b8;padding:5px 14px;border-radius:4px;cursor:pointer;font-size:11px;">&#8635; Refresh</button></div><div style="display:flex;gap:10px;margin-bottom:16px;"><input id="vuln-search" type="text" placeholder="Search CVEs: Apache, Log4j, Windows RDP..." style="flex:1;background:#1e293b;border:1px solid #334155;border-radius:6px;padding:9px 14px;color:#e2e8f0;font-size:12px;outline:none;"><button onclick="window.searchVulns&&window.searchVulns()" style="background:#a855f7;color:#fff;border:none;border-radius:6px;padding:9px 18px;font-size:12px;font-weight:700;cursor:pointer;">Search</button></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;"><div><div style="color:#64748b;font-size:10px;letter-spacing:1px;margin-bottom:10px;">CRITICAL CVEs Ã¢ÂÂ LAST 14 DAYS</div><div id="vuln-critical"></div></div><div><div style="color:#64748b;font-size:10px;letter-spacing:1px;margin-bottom:10px;">CISA ACTIVELY EXPLOITED (KEV)</div><div id="vuln-kev"></div></div></div><div id="vuln-search-result"></div></div></div>
+  
+  
+  
   <script src="/modules.js" defer></script>
-  <div class="page" id="page-news"><div style="padding:20px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;"><span style="color:#0ea5e9;font-size:11px;font-weight:700;letter-spacing:2px;">INTELLIGENCE NEWS FEED</span><div style="display:flex;gap:6px;"><button class="news-tab" data-cat="headlines" onclick="loadNews('headlines')" style="background:#0ea5e9;color:#fff;border:none;border-radius:4px;padding:4px 12px;font-size:10px;font-weight:700;cursor:pointer;letter-spacing:1px;">CYBER</button><button class="news-tab" data-cat="geopolitical" onclick="loadNews('geopolitical')" style="background:#1e293b;color:#64748b;border:none;border-radius:4px;padding:4px 12px;font-size:10px;font-weight:700;cursor:pointer;letter-spacing:1px;">GEO</button><button class="news-tab" data-cat="cyber" onclick="loadNews('cyber')" style="background:#1e293b;color:#64748b;border:none;border-radius:4px;padding:4px 12px;font-size:10px;font-weight:700;cursor:pointer;letter-spacing:1px;">VULN</button><input id="news-search-input" type="text" placeholder="Search news..." style="background:#1e293b;border:1px solid #334155;border-radius:4px;padding:4px 10px;color:#e2e8f0;font-size:11px;outline:none;width:140px;" onkeydown="if(event.key==='Enter')loadNews('search?q='+encodeURIComponent(this.value))"></div></div><div id="news-feed" style="max-height:600px;overflow-y:auto;"></div></div></div>
+  
 </body>
 </html>
