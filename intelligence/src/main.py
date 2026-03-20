@@ -17,6 +17,7 @@ from src.darkweb.router import router as darkweb_router
 from src.investigate.router import router as investigate_router
 from src.posture.router import router as posture_router
 from src.vuln.router import router as vuln_router
+from src.news.router import router as news_router
 from src.db.database import init_db
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -29,7 +30,7 @@ async def lifespan(app: FastAPI):
     await init_db()
     yield
 
-app = FastAPI(title="DARKWATCH Pro Intelligence API", description="Multi-domain threat intelligence platform", version="2.1.0", lifespan=lifespan)
+app = FastAPI(title="DARKWATCH Pro Intelligence API", description="Multi-domain threat intelligence platform", version='2.2.0', lifespan=lifespan)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=False, allow_methods=["*"], allow_headers=["*"])
@@ -45,11 +46,12 @@ app.include_router(darkweb_router)
 app.include_router(investigate_router)
 app.include_router(posture_router)
 app.include_router(vuln_router)
+app.include_router(news_router)
 
 @app.get("/health")
 async def health():
-    return {"status":"ok","service":"darkwatch-pro-intelligence","version":"2.1.0"}
+    return {"status":"ok","service":"darkwatch-pro-intelligence","version":"2.2.0"}
 
 @app.get("/")
 async def root():
-    return {"service":"DARKWATCH Pro Intelligence API","version":"2.1.0","modules":["geo","cyber","economic","ai","darkweb","investigate","posture","vuln"]}
+    return {"service":"DARKWATCH Pro Intelligence API","version":"2.2.0","modules":["geo","cyber","economic","ai","darkweb","investigate","posture","vuln"]}
