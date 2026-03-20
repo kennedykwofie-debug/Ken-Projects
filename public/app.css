@@ -106,7 +106,7 @@ td{padding:6px;border-bottom:1px solid #1e2630;vertical-align:top}tr:hover td{ba
 #rb .br:nth-child(5) .bf{background-color:#ff8c42!important}
 
 
-/* ── New page layout classes ── */
+/* ââ New page layout classes ââ */
 .page{display:none}.page.active{display:block}
 .page-toolbar{background:var(--surface2,#161b22);border-bottom:1px solid var(--border,#1e2630);padding:8px 14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .page-toolbar.flat{background:transparent;border-bottom:1px solid var(--border,#1e2630);padding:8px 14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -189,7 +189,7 @@ td{padding:6px;border-bottom:1px solid #1e2630;vertical-align:top}tr:hover td{ba
 #rb .br:nth-child(4) .bf{background-color:#f5c518!important}
 #rb .br:nth-child(5) .bf{background-color:#ff8c42!important}
 
-/* ── Creds page fixes ── */
+/* ââ Creds page fixes ââ */
 .page-toolbar.flat{background:#0f1318;border-bottom:1px solid #1e2630;padding:8px 20px;display:flex;align-items:center;gap:8px;min-height:44px;flex-wrap:wrap}
 .page-toolbar.flat .tagline{font-size:11px;color:#64748b;font-family:'JetBrains Mono',monospace}
 .stat-card.red::before{background:#ff3b5c}
@@ -428,3 +428,7 @@ td{padding:6px;border-bottom:1px solid #1e2630;vertical-align:top}tr:hover td{ba
 .ct-pulse-meta{display:flex;gap:10px;align-items:center}
 .ct-pulse-author{font-size:10px;color:#a78bfa}
 .ct-pulse-ioc{font-size:10px;color:#64748b;background:#111820;border:1px solid #1e2630;padding:1px 7px;border-radius:10px}
+
+/* Pro Intel sidebar group labels */
+.pi-nav-group-label{color:#334155;font-size:9px;letter-spacing:2px;font-weight:700;padding:12px 12px 4px;text-transform:uppercase;}
+.pi-nav-btn .pi-nav-icon{font-size:14px;}
