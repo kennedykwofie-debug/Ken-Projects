@@ -45,7 +45,7 @@
       var total=d.total_exposed||0;
       var col=total>1000?'#ff3b5c':total>0?'#f5c518':'#22c55e';
       var h='<div style="color:'+col+';font-weight:700;font-size:13px;margin-bottom:6px;">'+total.toLocaleString()+' credentials exposed</div>';
-      if(d.hibp_status==='key_not_configured') h+='<div style="color:#64748b;font-size:11px;">â  HIBP_KEY not configured in Railway</div>';
+      if(d.hibp_status==='key_not_configured') h+='<div style="color:#64748b;font-size:11px;">Ã¢ÂÂ  HIBP_KEY not configured in Railway</div>';
       else if(d.hibp&&d.hibp.length){h+='<div style="color:#94a3b8;font-size:11px;margin-bottom:4px;">Found in: ';d.hibp.slice(0,5).forEach(function(b){h+='<span style="background:#1e293b;border-radius:3px;padding:1px 6px;margin:0 2px;font-size:10px;">'+esc(b.breach)+'</span>';});h+='</div>';}
       el.innerHTML=h;
     }catch(e){el.innerHTML='<span style="color:#ff3b5c;font-size:12px;">'+esc(e.message)+'</span>';}
@@ -70,7 +70,7 @@
       // VirusTotal block
       var vt=d.virustotal||{};
       if(vt.status==='key_not_configured'){
-        h+='<div style="background:#1e293b;border-radius:6px;padding:10px 14px;margin-bottom:10px;font-size:11px;color:#64748b;">â  VirusTotal: VIRUSTOTAL_KEY not configured in Railway vars</div>';
+        h+='<div style="background:#1e293b;border-radius:6px;padding:10px 14px;margin-bottom:10px;font-size:11px;color:#64748b;">Ã¢ÂÂ  VirusTotal: VIRUSTOTAL_KEY not configured in Railway vars</div>';
       } else if(vt.malicious!==undefined){
         var mal=vt.malicious||0; var col=mal>5?'#ff3b5c':mal>0?'#f5c518':'#22c55e';
         h+='<div style="margin-bottom:14px;"><div style="color:#64748b;font-size:10px;letter-spacing:1px;margin-bottom:8px;">VIRUSTOTAL DETECTIONS</div>';
@@ -87,7 +87,7 @@
         if(gn.name) h+=' &nbsp;<span style="color:#f5c518;font-size:12px;">'+esc(gn.name)+'</span>';
         h+='</div>';
       } else if(d.greynoise&&d.greynoise.status==='key_not_configured'){
-        h+='<div style="background:#1e293b;border-radius:6px;padding:10px 14px;margin-bottom:10px;font-size:11px;color:#64748b;">â  GreyNoise: GREYNOISE_KEY not configured</div>';
+        h+='<div style="background:#1e293b;border-radius:6px;padding:10px 14px;margin-bottom:10px;font-size:11px;color:#64748b;">Ã¢ÂÂ  GreyNoise: GREYNOISE_KEY not configured</div>';
       }
       // Shodan
       if(d.shodan&&d.shodan.ports){
@@ -115,7 +115,7 @@
       if(d.malwarebazaar&&d.malwarebazaar.file_name){
         var mb=d.malwarebazaar;
         h+='<div style="background:#1a0a0a;border:1px solid #ff3b5c33;border-radius:6px;padding:12px 14px;margin-bottom:10px;">';
-        h+='<div style="color:#ff3b5c;font-weight:700;font-size:12px;margin-bottom:6px;">â  KNOWN MALWARE â MalwareBazaar</div>';
+        h+='<div style="color:#ff3b5c;font-weight:700;font-size:12px;margin-bottom:6px;">Ã¢ÂÂ  KNOWN MALWARE Ã¢ÂÂ MalwareBazaar</div>';
         if(mb.file_name) h+='<div style="color:#94a3b8;font-size:11px;">File: <span style="color:#e2e8f0;">'+esc(mb.file_name)+'</span></div>';
         if(mb.signature) h+='<div style="color:#94a3b8;font-size:11px;">Signature: <span style="color:#f5c518;">'+esc(mb.signature)+'</span></div>';
         if(mb.file_type) h+='<div style="color:#94a3b8;font-size:11px;">Type: <span style="color:#e2e8f0;">'+esc(mb.file_type)+'</span></div>';
@@ -156,9 +156,9 @@
       h+='<div>';
       if(d.findings&&d.findings.length){
         h+='<div style="color:#64748b;font-size:10px;letter-spacing:1px;margin-bottom:8px;">FINDINGS</div>';
-        d.findings.forEach(function(f){h+='<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:7px;font-size:12px;"><span style="color:#f97316;margin-top:1px;">â </span><span style="color:#e2e8f0;">'+esc(f)+'</span></div>';});
+        d.findings.forEach(function(f){h+='<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:7px;font-size:12px;"><span style="color:#f97316;margin-top:1px;">Ã¢ÂÂ </span><span style="color:#e2e8f0;">'+esc(f)+'</span></div>';});
       } else {
-        h+='<div style="color:#22c55e;font-size:12px;">â No critical findings detected</div>';
+        h+='<div style="color:#22c55e;font-size:12px;">Ã¢ÂÂ No critical findings detected</div>';
       }
       if(d.shodan&&d.shodan.ports&&d.shodan.ports.length){
         h+='<div style="margin-top:14px;"><div style="color:#64748b;font-size:10px;letter-spacing:1px;margin-bottom:6px;">INTERNET EXPOSURE (SHODAN)</div>';
@@ -167,7 +167,7 @@
         if(d.shodan.vulns&&d.shodan.vulns.length) h+='<div style="font-size:12px;margin-top:3px;color:#ff3b5c;font-weight:700;">'+d.shodan.vulns.length+' CVE(s): '+d.shodan.vulns.slice(0,4).join(', ')+'</div>';
         h+='</div>';
       } else if(d.shodan&&d.shodan.status==='key_not_configured'){
-        h+='<div style="margin-top:10px;font-size:11px;color:#64748b;">â  SHODAN_KEY not configured in Railway vars</div>';
+        h+='<div style="margin-top:10px;font-size:11px;color:#64748b;">Ã¢ÂÂ  SHODAN_KEY not configured in Railway vars</div>';
       }
       if(d.hibp&&d.hibp.exposed_emails!==undefined){
         h+='<div style="margin-top:14px;"><div style="color:#64748b;font-size:10px;letter-spacing:1px;margin-bottom:6px;">CREDENTIAL EXPOSURE (HIBP)</div>';
@@ -176,7 +176,7 @@
         if(d.hibp.breaches&&d.hibp.breaches.length) h+='<div style="font-size:11px;color:#64748b;margin-top:3px;">In breaches: '+d.hibp.breaches.slice(0,5).map(function(b){return '<span style="color:#94a3b8;">'+esc(b)+'</span>';}).join(', ')+'</div>';
         h+='</div>';
       } else if(d.hibp&&d.hibp.status==='key_not_configured'){
-        h+='<div style="margin-top:10px;font-size:11px;color:#64748b;">â  HIBP_KEY not configured in Railway vars</div>';
+        h+='<div style="margin-top:10px;font-size:11px;color:#64748b;">Ã¢ÂÂ  HIBP_KEY not configured in Railway vars</div>';
       }
       h+='</div></div>';
       el.innerHTML=h;
@@ -205,7 +205,7 @@
         ch+='<span style="background:#ff3b5c22;color:#ff3b5c;padding:1px 7px;border-radius:3px;font-size:11px;font-weight:700;">'+c.cvss_score+'</span></div>';
         ch+='<div style="color:#94a3b8;font-size:10px;">'+esc((c.description||'').substring(0,130))+(c.description&&c.description.length>130?'...':'')+'</div></div>';
       });
-      if(cEl) cEl.innerHTML=ch||'<div style="color:#22c55e;font-size:12px;">â No critical CVEs in last 14 days</div>';
+      if(cEl) cEl.innerHTML=ch||'<div style="color:#22c55e;font-size:12px;">Ã¢ÂÂ No critical CVEs in last 14 days</div>';
       // KEV
       var kh='';
       (d.actively_exploited_kev||[]).slice(0,8).forEach(function(k){
@@ -248,7 +248,7 @@
   var vulnInput=document.getElementById('vuln-search');
   if(vulnInput) vulnInput.addEventListener('keydown',function(e){if(e.key==='Enter') window.searchVulns();});
 
-  // PAGE HOOKS â intercept showPage for auto-loading
+  // PAGE HOOKS Ã¢ÂÂ intercept showPage for auto-loading
   var _origShowPage=window.showPage;
   window.showPage=function(name){
     if(typeof _origShowPage==='function') _origShowPage(name);
@@ -258,7 +258,7 @@
   };
 
 
-// ── NAV CLICK FIX ──────────────────────────────────────────────────────────
+// ââ NAV CLICK FIX ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // app.js uses a closure-scoped showPage that doesn't know about new pages.
 // We replace the nav buttons with new ones that directly switch pages + load data.
 (function wireNewNavBtns(){
@@ -284,4 +284,58 @@
     },true);
   });
 })();
+
+// ── NEWS INTELLIGENCE MODULE ────────────────────────────────────────────────
+window.loadNews = async function(category){
+  category = category || 'headlines';
+  var PROAPI='https://spectacular-wisdom-production.up.railway.app';
+  function authH(){var t=localStorage.getItem('dw_access_token');return t?{'Content-Type':'application/json','Authorization':'Bearer '+t}:{'Content-Type':'application/json'};}
+  function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  var el=document.getElementById('news-feed');
+  if(el) el.innerHTML='<div style="color:#64748b;font-size:12px;text-align:center;padding:30px;">Loading intelligence feed...</div>';
+  document.querySelectorAll('.news-tab').forEach(function(b){b.classList.remove('active');b.style.background='#1e293b';b.style.color='#64748b';});
+  var activeTab=document.querySelector('.news-tab[data-cat="'+category+'"]');
+  if(activeTab){activeTab.classList.add('active');activeTab.style.background='#0ea5e9';activeTab.style.color='#fff';}
+  try{
+    var r=await fetch(PROAPI+'/news/'+category,{headers:authH()});
+    var d=await r.json();
+    if(d.status==='key_not_configured'){if(el)el.innerHTML='<div style="color:#f97316;font-size:12px;padding:16px;">NEWS_API_KEY not configured</div>';return;}
+    if(!r.ok){if(el)el.innerHTML='<div style="color:#ff3b5c;font-size:12px;padding:16px;">'+esc(d.detail||'Error')+'</div>';return;}
+    var articles=d.articles||[];
+    if(!articles.length){if(el)el.innerHTML='<div style="color:#64748b;font-size:12px;padding:16px;">No articles found</div>';return;}
+    var h='';
+    articles.forEach(function(a){
+      var pub=a.published?new Date(a.published).toLocaleDateString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'';
+      h+='<a href="'+esc(a.url)+'" target="_blank" rel="noopener" style="display:block;border-bottom:1px solid #1e293b;padding:12px 0;text-decoration:none;">';
+      h+='<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:5px;">';
+      h+='<div style="color:#e2e8f0;font-size:13px;font-weight:600;line-height:1.4;flex:1;">'+esc(a.title)+'</div>';
+      if(a.image) h+='<img src="'+esc(a.image)+'" style="width:64px;height:48px;object-fit:cover;border-radius:4px;flex-shrink:0;" onerror="this.style.display='none'">';
+      h+='</div><div style="display:flex;align-items:center;gap:10px;">';
+      h+='<span style="color:#0ea5e9;font-size:10px;font-weight:700;background:#0ea5e922;padding:1px 8px;border-radius:3px;">'+esc(a.source)+'</span>';
+      h+='<span style="color:#475569;font-size:10px;">'+esc(pub)+'</span></div>';
+      if(a.description) h+='<div style="color:#64748b;font-size:11px;margin-top:4px;line-height:1.4;">'+esc((a.description||'').substring(0,130))+'</div>';
+      h+='</a>';
+    });
+    if(el) el.innerHTML=h;
+  }catch(e){if(el)el.innerHTML='<div style="color:#ff3b5c;font-size:12px;padding:16px;">'+esc(e.message)+'</div>';}
+};
+
+  // wire news nav
+  ['news'].forEach(function(name){
+    var btn=document.querySelector('[data-page="'+name+'"]');
+    if(!btn)return;
+    var nb=btn.cloneNode(true);
+    btn.parentNode.replaceChild(nb,btn);
+    nb.addEventListener('click',function(e){
+      e.stopImmediatePropagation();
+      document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+      document.querySelectorAll('.nvb,[data-page]').forEach(function(b){b.classList.remove('active');});
+      var pg=document.getElementById('page-'+name);
+      if(pg)pg.classList.add('active');
+      nb.classList.add('active');
+      var tok=localStorage.getItem('dw_access_token');
+      tok?window.loadNews():window.dwShowLoginModal&&window.dwShowLoginModal(function(){window.loadNews();});
+    },true);
+  });
+
 })();
