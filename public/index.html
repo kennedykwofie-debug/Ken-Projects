@@ -15,7 +15,7 @@
     <button class="nvb active" data-page="intel">Intel Feed</button>
     <button class="nvb" data-page="assets">Asset Monitor</button>
     <button class="nvb" data-page="creds">Credential Leaks</button>
-    <button class="nvb" data-page="pro">Pro Intel ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¦</button>
+    <button class="nvb" data-page="pro">Pro Intel ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¦</button>
     <button class="nvb" data-page="alerts">Alerts <span id="alert-count" class="alert-dot" style="display:none">0</span></button>
     </nav>
   <span class="clk" id="ck">00:00:00 UTC</span>
@@ -287,7 +287,7 @@
         <div id="pro-map-detail" class="pi-map-detail" style="display:none"></div>
       </div>
       <div class="pi-country-list-wrap">
-        <div class="pi-sec-sub-hdr">Top Risk Countries <span style="color:#64748b;font-weight:400;font-size:10px">ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ click row to expand risk drivers</span></div>
+        <div class="pi-sec-sub-hdr">Top Risk Countries <span style="color:#64748b;font-weight:400;font-size:10px">ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ click row to expand risk drivers</span></div>
         <div id="pro-geo-list" class="pi-country-list"></div>
       </div>
     </section>
@@ -370,8 +370,8 @@
           <div class="pi-sec-hdr"><span>&#128272; Credential Breach Search</span></div>
           <div style="color:#64748b;font-size:11px;margin-bottom:14px;">Search DeHashed and Leak-Lookup for exposed credentials across 13B+ breach records</div>
           <div style="display:flex;gap:10px;margin-bottom:16px;">
-            <input id="cred-domain-input" type="text" placeholder="yourdomain.com" style="flex:1;background:#1e293b;border:1px solid #334155;border-radius:6px;padding:10px 14px;color:#e2e8f0;font-size:13px;outline:none;" onkeydown="if(event.key==='Enter')window.searchCredentials&&window.searchCredentials(this.value)">
-            <button onclick="window.searchCredentials&&window.searchCredentials(document.getElementById('cred-domain-input').value)" style="background:#ff3b5c;color:#fff;border:none;border-radius:6px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;">Search</button>
+            <input id="cred-domain-input" type="text" placeholder="yourdomain.com" style="flex:1;background:#1e293b;border:1px solid #334155;border-radius:6px;padding:10px 14px;color:#e2e8f0;font-size:13px;outline:none;" onkeydown="event.stopPropagation();if(event.key==='Enter')window.searchCredentials&&window.searchCredentials(this.value)">
+            <button onclick="event.stopPropagation();window.searchCredentials&&window.searchCredentials(document.getElementById('cred-domain-input').value)" style="background:#ff3b5c;color:#fff;border:none;border-radius:6px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;">Search</button>
           </div>
           <div id="cred-results"></div>
         </section>
@@ -379,8 +379,8 @@
           <div class="pi-sec-hdr"><span>&#127760; Intelligence X Search</span></div>
           <div style="color:#64748b;font-size:11px;margin-bottom:14px;">Search dark web, Tor, paste sites, and leaked databases via Intelligence X</div>
           <div style="display:flex;gap:10px;margin-bottom:16px;">
-            <input id="intelx-input" type="text" placeholder="domain.com, email@org.com, IP address, hash..." style="flex:1;background:#1e293b;border:1px solid #334155;border-radius:6px;padding:10px 14px;color:#e2e8f0;font-size:13px;outline:none;" onkeydown="if(event.key==='Enter')window.searchIntelX&&window.searchIntelX(this.value)">
-            <button onclick="window.searchIntelX&&window.searchIntelX(document.getElementById('intelx-input').value)" style="background:#a78bfa;color:#fff;border:none;border-radius:6px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;">Search</button>
+            <input id="intelx-input" type="text" placeholder="domain.com, email@org.com, IP address, hash..." style="flex:1;background:#1e293b;border:1px solid #334155;border-radius:6px;padding:10px 14px;color:#e2e8f0;font-size:13px;outline:none;" onkeydown="event.stopPropagation();if(event.key==='Enter')window.searchIntelX&&window.searchIntelX(this.value)">
+            <button onclick="event.stopPropagation();window.searchIntelX&&window.searchIntelX(document.getElementById('intelx-input').value)" style="background:#a78bfa;color:#fff;border:none;border-radius:6px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;">Search</button>
           </div>
           <div id="intelx-results"></div>
         </section>
