@@ -1,9 +1,11 @@
 """Finnhub strategic market data fetcher."""
+import asyncio
 import logging
 from typing import Any, Dict, List
 
+import httpx
+
 from src.shared.config import settings
-from src.shared.http import get
 
 logger = logging.getLogger(__name__)
 
@@ -22,13 +24,18 @@ _SYMBOLS = [
 async def fetch_quote(symbol: str) -> Dict[str, Any]:
     """Fetch a single quote from Finnhub."""
     if not settings.finnhub_key:
+        logger.warning("FINNHUB_KEY not configured")
         return {}
     try:
-        data = await get(
-            f"{_BASE}/quote",
-            params={"symbol": symbol, "token": settings.finnhub_key},
-        )
-        if not data.get("c"):
+        async with httpx.AsyncClient(timeout=20.0, verify=True) as client:
+            resp = await client.get(
+                f"{_BASE}/quote",
+                params={"symbol": symbol, "token": settings.finnhub_key},
+            )
+            resp.raise_for_status()
+            data = resp.json()
+        if not data or not data.get("c"):
+            logger.warning(f"Finnhub {symbol}: no price data")
             return {}
         return {
             "symbol": symbol,
@@ -39,13 +46,12 @@ async def fetch_quote(symbol: str) -> Dict[str, Any]:
             "source": "finnhub",
         }
     except Exception as e:
-        logger.debug(f"Finnhub {symbol} error: {e}")
+        logger.error(f"Finnhub fetch_quote {symbol} failed: {e!r}")
         return {}
 
 
 async def fetch_strategic_markets() -> List[Dict[str, Any]]:
     """Fetch all strategic market quotes."""
-    import asyncio
     results = await asyncio.gather(
         *[fetch_quote(sym) for sym, _, _ in _SYMBOLS],
         return_exceptions=True,
