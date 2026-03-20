@@ -11,7 +11,7 @@ _IP_RE = re.compile(r'^(?:d{1,3}.){3}d{1,3}$')
 _HASH_RE = re.compile(r'^[a-fA-F0-9]{32,64}$')
 _DOMAIN_RE = re.compile(r'^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?.)+[a-zA-Z]{2,}$')
 
-@router.get("/enrich/{indicator}")
+@router.get("/enrich/{indicator:path}")
 async def enrich_indicator(indicator: str, _: User = Depends(require_analyst)):
     """Auto-detect indicator type (IP / domain / hash) and enrich from all sources."""
     indicator = indicator.strip()
