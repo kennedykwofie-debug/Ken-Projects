@@ -1,4 +1,5 @@
-"""Dark Web Monitor router â /darkweb/*"""
+from typing import Any, Dict
+"""Dark Web Monitor router Ã¢ÂÂ /darkweb/*"""
 import logging
 from fastapi import APIRouter, Depends, Query
 from src.auth.dependencies import get_current_user, require_analyst
