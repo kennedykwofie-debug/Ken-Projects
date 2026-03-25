@@ -106,7 +106,7 @@ td{padding:6px;border-bottom:1px solid #1e2630;vertical-align:top}tr:hover td{ba
 #rb .br:nth-child(5) .bf{background-color:#ff8c42!important}
 
 
-/* ââ New page layout classes ââ */
+/* Ã¢ÂÂÃ¢ÂÂ New page layout classes Ã¢ÂÂÃ¢ÂÂ */
 .page{display:none}.page.active{display:block}
 .page-toolbar{background:var(--surface2,#161b22);border-bottom:1px solid var(--border,#1e2630);padding:8px 14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .page-toolbar.flat{background:transparent;border-bottom:1px solid var(--border,#1e2630);padding:8px 14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -189,7 +189,7 @@ td{padding:6px;border-bottom:1px solid #1e2630;vertical-align:top}tr:hover td{ba
 #rb .br:nth-child(4) .bf{background-color:#f5c518!important}
 #rb .br:nth-child(5) .bf{background-color:#ff8c42!important}
 
-/* ââ Creds page fixes ââ */
+/* Ã¢ÂÂÃ¢ÂÂ Creds page fixes Ã¢ÂÂÃ¢ÂÂ */
 .page-toolbar.flat{background:#0f1318;border-bottom:1px solid #1e2630;padding:8px 20px;display:flex;align-items:center;gap:8px;min-height:44px;flex-wrap:wrap}
 .page-toolbar.flat .tagline{font-size:11px;color:#64748b;font-family:'JetBrains Mono',monospace}
 .stat-card.red::before{background:#ff3b5c}
@@ -432,3 +432,22 @@ td{padding:6px;border-bottom:1px solid #1e2630;vertical-align:top}tr:hover td{ba
 /* Pro Intel sidebar group labels */
 .pi-nav-group-label{color:#334155;font-size:9px;letter-spacing:2px;font-weight:700;padding:12px 12px 4px;text-transform:uppercase;}
 .pi-nav-btn .pi-nav-icon{font-size:14px;}
+
+/* ── DARKWATCH MONITOR (Crucix HUD) ──────────────────────────────── */
+#pi-sec-geo {
+  padding: 0 !important;
+  overflow: hidden !important;
+  display: flex;
+  flex-direction: column;
+}
+#crucix-frame {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  min-height: calc(100vh - 60px);
+  border: none;
+  background: #080c14;
+}
+.pi-section#pi-sec-geo.active {
+  padding: 0 !important;
+}
