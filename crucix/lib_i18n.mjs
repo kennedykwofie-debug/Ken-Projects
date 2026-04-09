@@ -7,7 +7,7 @@ import { dirname, join } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const LOCALES_DIR = join(__dirname, '..', 'locales');
+const LOCALES_DIR = join(__dirname,, 'locales');
 
 // Supported languages
 const SUPPORTED_LOCALES = ['en', 'fr'];
