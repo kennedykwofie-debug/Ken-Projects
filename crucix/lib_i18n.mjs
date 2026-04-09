@@ -7,7 +7,7 @@ import { dirname, join } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const LOCALES_DIR = join(__dirname,, 'locales');
+// LOCALES_DIR not needed - using flat locale files
 
 // Supported languages
 const SUPPORTED_LOCALES = ['en', 'fr'];
@@ -38,7 +38,7 @@ function loadLocale(lang) {
     return localeCache.get(lang);
   }
 
-  const localePath = join(LOCALES_DIR, `${lang}.json`);
+  const localePath = join(__dirname, `locales_${lang}.json`);
   
   if (!existsSync(localePath)) {
     console.warn(`[i18n] Locale file not found: ${localePath}, falling back to ${DEFAULT_LOCALE}`);
